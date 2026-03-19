@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sana AI — Terminal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:     #050E14;
+      --surf:   #0A1A26;
+      --surf2:  #0F2035;
+      --amber:  #B8935A;
+      --amber2: #D4A96A;
+      --white:  #E8EDF2;
+      --dim:    rgba(232,237,242,0.45);
+      --faint:  rgba(232,237,242,0.15);
+      --border: rgba(184,147,90,0.12);
+      --green:  #2ECC8A;
+    }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--white);
+      font-size: 14px;
+      line-height: 1.6;
+      /* subtle amber grid */
+      background-image:
+        linear-gradient(rgba(184,147,90,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(184,147,90,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    /* Left amber accent bar */
+    body::before {
+      content: '';
+      position: fixed;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, transparent, var(--amber), var(--amber), transparent);
+      z-index: 999;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 52px; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px 0 56px;
+      background: rgba(5,14,20,0.92);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .nav-mark { display: flex; align-items: center; }
+    .nav-mark svg { width: 20px; height: 16px; }
+    .nav-name { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: var(--white); letter-spacing: 0.04em; }
+    .nav-name em { color: var(--amber); font-style: normal; }
+    .nav-status { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--amber); opacity: 0.6; letter-spacing: 0.12em; margin-left: 4px; }
+    .nav-links { display: flex; gap: 28px; }
+    .nav-links a { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--dim); text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.15s; }
+    .nav-links a:hover { color: var(--amber); }
+    .nav-btn { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; color: var(--bg); background: var(--amber); padding: 8px 18px; text-decoration: none; letter-spacing: 0.06em; border: 1px solid var(--amber); transition: all 0.15s; }
+    .nav-btn:hover { background: transparent; color: var(--amber); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 80px 48px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* EKG background line */
+    .ekg-bg {
+      position: absolute;
+      top: 50%; left: 0;
+      transform: translateY(-50%);
+      width: 100%; height: 120px;
+      opacity: 0.25;
+      pointer-events: none;
+    }
+    .ekg-bg path {
+      fill: none;
+      stroke: var(--amber);
+      stroke-width: 2;
+      stroke-dasharray: 2400;
+      stroke-dashoffset: 2400;
+      animation: drawEkg 3s ease-in-out forwards, fadeEkg 1s ease-in 3s forwards;
+    }
+    @keyframes drawEkg {
+      to { stroke-dashoffset: 0; }
+    }
+    @keyframes fadeEkg {
+      to { opacity: 0.08; }
+    }
+
+    .hero-inner { position: relative; z-index: 2; text-align: center; max-width: 820px; }
+
+    /* Terminal status bar */
+    .terminal-bar {
+      display: inline-flex; align-items: center; gap: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; color: var(--amber);
+      border: 1px solid var(--border);
+      padding: 7px 18px;
+      margin-bottom: 40px;
+      background: rgba(184,147,90,0.04);
+      letter-spacing: 0.08em;
+    }
+    .t-live { display: flex; align-items: center; gap: 6px; }
+    .t-dot { width: 6px; height: 6px; background: var(--green); animation: tblink 1.4s ease-in-out infinite; }
+    @keyframes tblink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+    .t-sep { color: var(--border); }
+    .t-clock { font-variant-numeric: tabular-nums; }
+
+    h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(48px, 6.5vw, 88px);
+      font-weight: 300;
+      line-height: 1.0;
+      letter-spacing: -1.5px;
+      color: var(--white);
+      margin-bottom: 32px;
+    }
+    h1 .underline-word {
+      position: relative;
+      font-weight: 600;
+    }
+    h1 .underline-word::after {
+      content: '';
+      position: absolute;
+      left: 0; bottom: 4px; right: 0;
+      height: 2px;
+      background: var(--amber);
+    }
+
+    .hero-sub {
+      font-size: 16px; color: var(--dim); line-height: 1.8;
+      max-width: 520px; margin: 0 auto 40px;
+      font-weight: 300;
+    }
+    .hero-actions { display: flex; gap: 14px; align-items: center; justify-content: center; }
+    .btn-amber { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; background: var(--amber); color: var(--bg); padding: 13px 28px; text-decoration: none; letter-spacing: 0.06em; border: 1px solid var(--amber); transition: all 0.18s; display: inline-flex; align-items: center; gap: 10px; }
+    .btn-amber:hover { background: transparent; color: var(--amber); }
+    .btn-ghost { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 400; color: var(--dim); padding: 13px 22px; text-decoration: none; border: 1px solid var(--border); transition: all 0.18s; }
+    .btn-ghost:hover { border-color: var(--amber); color: var(--amber); }
+
+    /* ── TICKER ── */
+    .ticker {
+      background: var(--surf);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      height: 44px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+    .ticker-track {
+      display: flex;
+      gap: 0;
+      animation: tickerScroll 20s linear infinite;
+      white-space: nowrap;
+    }
+    @keyframes tickerScroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    .ticker-item {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; color: var(--dim); letter-spacing: 0.08em;
+      padding: 0 32px; white-space: nowrap;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .ticker-item::before { content: '▸'; color: var(--amber); font-size: 8px; }
+
+    /* ── PROBLEM / STATS ── */
+    .stats-section { padding: 88px 48px; max-width: 1200px; margin: 0 auto; }
+    .sec-head { display: flex; align-items: center; gap: 16px; margin-bottom: 48px; }
+    .sec-tag { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 500; color: var(--amber); border: 1px solid var(--border); padding: 4px 12px; letter-spacing: 0.12em; text-transform: uppercase; }
+    .sec-line { flex: 1; height: 1px; background: var(--border); }
+
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+    .stat-card {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      padding: 32px 28px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .stat-card:hover { border-color: rgba(184,147,90,0.35); }
+    .sparkline { margin-bottom: 20px; }
+    .sparkline svg { width: 80px; height: 28px; }
+
+    .stat-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 52px; font-weight: 700;
+      color: var(--amber);
+      line-height: 1; margin-bottom: 10px;
+      letter-spacing: -1px;
+    }
+    .stat-num.g { color: var(--green); }
+    .stat-num.w { color: var(--white); }
+    .stat-label { font-size: 14px; font-weight: 500; color: var(--white); margin-bottom: 6px; }
+    .stat-sub { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--dim); letter-spacing: 0.04em; line-height: 1.6; }
+
+    /* Corner accent */
+    .stat-card::after {
+      content: '';
+      position: absolute; top: 0; right: 0;
+      width: 0; height: 0;
+      border-style: solid;
+      border-width: 0 20px 20px 0;
+      border-color: transparent var(--amber) transparent transparent;
+      opacity: 0.3;
+    }
+
+    /* Intro text below stats */
+    .problem-text { max-width: 720px; margin: 56px auto 0; text-align: center; }
+    .problem-text blockquote {
+      font-family: 'Inter', sans-serif;
+      font-size: 22px; font-weight: 300;
+      color: var(--white);
+      line-height: 1.6;
+      letter-spacing: -0.3px;
+      margin-bottom: 20px;
+    }
+    .problem-text blockquote em { font-style: normal; color: var(--amber); font-weight: 400; }
+    .problem-text p { font-size: 15px; color: var(--dim); line-height: 1.8; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--surf);
+      border-top: 1px solid var(--border);
+      padding: 24px 48px 24px 56px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .fbrand { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: var(--white); letter-spacing: 0.04em; }
+    .fbrand em { color: var(--amber); font-style: normal; }
+    .flinks { display: flex; gap: 24px; }
+    .flinks a { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--faint); text-decoration: none; letter-spacing: 0.06em; transition: color 0.15s; }
+    .flinks a:hover { color: var(--amber); }
+    .fcopy { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(232,237,242,0.15); letter-spacing: 0.06em; }
+
+    @media (max-width: 900px) {
+      nav { padding: 0 24px 0 32px; }
+      .nav-links { display: none; }
+      .hero { padding: 72px 24px 0; }
+      .stats-section { padding: 64px 24px; }
+      .stat-row { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 14px; align-items: flex-start; padding: 24px 24px 24px 32px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">
+    <div class="nav-mark">
+      <svg viewBox="0 0 20 16" fill="none">
+        <path d="M0 8h4l2 6 5-13 2 7 2-3h5" stroke="#B8935A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="nav-name">SANA<em>AI</em></span>
+    <span class="nav-status">● ONLINE</span>
+  </a>
+  <div class="nav-links">
+    <a href="#">Utfordringen</a>
+    <a href="#">Arbeidsflyt</a>
+    <a href="#">Sikkerhet</a>
+    <a href="#">Kontakt</a>
+  </div>
+  <a href="#" class="nav-btn">LOGG INN →</a>
+</nav>
+
+<div class="hero">
+  <!-- Animated EKG background -->
+  <svg class="ekg-bg" viewBox="0 0 1400 120" preserveAspectRatio="none">
+    <path d="M0,60 L120,60 L135,60 L142,10 L148,110 L154,25 L160,95 L166,60 L280,60 L395,60 L402,60 L409,10 L415,110 L421,25 L427,95 L433,60 L548,60 L663,60 L670,60 L677,10 L683,110 L689,25 L695,95 L701,60 L816,60 L931,60 L938,60 L945,10 L951,110 L957,25 L963,95 L969,60 L1084,60 L1199,60 L1206,60 L1213,10 L1219,110 L1225,25 L1231,95 L1237,60 L1352,60 L1400,60"/>
+  </svg>
+
+  <div class="hero-inner">
+    <div class="terminal-bar">
+      <div class="t-live"><div class="t-dot"></div><span>LIVE</span></div>
+      <span class="t-sep">·</span>
+      <span>SYSTEM NOMINAL</span>
+      <span class="t-sep">·</span>
+      <span class="t-clock" id="clock">--:--:-- CET</span>
+      <span class="t-sep">·</span>
+      <span>eu-north-1</span>
+    </div>
+
+    <h1>
+      Medisinsk<br>
+      <span class="underline-word">presisjon.</span><br>
+      Sekunder.
+    </h1>
+
+    <p class="hero-sub">
+      Sana AI gir leger et strukturert medisinsk standpunkt på sekunder. Fra hundrevis av sider til klar anbefaling — med full GDPR-compliance og uforanderlig revisjonslogg.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#" class="btn-amber">
+        START ANALYSE
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7.5 3l3 3.5-3 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#" class="btn-ghost">SE ARBEIDSFLYT</a>
+    </div>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <div class="ticker-item">184 sider behandlet per klagesak</div>
+    <div class="ticker-item">97% prioritetsnøyaktighet</div>
+    <div class="ticker-item">&lt;5s analysetid</div>
+    <div class="ticker-item">0 pasientdata hos AI-leverandør</div>
+    <div class="ticker-item">Claude Sonnet 4.6 · eu-north-1</div>
+    <div class="ticker-item">GDPR Art. 9 kompatibel</div>
+    <div class="ticker-item">Uforanderlig revisjonslogg</div>
+    <div class="ticker-item">Legen godkjenner alltid</div>
+    <!-- duplicate for loop -->
+    <div class="ticker-item">184 sider behandlet per klagesak</div>
+    <div class="ticker-item">97% prioritetsnøyaktighet</div>
+    <div class="ticker-item">&lt;5s analysetid</div>
+    <div class="ticker-item">0 pasientdata hos AI-leverandør</div>
+    <div class="ticker-item">Claude Sonnet 4.6 · eu-north-1</div>
+    <div class="ticker-item">GDPR Art. 9 kompatibel</div>
+    <div class="ticker-item">Uforanderlig revisjonslogg</div>
+    <div class="ticker-item">Legen godkjenner alltid</div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-section">
+  <div class="sec-head">
+    <span class="sec-tag">Utfordringen</span>
+    <div class="sec-line"></div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="sparkline">
+        <svg viewBox="0 0 80 28" fill="none">
+          <polyline points="0,22 20,18 40,24 60,12 80,8" stroke="#B8935A" stroke-width="1.5" fill="none" opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="stat-num">184</div>
+      <div class="stat-label">Gjennomsnittlig sideantall</div>
+      <div class="stat-sub">i en kompleks helseforsikringsklage. Journalnotater, epikriser, sakkyndige erklæringer.</div>
+    </div>
+    <div class="stat-card">
+      <div class="sparkline">
+        <svg viewBox="0 0 80 28" fill="none">
+          <polyline points="0,24 20,20 40,18 60,10 80,4" stroke="#2ECC8A" stroke-width="1.5" fill="none" opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="stat-num g">&lt;5s</div>
+      <div class="stat-label">AI-analysetid</div>
+      <div class="stat-sub">fra opplasting til strukturert medisinsk standpunkt. Støttes / Avvises / Uavklart.</div>
+    </div>
+    <div class="stat-card">
+      <div class="sparkline">
+        <svg viewBox="0 0 80 28" fill="none">
+          <polyline points="0,14 20,14 40,14 60,14 80,14" stroke="#E8EDF2" stroke-width="1.5" fill="none" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="stat-num w">0</div>
+      <div class="stat-label">Pasientdata hos AI-leverandør</div>
+      <div class="stat-sub">PII fjernes automatisk. Kun klinisk innhold når Claude Sonnet 4.6.</div>
+    </div>
+  </div>
+
+  <div class="problem-text">
+    <blockquote>"Sana AI fjerner ikke legens ansvar.<br>Det fjerner <em>støyen</em> mellom dokumentene og avgjørelsen."</blockquote>
+    <p>En enkelt klagesak kan inneholde hundrevis av sider. Legen må lese, forstå og vurdere — ofte under tidspress, med sakskø. Vi endrer ikke arbeidsmåten. Vi fjerner det manuelle.</p>
+  </div>
+</div>
+
+<footer>
+  <span class="fbrand">SANA<em>AI</em></span>
+  <div class="flinks">
+    <a href="#">Klagesak-verktøyet</a>
+    <a href="#">Compliance</a>
+    <a href="#">Kontakt</a>
+  </div>
+  <span class="fcopy">© 2026 SANA AI · AWS eu-north-1 · GDPR Art. 9</span>
+</footer>
+
+<script>
+  // Live clock
+  function updateClock() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2,'0');
+    const m = String(now.getMinutes()).padStart(2,'0');
+    const s = String(now.getSeconds()).padStart(2,'0');
+    const el = document.getElementById('clock');
+    if (el) el.textContent = `${h}:${m}:${s} CET`;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+</script>
+</body>
+</html>

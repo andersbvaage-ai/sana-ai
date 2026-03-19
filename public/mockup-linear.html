@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sana AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0A0A0A;
+      --surf:    #141414;
+      --surf2:   #1C1C1C;
+      --border:  rgba(255,255,255,0.07);
+      --border2: rgba(255,255,255,0.12);
+      --white:   #FFFFFF;
+      --dim:     rgba(255,255,255,0.45);
+      --faint:   rgba(255,255,255,0.18);
+      --gold:    #B8935A;
+      --green:   #22C55E;
+      --red:     #EF4444;
+      --amber:   #F59E0B;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--white);
+      font-size: 14px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 52px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 9px; text-decoration: none; }
+    .nav-icon { width: 22px; height: 22px; }
+    .nav-icon path { stroke: white; }
+    .nav-name { font-size: 15px; font-weight: 600; color: var(--white); letter-spacing: -0.2px; }
+
+    .nav-links { display: flex; gap: 4px; }
+    .nav-links a {
+      font-size: 13.5px; font-weight: 400; color: var(--dim);
+      text-decoration: none; padding: 6px 12px; border-radius: 6px;
+      transition: all 0.15s;
+    }
+    .nav-links a:hover { color: var(--white); background: rgba(255,255,255,0.06); }
+
+    .nav-right { display: flex; align-items: center; gap: 8px; }
+    .nav-login { font-size: 13.5px; font-weight: 400; color: var(--dim); text-decoration: none; padding: 6px 12px; border-radius: 6px; transition: all 0.15s; }
+    .nav-login:hover { color: var(--white); background: rgba(255,255,255,0.06); }
+    .nav-signup {
+      font-size: 13.5px; font-weight: 500; color: var(--bg);
+      background: var(--white); padding: 6px 14px; border-radius: 6px;
+      text-decoration: none; transition: all 0.15s;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .nav-signup:hover { background: rgba(255,255,255,0.88); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 120px 32px 0;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .hero-announce {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 13px; color: var(--dim);
+      margin-bottom: 48px;
+    }
+    .hero-announce strong { color: var(--white); font-weight: 500; }
+    .hero-announce svg { opacity: 0.4; }
+
+    h1 {
+      font-size: clamp(52px, 6.5vw, 88px);
+      font-weight: 700;
+      line-height: 1.0;
+      letter-spacing: -2.5px;
+      color: var(--white);
+      max-width: 900px;
+      margin-bottom: 24px;
+    }
+
+    .hero-sub {
+      font-size: 17px;
+      color: var(--dim);
+      line-height: 1.65;
+      max-width: 480px;
+      margin-bottom: 40px;
+      font-weight: 400;
+      letter-spacing: -0.1px;
+    }
+
+    .hero-actions { display: flex; gap: 10px; align-items: center; margin-bottom: 80px; }
+    .btn-primary {
+      font-size: 14px; font-weight: 500;
+      background: var(--white); color: var(--bg);
+      padding: 9px 18px; border-radius: 8px;
+      text-decoration: none; transition: all 0.15s;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-primary:hover { background: rgba(255,255,255,0.88); }
+    .btn-ghost {
+      font-size: 14px; font-weight: 400; color: var(--dim);
+      padding: 9px 18px; border-radius: 8px;
+      text-decoration: none; transition: all 0.15s;
+      border: 1px solid var(--border2);
+    }
+    .btn-ghost:hover { color: var(--white); border-color: rgba(255,255,255,0.25); }
+
+    /* ── PRODUCT MOCKUP ── */
+    .product-wrap {
+      position: relative;
+      border-radius: 12px 12px 0 0;
+      overflow: hidden;
+      border: 1px solid var(--border2);
+      border-bottom: none;
+      /* Subtle glow */
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.04),
+        0 -40px 120px rgba(184,147,90,0.06),
+        0 -80px 200px rgba(27,58,75,0.15);
+    }
+
+    /* Browser chrome */
+    .browser-chrome {
+      background: #1A1A1A;
+      padding: 10px 16px;
+      display: flex; align-items: center; gap: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .traffic { display: flex; gap: 6px; }
+    .tl { width: 10px; height: 10px; border-radius: 50%; }
+    .tl-r { background: #FF5F57; } .tl-y { background: #FEBC2E; } .tl-g { background: #28C840; }
+    .chrome-url {
+      flex: 1; background: rgba(255,255,255,0.06); border-radius: 5px;
+      padding: 4px 12px; font-size: 11px; color: var(--faint);
+      font-family: 'Inter', monospace; letter-spacing: 0.02em;
+    }
+
+    /* App shell */
+    .app-shell {
+      display: grid;
+      grid-template-columns: 220px 1fr 380px;
+      height: 560px;
+      background: var(--surf);
+    }
+
+    /* Sidebar */
+    .app-sidebar {
+      background: #111111;
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      padding: 16px 0;
+      overflow: hidden;
+    }
+    .sidebar-org {
+      display: flex; align-items: center; gap: 8px;
+      padding: 4px 14px 12px;
+      margin-bottom: 4px;
+    }
+    .org-icon {
+      width: 20px; height: 20px; border-radius: 5px;
+      background: linear-gradient(135deg, #1B3A4B, #2D5A70);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .org-icon svg { width: 11px; height: 11px; }
+    .org-name { font-size: 12.5px; font-weight: 600; color: var(--white); }
+    .org-plan { font-size: 10px; color: var(--faint); }
+
+    .sidebar-section { margin-bottom: 20px; }
+    .sidebar-section-label {
+      font-size: 10.5px; font-weight: 500; color: rgba(255,255,255,0.25);
+      padding: 0 14px; margin-bottom: 3px; letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .sidebar-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 5px 14px; font-size: 12.5px; color: rgba(255,255,255,0.5);
+      cursor: pointer; transition: all 0.1s;
+    }
+    .sidebar-item:hover, .sidebar-item.active {
+      background: rgba(255,255,255,0.06); color: var(--white);
+    }
+    .sidebar-item svg { width: 14px; height: 14px; opacity: 0.6; flex-shrink: 0; }
+    .sidebar-item.active svg { opacity: 1; }
+    .sidebar-badge {
+      margin-left: auto; font-size: 10px; font-weight: 600;
+      background: rgba(255,255,255,0.1); color: var(--dim);
+      padding: 1px 6px; border-radius: 100px;
+    }
+
+    /* Case list */
+    .app-caselist {
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+    .caselist-header {
+      padding: 14px 16px 10px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .caselist-title { font-size: 12.5px; font-weight: 600; color: var(--white); }
+    .caselist-count { font-size: 11px; color: var(--faint); }
+    .caselist-search {
+      margin: 10px 12px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 10px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .caselist-search svg { width: 12px; height: 12px; opacity: 0.3; }
+    .caselist-search span { font-size: 12px; color: rgba(255,255,255,0.2); }
+
+    .case-item {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer; transition: background 0.1s;
+    }
+    .case-item:hover { background: rgba(255,255,255,0.04); }
+    .case-item.active { background: rgba(255,255,255,0.07); }
+    .case-item-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px; }
+    .case-title { font-size: 12.5px; font-weight: 500; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; }
+    .case-date { font-size: 10.5px; color: var(--faint); }
+    .case-meta { display: flex; align-items: center; gap: 5px; }
+    .case-badge {
+      font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 3px;
+    }
+    .badge-green { background: rgba(34,197,94,0.15); color: #4ADE80; }
+    .badge-red   { background: rgba(239,68,68,0.15);  color: #FCA5A5; }
+    .badge-amber { background: rgba(245,158,11,0.15); color: #FCD34D; }
+    .badge-gray  { background: rgba(255,255,255,0.08); color: var(--faint); }
+    .case-pages { font-size: 10.5px; color: rgba(255,255,255,0.2); }
+
+    /* Analysis panel */
+    .app-analysis {
+      display: flex; flex-direction: column;
+      overflow: hidden; padding: 20px 22px;
+      gap: 16px;
+    }
+    .analysis-header { display: flex; align-items: flex-start; justify-content: space-between; }
+    .analysis-title { font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
+    .analysis-meta { font-size: 11px; color: var(--faint); }
+    .analysis-status {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 600;
+      background: rgba(34,197,94,0.12); color: #4ADE80;
+      padding: 4px 10px; border-radius: 100px;
+      border: 1px solid rgba(34,197,94,0.2);
+    }
+    .status-dot { width: 5px; height: 5px; border-radius: 50%; background: #22C55E; }
+
+    .analysis-block {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 8px; padding: 14px 16px;
+    }
+    .block-label {
+      font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.1em; color: rgba(255,255,255,0.25);
+      margin-bottom: 8px;
+    }
+    .verdict-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .verdict-pill {
+      font-size: 12px; font-weight: 700; padding: 3px 12px; border-radius: 4px;
+    }
+    .verdict-pill.green { background: rgba(34,197,94,0.15); color: #4ADE80; border: 1px solid rgba(34,197,94,0.2); }
+    .prio-badge { font-size: 11px; font-weight: 600; color: var(--faint); }
+
+    .prio-bar-wrap { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .prio-bar-bg { flex: 1; height: 3px; background: rgba(255,255,255,0.08); border-radius: 100px; overflow: hidden; }
+    .prio-bar-fill { height: 100%; width: 97%; background: var(--gold); border-radius: 100px; }
+    .prio-pct { font-size: 11px; font-weight: 600; color: var(--dim); }
+
+    .analysis-text { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.7; }
+
+    .findings-list { display: flex; flex-direction: column; gap: 6px; }
+    .finding { display: flex; gap: 8px; font-size: 11.5px; color: rgba(255,255,255,0.5); line-height: 1.5; }
+    .finding::before { content: '→'; color: var(--gold); flex-shrink: 0; font-size: 11px; margin-top: 1px; }
+
+    .model-tag {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 10px; color: rgba(255,255,255,0.2);
+      border-top: 1px solid var(--border); padding-top: 12px;
+      margin-top: 4px;
+    }
+    .model-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); opacity: 0.5; }
+
+    /* ── BELOW HERO SECTIONS ── */
+    .section { padding: 96px 32px; max-width: 1200px; margin: 0 auto; }
+
+    .section-label {
+      font-size: 12px; font-weight: 500; color: var(--faint);
+      letter-spacing: 0.05em; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-label::before { content: ''; width: 16px; height: 1px; background: var(--border2); }
+
+    .section h2 {
+      font-size: clamp(28px, 3.5vw, 42px); font-weight: 600;
+      letter-spacing: -1px; line-height: 1.15;
+      color: var(--white); margin-bottom: 16px; max-width: 640px;
+    }
+    .section p {
+      font-size: 16px; color: var(--dim); line-height: 1.75;
+      max-width: 520px; margin-bottom: 48px;
+    }
+
+    /* 3-col feature grid */
+    .feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .feat {
+      background: var(--surf);
+      padding: 28px 26px;
+      transition: background 0.15s;
+    }
+    .feat:hover { background: var(--surf2); }
+    .feat-icon {
+      width: 32px; height: 32px; border-radius: 7px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border2);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+    }
+    .feat-icon svg { width: 16px; height: 16px; stroke: rgba(255,255,255,0.6); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .feat h3 { font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 8px; letter-spacing: -0.2px; }
+    .feat p { font-size: 13px; color: var(--faint); line-height: 1.65; }
+
+    /* Stats row */
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 64px; }
+    .stat { border-top: 1px solid var(--border2); padding-top: 20px; }
+    .stat-num { font-size: 40px; font-weight: 600; color: var(--white); letter-spacing: -1.5px; line-height: 1; margin-bottom: 8px; }
+    .stat-label { font-size: 13.5px; color: var(--faint); line-height: 1.5; }
+
+    /* Divider */
+    .divider { height: 1px; background: var(--border); max-width: 1200px; margin: 0 auto; }
+
+    /* ── FOOTER ── */
+    footer {
+      max-width: 1200px; margin: 0 auto;
+      padding: 48px 32px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .f-brand { font-size: 14px; font-weight: 600; color: var(--faint); }
+    .f-links { display: flex; gap: 24px; }
+    .f-links a { font-size: 13px; color: rgba(255,255,255,0.2); text-decoration: none; transition: color 0.15s; }
+    .f-links a:hover { color: var(--dim); }
+    .f-copy { font-size: 12px; color: rgba(255,255,255,0.12); }
+
+    @media (max-width: 1024px) {
+      .app-shell { grid-template-columns: 200px 1fr; }
+      .app-analysis { display: none; }
+      .feat-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hero { padding: 100px 20px 0; }
+      .app-sidebar { display: none; }
+      .app-shell { grid-template-columns: 1fr; }
+      .feat-grid { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: 1fr 1fr; }
+      .section { padding: 64px 20px; }
+      footer { flex-direction: column; gap: 20px; align-items: flex-start; padding: 40px 20px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <svg class="nav-icon" viewBox="0 0 22 22" fill="none">
+      <path d="M2 11h3.5l2 5.5L12 4l2.5 7H20" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span class="nav-name">Sana AI</span>
+  </a>
+  <div class="nav-links">
+    <a href="#">Utfordringen</a>
+    <a href="#">Arbeidsflyt</a>
+    <a href="#">Sikkerhet</a>
+    <a href="#">Priser</a>
+    <a href="#">Kontakt</a>
+  </div>
+  <div class="nav-right">
+    <a href="#" class="nav-login">Logg inn</a>
+    <a href="#" class="nav-signup">Prøv gratis</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-announce">
+    <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M6.5 4v3l2 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+    <strong>Nytt</strong> Automatisk prioritetsscore for alle klagesaker →
+  </div>
+
+  <h1>AI-analyse for<br>klagesaksbehandling</h1>
+
+  <p class="hero-sub">
+    Fra hundrevis av sider til klar medisinsk anbefaling. Legen bestemmer — AI fjerner støyen.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#" class="btn-primary">
+      Kom i gang
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2.5 6.5h8M7 3l3.5 3.5L7 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <a href="#" class="btn-ghost">Se arbeidsflyt</a>
+  </div>
+
+  <!-- PRODUCT MOCKUP -->
+  <div class="product-wrap">
+    <div class="browser-chrome">
+      <div class="traffic"><div class="tl tl-r"></div><div class="tl tl-y"></div><div class="tl tl-g"></div></div>
+      <div class="chrome-url">sana-ai.no/cases</div>
+    </div>
+
+    <div class="app-shell">
+
+      <!-- Sidebar -->
+      <div class="app-sidebar">
+        <div class="sidebar-org">
+          <div class="org-icon">
+            <svg viewBox="0 0 11 11" fill="none"><path d="M1 5.5h2l1.5 4L7 1l1.5 3.5H10" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div><div class="org-name">Storebrand Helse</div><div class="org-plan">Pro</div></div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-item active">
+            <svg viewBox="0 0 14 14" fill="none"><rect x="2" y="2" width="10" height="12" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4.5 5.5h5M4.5 7.5h5M4.5 9.5h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            Alle saker
+            <span class="sidebar-badge">47</span>
+          </div>
+          <div class="sidebar-item">
+            <svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.2"/><path d="M7 4v3l2 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            Venter
+            <span class="sidebar-badge">12</span>
+          </div>
+          <div class="sidebar-item">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Fullført
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-section-label">Filter</div>
+          <div class="sidebar-item">
+            <svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="5" r="2" stroke="currentColor" stroke-width="1.2"/><path d="M2 12c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            Mine saker
+          </div>
+          <div class="sidebar-item">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M2 4h10M4 7h6M6 10h2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            Kritiske
+            <span class="sidebar-badge">5</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Case list -->
+      <div class="app-caselist">
+        <div class="caselist-header">
+          <span class="caselist-title">Klagesaker</span>
+          <span class="caselist-count">47 saker</span>
+        </div>
+        <div class="caselist-search">
+          <svg viewBox="0 0 12 12" fill="none"><circle cx="5" cy="5" r="3.5" stroke="currentColor" stroke-width="1.2"/><path d="M8 8l2.5 2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <span>Søk i saker...</span>
+        </div>
+
+        <div class="case-item active">
+          <div class="case-item-top">
+            <span class="case-title">thorvaldsen-kne-2026.pdf</span>
+            <span class="case-date">14.03</span>
+          </div>
+          <div class="case-meta">
+            <span class="case-badge badge-green">Støttes</span>
+            <span class="case-badge badge-red">Kritisk</span>
+            <span class="case-pages">184s</span>
+          </div>
+        </div>
+        <div class="case-item">
+          <div class="case-item-top">
+            <span class="case-title">berg-rygg-operasjon.pdf</span>
+            <span class="case-date">13.03</span>
+          </div>
+          <div class="case-meta">
+            <span class="case-badge badge-amber">Delvis</span>
+            <span class="case-pages">92s</span>
+          </div>
+        </div>
+        <div class="case-item">
+          <div class="case-item-top">
+            <span class="case-title">lindstrom-medisin.pdf</span>
+            <span class="case-date">13.03</span>
+          </div>
+          <div class="case-meta">
+            <span class="case-badge badge-red">Avvises</span>
+            <span class="case-pages">67s</span>
+          </div>
+        </div>
+        <div class="case-item">
+          <div class="case-item-top">
+            <span class="case-title">haugen-hjerte-2026.pdf</span>
+            <span class="case-date">12.03</span>
+          </div>
+          <div class="case-meta">
+            <span class="case-badge badge-gray">Uavklart</span>
+            <span class="case-pages">211s</span>
+          </div>
+        </div>
+        <div class="case-item">
+          <div class="case-item-top">
+            <span class="case-title">eriksen-skulder.pdf</span>
+            <span class="case-date">11.03</span>
+          </div>
+          <div class="case-meta">
+            <span class="case-badge badge-green">Støttes</span>
+            <span class="case-pages">48s</span>
+          </div>
+        </div>
+        <div class="case-item">
+          <div class="case-item-top">
+            <span class="case-title">olsen-nevro-utredning.pdf</span>
+            <span class="case-date">10.03</span>
+          </div>
+          <div class="case-meta">
+            <span class="case-badge badge-amber">Delvis</span>
+            <span class="case-pages">138s</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analysis panel -->
+      <div class="app-analysis">
+        <div class="analysis-header">
+          <div>
+            <div class="analysis-title">thorvaldsen-kne-2026.pdf</div>
+            <div class="analysis-meta">184 sider · 3 dokumenter · 14.03.2026</div>
+          </div>
+          <div class="analysis-status"><div class="status-dot"></div>Fullført</div>
+        </div>
+
+        <div class="analysis-block">
+          <div class="block-label">AI-standpunkt</div>
+          <div class="verdict-row">
+            <span class="verdict-pill green">Støttes</span>
+            <span class="prio-badge">Kritisk prioritet</span>
+          </div>
+          <div class="prio-bar-wrap">
+            <div class="prio-bar-bg"><div class="prio-bar-fill"></div></div>
+            <span class="prio-pct">97%</span>
+          </div>
+          <div class="analysis-text">Multiple dokumenterte behandlingssvikt med kausalt sammenheng. To sakkyndige vurderer sannsynligheten som overveiende.</div>
+        </div>
+
+        <div class="analysis-block">
+          <div class="block-label">Nøkkelfunn</div>
+          <div class="findings-list">
+            <div class="finding">Feilimplantasjon av femoral komponent — 11° rotasjonsavvik utenfor NOF-toleranse</div>
+            <div class="finding">Forsinket PJI-diagnostikk: kliniske tegn dag 1–2, utredning dag 4</div>
+            <div class="finding">Kausalitet mellom sviktene og dødsfallet overveiende sannsynlig</div>
+          </div>
+        </div>
+
+        <div class="model-tag">
+          <div class="model-dot"></div>
+          claude-sonnet-4-6 · eu-north-1 · PII fjernet · GDPR Art. 9
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div class="section" style="padding-top: 96px;">
+  <div class="section-label">Slik fungerer det</div>
+  <h2>Bygget for legers arbeidshverdag</h2>
+  <p>Ingen endring i arbeidsmåten. Last opp dokumenter, få strukturert analyse, godkjenn med ett klikk.</p>
+
+  <div class="feat-grid">
+    <div class="feat">
+      <div class="feat-icon"><svg viewBox="0 0 16 16"><path d="M3 3h7l3 3v7H3V3z"/><path d="M10 3v3h3"/><path d="M6 8h4M6 10.5h3"/></svg></div>
+      <h3>PDF og Word-støtte</h3>
+      <p>Last opp journalnotater, epikriser og sakkyndige erklæringer. Sana AI håndterer alt.</p>
+    </div>
+    <div class="feat">
+      <div class="feat-icon"><svg viewBox="0 0 16 16"><rect x="2" y="6" width="12" height="8" rx="1.5"/><path d="M5 6V5a3 3 0 016 0v1"/></svg></div>
+      <h3>Automatisk PII-fjerning</h3>
+      <p>Fødselsnummer, adresser og kontaktdata strippes ut automatisk. Kun klinisk innhold sendes videre.</p>
+    </div>
+    <div class="feat">
+      <div class="feat-icon"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6"/><path d="M5.5 8l2 2 3-3.5"/></svg></div>
+      <h3>Legen godkjenner alltid</h3>
+      <p>AI-standpunktet er et verktøy, ikke en beslutning. All bruk krever aktiv godkjenning.</p>
+    </div>
+    <div class="feat">
+      <div class="feat-icon"><svg viewBox="0 0 16 16"><path d="M8 2v4M8 10v4M2 8h4M10 8h4"/></svg></div>
+      <h3>Prioritetsscore 0–100%</h3>
+      <p>Sorterer sakskøen automatisk. De mest komplekse sakene håndteres alltid først.</p>
+    </div>
+    <div class="feat">
+      <div class="feat-icon"><svg viewBox="0 0 16 16"><path d="M4 8h8M4 5h8M4 11h5"/></svg></div>
+      <h3>Uforanderlig revisjonslogg</h3>
+      <p>Hvert AI-kall, hver PII-fjerning og hvert legevedtak loggføres med tidsstempel og bruker-ID.</p>
+    </div>
+    <div class="feat">
+      <div class="feat-icon"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2 1.5"/></svg></div>
+      <h3>&lt; 5 sekunder</h3>
+      <p>Fra opplasting til strukturert medisinsk standpunkt. Uansett dokumentlengde.</p>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num">184</div>
+      <div class="stat-label">Gjennomsnittlig sideantall<br>per klagesak</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">&lt; 5s</div>
+      <div class="stat-label">Analysetid fra opplasting<br>til standpunkt</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">0</div>
+      <div class="stat-label">Pasientdata lagret<br>hos AI-leverandør</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<footer>
+  <span class="f-brand">Sana AI</span>
+  <div class="f-links">
+    <a href="#">Compliance</a>
+    <a href="#">Personvern</a>
+    <a href="#">Kontakt</a>
+  </div>
+  <span class="f-copy">© 2026 Sana AI · AWS eu-north-1</span>
+</footer>
+
+</body>
+</html>

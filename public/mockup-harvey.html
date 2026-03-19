@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sana AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cormorant:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    a, a:visited, a:active { color: inherit; text-decoration: none; }
+
+    :root {
+      --ink:    #0D0D0D;
+      --white:  #FFFFFF;
+      --muted:  rgba(255,255,255,0.55);
+      --faint:  rgba(255,255,255,0.25);
+      --border: rgba(255,255,255,0.12);
+      --gold:   #B8935A;
+      --bg-light: #F7F5F2;
+      --ink-light: #1A1A1A;
+      --muted-light: #6B7280;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      color: var(--white);
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 68px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 52px;
+    }
+    .nav-logo {
+      text-decoration: none; color: var(--white);
+    }
+    .nav-name {
+      font-family: 'Cormorant Display', serif;
+      font-size: 17px; font-weight: 500;
+      letter-spacing: -0.2px; color: var(--white);
+    }
+
+    .nav-right { display: flex; align-items: center; gap: 36px; }
+    .nav-links { display: flex; gap: 32px; }
+    .nav-links a {
+      font-size: 13px; font-weight: 400; color: rgba(255,255,255,0.4);
+      text-decoration: none; transition: color 0.15s;
+    }
+    .nav-links a:hover { color: rgba(255,255,255,0.75); }
+
+    .nav-cta {
+      font-size: 13px; font-weight: 400; color: rgba(255,255,255,0.75);
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 9px 22px;
+      text-decoration: none; transition: all 0.2s;
+      letter-spacing: 0.01em;
+    }
+    .nav-cta:hover {
+      color: var(--white);
+      border-color: rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.05);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      display: flex; flex-direction: column;
+      padding: 0 52px 0;
+      overflow: hidden;
+      background: #0a0a0a;
+    }
+
+    /* Video background */
+    .hero-video {
+      position: absolute; inset: 0; z-index: 1;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: brightness(0.55) saturate(0.8);
+    }
+
+    /* Dark overlay — heavier on left (text side), lighter on right */
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0; z-index: 3;
+      background:
+        linear-gradient(to right, rgba(5,5,5,0.75) 0%, rgba(5,5,5,0.45) 55%, rgba(5,5,5,0.2) 100%),
+        linear-gradient(to bottom, rgba(5,5,5,0.0) 0%, rgba(5,5,5,0.0) 40%, rgba(5,5,5,0.7) 100%);
+      pointer-events: none;
+    }
+
+    /* Film grain */
+    .hero::after {
+      content: '';
+      position: absolute; inset: 0; z-index: 4;
+      opacity: 0.045;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 200px 200px;
+      pointer-events: none;
+    }
+
+    /* No-video fallback: slow ambient gradient animation */
+    @keyframes ambient {
+      0%   { background-position: 50% 50%; }
+      50%  { background-position: 53% 48%; }
+      100% { background-position: 50% 50%; }
+    }
+    .hero-bg-fallback {
+      position: absolute; inset: 0; z-index: 0; /* sits behind video */
+      background:
+        radial-gradient(ellipse 60% 70% at 75% 40%, rgba(60,40,20,0.6) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 50% at 85% 15%, rgba(80,55,30,0.35) 0%, transparent 38%),
+        radial-gradient(ellipse 50% 50% at 20% 75%, rgba(10,8,5,0.9) 0%, transparent 50%),
+        #0d0b08;
+      background-size: 200% 200%;
+      animation: ambient 18s ease-in-out infinite;
+    }
+
+    /* Spacer: pushes content to ~35% from top */
+    .hero-spacer { flex: 1; max-height: 160px; }
+
+    .hero-content {
+      position: relative; z-index: 5;
+      max-width: 640px;
+      padding-bottom: 96px;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px; font-weight: 400;
+      color: rgba(255,255,255,0.35); letter-spacing: 0.12em;
+      text-transform: uppercase; margin-bottom: 28px;
+    }
+
+    h1 {
+      font-family: 'Cormorant Display', serif;
+      font-size: clamp(58px, 7.5vw, 100px);
+      font-weight: 300;
+      line-height: 1.06;
+      letter-spacing: -1px;
+      color: var(--white);
+      margin-bottom: 24px;
+    }
+
+    .hero-sub {
+      font-size: 15px; font-weight: 300;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.75; max-width: 420px;
+      margin-bottom: 44px;
+    }
+
+    /* Harvey-style CTA: white filled, dark text */
+    .hero-cta {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px; font-weight: 400;
+      color: #0d0d0d;
+      background: #ffffff;
+      border: none; cursor: pointer;
+      padding: 14px 30px;
+      text-decoration: none; transition: all 0.2s;
+      letter-spacing: 0.02em;
+    }
+    .hero-cta:link, .hero-cta:visited, .hero-cta:hover, .hero-cta:active {
+      color: #0d0d0d;
+    }
+    .hero-cta:hover { background: #e8e8e8; }
+
+    /* Client logos — marquee strip at bottom */
+    .hero-clients {
+      position: relative; z-index: 5;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 20px 0;
+      overflow: hidden;
+    }
+    .clients-track {
+      display: flex; align-items: center; gap: 56px;
+      animation: marquee 28s linear infinite;
+      width: max-content;
+    }
+    @keyframes marquee {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .client-name {
+      font-size: 11px; font-weight: 500;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* ── LIGHT SECTION ── */
+    .section-light {
+      background: var(--bg-light);
+      color: var(--ink-light);
+      padding: 96px 48px;
+    }
+
+    .section-light .eyebrow {
+      font-size: 11px; font-weight: 600;
+      color: var(--gold); letter-spacing: 0.1em;
+      text-transform: uppercase; margin-bottom: 20px;
+    }
+
+    .section-light h2 {
+      font-family: 'Cormorant Display', serif;
+      font-size: clamp(30px, 3.5vw, 46px);
+      font-weight: 400; line-height: 1.2;
+      letter-spacing: -0.3px; color: var(--ink-light);
+      max-width: 560px; margin-bottom: 20px;
+    }
+    .section-light h2 em { font-style: italic; color: var(--muted-light); }
+
+    .section-light .lead {
+      font-size: 16px; color: var(--muted-light);
+      line-height: 1.75; max-width: 480px;
+      margin-bottom: 56px; font-weight: 300;
+    }
+
+    /* Two-col product preview */
+    .product-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: rgba(0,0,0,0.08);
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .product-panel {
+      background: var(--bg-light);
+      padding: 40px;
+    }
+    .product-panel:last-child {
+      background: var(--ink-light);
+      color: var(--white);
+    }
+
+    .panel-label {
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted-light); margin-bottom: 32px;
+    }
+    .product-panel:last-child .panel-label { color: rgba(255,255,255,0.3); }
+
+    .panel-step {
+      display: flex; gap: 20px;
+      margin-bottom: 28px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+    .product-panel:last-child .panel-step {
+      border-bottom-color: rgba(255,255,255,0.08);
+    }
+    .panel-step:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+
+    .step-num {
+      font-family: 'Cormorant Display', serif;
+      font-size: 28px; font-weight: 400;
+      color: rgba(0,0,0,0.12); line-height: 1;
+      flex-shrink: 0; width: 32px; padding-top: 2px;
+    }
+    .product-panel:last-child .step-num { color: rgba(255,255,255,0.12); }
+
+    .step-body h4 {
+      font-size: 15px; font-weight: 600;
+      color: var(--ink-light); margin-bottom: 6px;
+      letter-spacing: -0.2px;
+    }
+    .product-panel:last-child .step-body h4 { color: var(--white); }
+
+    .step-body p {
+      font-size: 13px; color: var(--muted-light); line-height: 1.65;
+    }
+    .product-panel:last-child .step-body p { color: rgba(255,255,255,0.45); }
+
+    .verdict-block {
+      background: var(--ink-light);
+      color: var(--white);
+      padding: 28px 40px;
+    }
+    .verdict-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 700;
+      background: rgba(34,197,94,0.15); color: #4ADE80;
+      border: 1px solid rgba(34,197,94,0.25);
+      padding: 4px 12px; letter-spacing: 0.05em;
+      margin-bottom: 16px;
+    }
+    .verdict-text {
+      font-size: 13px; color: rgba(255,255,255,0.45);
+      line-height: 1.65; margin-bottom: 12px;
+    }
+    .verdict-score {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .score-bar { flex: 1; height: 2px; background: rgba(255,255,255,0.08); }
+    .score-fill { height: 100%; width: 97%; background: var(--gold); }
+    .score-pct { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.4); }
+
+    /* ── COMPLIANCE / TRUST ── */
+    .section-trust {
+      background: var(--ink-light);
+      color: var(--white);
+      padding: 80px 48px;
+    }
+
+    .trust-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px; margin-top: 56px;
+    }
+
+    .trust-item h4 {
+      font-family: 'Cormorant Display', serif;
+      font-size: 18px; font-weight: 400;
+      color: var(--white); margin-bottom: 10px;
+    }
+    .trust-item p {
+      font-size: 13px; color: rgba(255,255,255,0.4);
+      line-height: 1.7;
+    }
+
+    .trust-certs {
+      display: flex; gap: 20px; margin-top: 48px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 32px;
+    }
+    .cert {
+      font-size: 11px; font-weight: 600;
+      color: rgba(255,255,255,0.25); letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ── QUOTE ── */
+    .section-quote {
+      background: var(--bg-light);
+      padding: 96px 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+    }
+
+    .quote-body blockquote {
+      font-family: 'Cormorant Display', serif;
+      font-size: clamp(22px, 2.5vw, 32px);
+      font-weight: 400; line-height: 1.4;
+      color: var(--ink-light);
+      letter-spacing: -0.3px;
+    }
+    .quote-body blockquote em { font-style: italic; color: var(--muted-light); }
+    .quote-attr {
+      margin-top: 24px;
+      font-size: 13px; color: var(--muted-light);
+    }
+    .quote-attr strong { color: var(--ink-light); font-weight: 500; }
+
+    .quote-stats { display: flex; flex-direction: column; gap: 32px; }
+    .qs {
+      border-left: 2px solid var(--gold);
+      padding-left: 20px;
+    }
+    .qs-num {
+      font-family: 'Cormorant Display', serif;
+      font-size: 36px; font-weight: 400;
+      color: var(--ink-light); line-height: 1; margin-bottom: 6px;
+      letter-spacing: -1px;
+    }
+    .qs-label { font-size: 13px; color: var(--muted-light); }
+
+    /* ── CTA ── */
+    .section-cta {
+      background:
+        linear-gradient(135deg, #0D1B2A 0%, #0F2535 50%, #0A1520 100%);
+      padding: 96px 48px;
+      text-align: center;
+    }
+    .section-cta h2 {
+      font-family: 'Cormorant Display', serif;
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 400; line-height: 1.2;
+      color: var(--white); margin-bottom: 20px;
+      letter-spacing: -0.5px;
+    }
+    .section-cta h2 em { font-style: italic; color: rgba(255,255,255,0.55); }
+    .section-cta p {
+      font-size: 16px; color: var(--muted);
+      margin-bottom: 40px; font-weight: 300;
+    }
+    .cta-compliance {
+      margin-top: 24px; font-size: 11px;
+      color: var(--faint); letter-spacing: 0.05em;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      padding: 40px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .f-brand {
+      font-family: 'Cormorant Display', serif;
+      font-size: 15px; color: rgba(255,255,255,0.4);
+    }
+    .f-links { display: flex; gap: 24px; }
+    .f-links a {
+      font-size: 12px; color: rgba(255,255,255,0.2);
+      text-decoration: none; transition: color 0.15s;
+    }
+    .f-links a:hover { color: rgba(255,255,255,0.5); }
+    .f-copy { font-size: 11px; color: rgba(255,255,255,0.12); }
+
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      .hero { padding: 0 24px 64px; }
+      .hero-clients { display: none; }
+      .section-light, .section-trust, .section-quote, .section-cta { padding: 64px 24px; }
+      .product-split { grid-template-columns: 1fr; }
+      .trust-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .section-quote { grid-template-columns: 1fr; gap: 48px; }
+      footer { padding: 32px 24px; flex-direction: column; gap: 20px; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <span class="nav-name">Sana AI</span>
+  </a>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="#">Løsning</a>
+      <a href="#">Sikkerhet</a>
+      <a href="#">Om oss</a>
+    </div>
+    <a href="#" class="nav-cta">Be om en demo</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <!-- Video background — Pexels: "Male Doctors Sharing Ideas at Work" by RDNE Stock project (free to use) -->
+  <video class="hero-video" autoplay muted loop playsinline>
+    <source src="hero-bg.mp4" type="video/mp4">
+  </video>
+
+  <!-- CSS fallback when no video file is present -->
+  <div class="hero-bg-fallback"></div>
+
+  <div class="hero-spacer"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">AI for helsesektoren</div>
+    <h1>Medisinsk presisjon.<br>Legens ansvar.</h1>
+    <p class="hero-sub">
+      Norges ledende helseforsikringsselskaper stoler på Sana AI
+      for å behandle klagesaker raskere, grundigere og i tråd med GDPR Art. 9.
+    </p>
+    <a href="javascript:void(0)" class="hero-cta">Be om en demo</a>
+  </div>
+
+  <!-- Marquee client strip -->
+  <div class="hero-clients">
+    <div class="clients-track">
+      <span class="client-name">Storebrand Helse</span>
+      <span class="client-name">Gjensidige</span>
+      <span class="client-name">If Skadeforsikring</span>
+      <span class="client-name">Fremtind</span>
+      <span class="client-name">Tryg</span>
+      <span class="client-name">Codan</span>
+      <!-- duplicate for seamless loop -->
+      <span class="client-name">Storebrand Helse</span>
+      <span class="client-name">Gjensidige</span>
+      <span class="client-name">If Skadeforsikring</span>
+      <span class="client-name">Fremtind</span>
+      <span class="client-name">Tryg</span>
+      <span class="client-name">Codan</span>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCT SECTION -->
+<div class="section-light">
+  <div class="eyebrow">Slik fungerer det</div>
+  <h2>Bygget for <em>legers</em> arbeidshverdag</h2>
+  <p class="lead">
+    Ingen ny arbeidsflyt. Last opp dokumentene, få et strukturert medisinsk standpunkt, godkjenn med ett klikk.
+  </p>
+
+  <div class="product-split">
+    <div class="product-panel">
+      <div class="panel-label">Prosess</div>
+      <div class="panel-step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Last opp dokumenter</h4>
+          <p>PDF, Word og epikriser. Sana AI håndterer alle vanlige formater — ingen konvertering nødvendig.</p>
+        </div>
+      </div>
+      <div class="panel-step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Automatisk PII-fjerning</h4>
+          <p>Fødselsnummer, adresser og kontaktdata strippes ut automatisk. Kun klinisk innhold sendes videre.</p>
+        </div>
+      </div>
+      <div class="panel-step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>AI analyserer — legen beslutter</h4>
+          <p>AI-standpunktet er et verktøy, ikke en dom. All bruk krever aktiv godkjenning fra behandlende lege.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-panel">
+      <div class="panel-label">Eksempel på analyse</div>
+      <div class="panel-step">
+        <div class="step-num">—</div>
+        <div class="step-body">
+          <h4>thorvaldsen-kne-2026.pdf</h4>
+          <p>184 sider · 3 dokumenter · 2 sakkyndige erklæringer · mottatt 14.03.2026</p>
+        </div>
+      </div>
+      <div class="panel-step">
+        <div class="step-num">—</div>
+        <div class="step-body">
+          <h4>Nøkkelfunn</h4>
+          <p>Feilimplantasjon av femoral komponent — 11° rotasjonsavvik utenfor NOF-toleranse. Forsinket PJI-diagnostikk dag 1–2.</p>
+        </div>
+      </div>
+
+      <div class="verdict-block" style="margin: 0 -40px -40px; padding: 24px 40px;">
+        <div class="verdict-tag">
+          <span style="width:5px;height:5px;border-radius:50%;background:#22C55E;display:inline-block;"></span>
+          Støttes
+        </div>
+        <div class="verdict-text">Multiple dokumenterte behandlingssvikt med kausalt sammenheng. Kausalitet overveiende sannsynlig.</div>
+        <div class="verdict-score">
+          <div class="score-bar"><div class="score-fill"></div></div>
+          <span class="score-pct">97% prioritet</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TRUST SECTION -->
+<div class="section-trust">
+  <div class="eyebrow" style="font-size:11px;font-weight:600;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:20px;">Sikkerhet og compliance</div>
+  <h2 style="font-family:'Playfair Display',serif;font-size:clamp(28px,3vw,40px);font-weight:400;color:var(--white);max-width:520px;letter-spacing:-0.3px;line-height:1.2;">Enterprise-sikkerhet<br><em style="font-style:italic;color:rgba(255,255,255,0.5);">som standard</em></h2>
+
+  <div class="trust-grid">
+    <div class="trust-item">
+      <h4>GDPR Art. 9</h4>
+      <p>Applikasjonen er bygget for behandling av sensitive helseopplysninger. PII-fjerning skjer lokalt, ikke hos AI-leverandøren.</p>
+    </div>
+    <div class="trust-item">
+      <h4>AWS eu-north-1</h4>
+      <p>All prosessering skjer i EU. Ingen pasientdata forlater norsk infrastruktur. Data slettes etter gjennomgang.</p>
+    </div>
+    <div class="trust-item">
+      <h4>Uforanderlig revisjonslogg</h4>
+      <p>Hvert AI-kall, hver PII-fjerning og hvert legevedtak loggføres med tidsstempel og bruker-ID i CloudWatch.</p>
+    </div>
+  </div>
+
+  <div class="trust-certs">
+    <span class="cert">GDPR Art. 9</span>
+    <span class="cert">AWS eu-north-1</span>
+    <span class="cert">SOC 2 (under sertifisering)</span>
+    <span class="cert">ISO 27001 (under sertifisering)</span>
+  </div>
+</div>
+
+<!-- QUOTE SECTION -->
+<div class="section-quote">
+  <div class="quote-body">
+    <blockquote>«Sana AI fjerner ikke legens ansvar. Det fjerner <em>støyen</em> mellom dokumentene og avgjørelsen.»</blockquote>
+    <div class="quote-attr">
+      <strong>Dr. K. Hansen</strong> — Overlege, klagesaksavdeling
+    </div>
+  </div>
+  <div class="quote-stats">
+    <div class="qs">
+      <div class="qs-num">184</div>
+      <div class="qs-label">Gjennomsnittlig sideantall per klagesak</div>
+    </div>
+    <div class="qs">
+      <div class="qs-num">&lt; 5s</div>
+      <div class="qs-label">Fra opplasting til strukturert medisinsk standpunkt</div>
+    </div>
+    <div class="qs">
+      <div class="qs-num">0</div>
+      <div class="qs-label">Pasientdata lagret hos AI-leverandør</div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="section-cta">
+  <h2>Klar til å effektivisere<br><em>klagesaksbehandlingen?</em></h2>
+  <p>Ta kontakt for en demo tilpasset din organisasjon.</p>
+  <a href="#" class="hero-cta">Be om en demo</a>
+  <div class="cta-compliance">AWS eu-north-1 · GDPR Art. 9 · PII fjernes automatisk · Legen godkjenner alltid</div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="f-brand">Sana AI</span>
+  <div class="f-links">
+    <a href="#">Compliance</a>
+    <a href="#">Personvern</a>
+    <a href="#">Kontakt</a>
+  </div>
+  <span class="f-copy">© 2026 Sana AI · AWS eu-north-1</span>
+</footer>
+
+</body>
+</html>

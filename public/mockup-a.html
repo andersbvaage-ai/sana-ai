@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sana AI — Medisinsk Journal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1B3A4B; --green: #00A36C; --ink: #1A1A1A;
+      --muted: #6B7280; --border: #E0DEDA; --grid: #F4F2EF; --white: #FFFFFF;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background: var(--white); color: var(--ink); font-size: 14px; line-height: 1.6;
+      background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 56px; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; background: rgba(255,255,255,0.97); border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-mark { width: 30px; height: 30px; border: 1.5px solid var(--navy); display: flex; align-items: center; justify-content: center; }
+    .nav-name { font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; color: var(--navy); letter-spacing: 0.06em; }
+    .nav-name em { color: var(--green); font-style: normal; }
+    .nav-links { display: flex; gap: 28px; }
+    .nav-links a { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500; color: var(--muted); text-decoration: none; letter-spacing: 0.12em; text-transform: uppercase; transition: color 0.15s; }
+    .nav-links a:hover { color: var(--navy); }
+    .nav-btn { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: white; background: var(--navy); padding: 8px 18px; text-decoration: none; letter-spacing: 0.06em; border: 1.5px solid var(--navy); transition: all 0.15s; }
+    .nav-btn:hover { background: transparent; color: var(--navy); }
+
+    .hero { min-height: 100vh; padding: 80px 48px 0; display: grid; grid-template-columns: 1fr 1fr; max-width: 1280px; margin: 0 auto; }
+
+    /* Journal form — LEFT */
+    .jform { padding: 48px 48px 48px 0; border-right: 1px solid var(--border); display: flex; flex-direction: column; justify-content: center; }
+    .jform-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; padding-bottom: 14px; border-bottom: 2px solid var(--navy); }
+    .jform-title { font-family: 'IBM Plex Mono', monospace; font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted); }
+    .jform-ref { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--navy); letter-spacing: 0.08em; }
+    .jrow { display: grid; grid-template-columns: 110px 1fr; gap: 12px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid var(--border); }
+    .jlabel { font-family: 'IBM Plex Mono', monospace; font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); }
+    .jval { font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--navy); }
+    .jval.redacted { letter-spacing: 0.04em; opacity: 0.5; }
+    .jstatus { display: flex; align-items: center; gap: 8px; }
+    .sdot { width: 6px; height: 6px; background: var(--green); animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.25} }
+    .sbadge { font-family: 'IBM Plex Mono', monospace; font-size: 9px; font-weight: 600; color: var(--green); border: 1px solid var(--green); padding: 2px 7px; letter-spacing: 0.08em; text-transform: uppercase; }
+    .jpositive { color: var(--green) !important; font-weight: 600; }
+    .jfoot { margin-top: 20px; padding-top: 12px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; }
+    .jfoot-note { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+
+    /* Hero text — RIGHT */
+    .htext { padding: 48px 0 48px 56px; display: flex; flex-direction: column; justify-content: center; }
+    .eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; color: var(--green); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+    .eyebrow::before { content: '//'; color: var(--muted); opacity: 0.4; font-size: 11px; }
+    h1 { font-family: 'Playfair Display', serif; font-size: clamp(44px, 5.5vw, 72px); font-weight: 800; line-height: 1.0; letter-spacing: -0.5px; color: var(--navy); margin-bottom: 28px; }
+    h1 em { font-style: italic; color: var(--ink); opacity: 0.4; }
+    .hsub { font-size: 15px; color: var(--muted); line-height: 1.8; max-width: 400px; margin-bottom: 36px; }
+    .hactions { display: flex; gap: 12px; align-items: center; }
+    .btn-p { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; background: var(--navy); color: white; padding: 12px 22px; text-decoration: none; letter-spacing: 0.06em; border: 1.5px solid var(--navy); transition: all 0.15s; display: inline-flex; align-items: center; gap: 9px; }
+    .btn-p:hover { background: transparent; color: var(--navy); }
+    .btn-s { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; color: var(--muted); padding: 12px 18px; text-decoration: none; border: 1.5px solid var(--border); transition: all 0.15s; }
+    .btn-s:hover { border-color: var(--navy); color: var(--navy); }
+
+    /* EKG separator */
+    .ekg-strip { width: 100%; height: 60px; overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: white; }
+    .ekg-strip svg { width: 200%; height: 100%; animation: scrollekg 5s linear infinite; }
+    @keyframes scrollekg { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    /* Problem */
+    .problem-wrap { max-width: 1280px; margin: 0 auto; padding: 88px 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+    .sec-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted); margin-bottom: 28px; display: flex; align-items: center; gap: 10px; }
+    .sec-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    .journal-entry { border: 1.5px solid var(--navy); padding: 28px; }
+    .jemeta { display: flex; justify-content: space-between; margin-bottom: 18px; padding-bottom: 13px; border-bottom: 1px solid var(--border); }
+    .jedate { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.05em; }
+    .jedoc { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--navy); letter-spacing: 0.05em; }
+    .jequote { font-family: 'Playfair Display', serif; font-size: 19px; font-style: italic; font-weight: 700; color: var(--navy); line-height: 1.5; margin-bottom: 14px; }
+    .jebody { font-size: 13.5px; color: var(--muted); line-height: 1.75; }
+    .jesig { margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--border); font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+
+    .stat-stack { display: flex; flex-direction: column; }
+    .sbox { border: 1px solid var(--border); border-bottom: none; padding: 22px 26px; display: grid; grid-template-columns: 72px 1fr; gap: 18px; align-items: center; background: var(--white); transition: background 0.15s; }
+    .sbox:last-child { border-bottom: 1px solid var(--border); }
+    .sbox:hover { background: #FAFAF8; }
+    .snum { font-family: 'Playfair Display', serif; font-size: 38px; font-weight: 800; color: var(--navy); line-height: 1; }
+    .snum.g { color: var(--green); }
+    .slbl { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 3px; }
+    .ssub { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.04em; }
+
+    footer { background: var(--navy); padding: 26px 48px; display: flex; align-items: center; justify-content: space-between; }
+    .fbrand { font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; color: white; letter-spacing: 0.06em; }
+    .fbrand em { color: var(--green); font-style: normal; }
+    .flinks { display: flex; gap: 24px; }
+    .flinks a { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.35); text-decoration: none; letter-spacing: 0.06em; transition: color 0.15s; }
+    .flinks a:hover { color: white; }
+    .fcopy { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: rgba(255,255,255,0.18); letter-spacing: 0.06em; }
+
+    @media (max-width: 900px) {
+      .hero, .problem-wrap { grid-template-columns: 1fr; padding: 80px 24px 0; }
+      .jform { border-right: none; border-bottom: 1px solid var(--border); padding: 32px 0; }
+      .htext { padding: 32px 0; }
+      .problem-wrap { padding: 64px 24px; }
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      footer { flex-direction: column; gap: 14px; align-items: flex-start; padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">
+    <div class="nav-mark">
+      <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
+        <path d="M0 7h3l2 5 4-10 2 5 2-2h5" stroke="#1B3A4B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="nav-name">SANA<em>_AI</em></span>
+  </a>
+  <div class="nav-links">
+    <a href="#">Utfordringen</a>
+    <a href="#">Arbeidsflyt</a>
+    <a href="#">Sikkerhet</a>
+    <a href="#">Kontakt</a>
+  </div>
+  <a href="#" class="nav-btn">LOGG INN →</a>
+</nav>
+
+<div class="hero">
+  <div class="jform">
+    <div class="jform-head">
+      <span class="jform-title">Klagesak — Journaloppføring</span>
+      <span class="jform-ref">REF-2026-0847</span>
+    </div>
+    <div class="jrow"><span class="jlabel">Klageref:</span><span class="jval">NPE-2026-0847 / TKA-MRSA</span></div>
+    <div class="jrow"><span class="jlabel">Pasient:</span><span class="jval redacted">████████ █████████ [PII fjernet]</span></div>
+    <div class="jrow"><span class="jlabel">Dokumenter:</span><span class="jval">184 sider · 7 vedlegg · 2 sakkyndige</span></div>
+    <div class="jrow"><span class="jlabel">Mottatt:</span><span class="jval">14.03.2026 · 09:42 CET</span></div>
+    <div class="jrow">
+      <span class="jlabel">Analysestatus:</span>
+      <div class="jstatus"><div class="sdot"></div><span class="sbadge">Aktiv analyse</span></div>
+    </div>
+    <div class="jrow"><span class="jlabel">Standpunkt:</span><span class="jval jpositive">Støttes — 97% prioritet</span></div>
+    <div class="jfoot">
+      <span class="jfoot-note">Claude Sonnet 4.6 · eu-north-1</span>
+      <span class="jfoot-note">GDPR Art. 9 ✓</span>
+    </div>
+  </div>
+
+  <div class="htext">
+    <div class="eyebrow">AI-assistert klagesaksbehandling</div>
+    <h1>Medisinsk<br>presisjon.<br><em>Juridisk</em><br>sporbarhet.</h1>
+    <p class="hsub">Timer brukt per klagesak på hundrevis av sider. Sana AI gir leger et strukturert medisinsk standpunkt på sekunder — med full revisjonslogg.</p>
+    <div class="hactions">
+      <a href="#" class="btn-p">START ANALYSE <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <a href="#" class="btn-s">SE ARBEIDSFLYT</a>
+    </div>
+  </div>
+</div>
+
+<div class="ekg-strip">
+  <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+    <path fill="none" stroke="#1B3A4B" stroke-width="1.5" opacity="0.15" d="M0,30 L55,30 L62,30 L66,6 L70,54 L74,18 L78,42 L82,30 L140,30 L195,30 L202,30 L206,6 L210,54 L214,18 L218,42 L222,30 L280,30 L335,30 L342,30 L346,6 L350,54 L354,18 L358,42 L362,30 L420,30 L475,30 L482,30 L486,6 L490,54 L494,18 L498,42 L502,30 L560,30 L615,30 L622,30 L626,6 L630,54 L634,18 L638,42 L642,30 L700,30 L755,30 L762,30 L766,6 L770,54 L774,18 L778,42 L782,30 L840,30 L895,30 L902,30 L906,6 L910,54 L914,18 L918,42 L922,30 L980,30 L1035,30 L1042,30 L1046,6 L1050,54 L1054,18 L1058,42 L1062,30 L1120,30 L1175,30 L1182,30 L1186,6 L1190,54 L1194,18 L1198,42 L1200,30"/>
+    <path fill="none" stroke="#1B3A4B" stroke-width="1.5" opacity="0.15" d="M1200,30 L1255,30 L1262,30 L1266,6 L1270,54 L1274,18 L1278,42 L1282,30 L1340,30 L1395,30 L1402,30 L1406,6 L1410,54 L1414,18 L1418,42 L1422,30 L1480,30 L1535,30 L1542,30 L1546,6 L1550,54 L1554,18 L1558,42 L1562,30 L1620,30 L1675,30 L1682,30 L1686,6 L1690,54 L1694,18 L1698,42 L1702,30 L1760,30 L1815,30 L1822,30 L1826,6 L1830,54 L1834,18 L1838,42 L1842,30 L1900,30 L1955,30 L1962,30 L1966,6 L1970,54 L1974,18 L1978,42 L1982,30 L2040,30 L2095,30 L2102,30 L2106,6 L2110,54 L2114,18 L2118,42 L2118,30 L2200,30 L2400,30"/>
+  </svg>
+</div>
+
+<section>
+  <div class="problem-wrap">
+    <div>
+      <div class="sec-label">Utfordringen</div>
+      <div class="journal-entry">
+        <div class="jemeta">
+          <span class="jedate">14. mars 2026 — 11:20 CET</span>
+          <span class="jedoc">Dr. K. Hansen · Overlege</span>
+        </div>
+        <div class="jequote">"En sak kan inneholde hundrevis av sider. Legen må lese, forstå og vurdere — under tidspress."</div>
+        <div class="jebody">Journalnotater, epikriser, sakkyndige erklæringer, korrespondanse. Alt skal vurderes. Sana AI fjerner ikke legens ansvar — det fjerner støyen mellom dokumentene og avgjørelsen.</div>
+        <div class="jesig">Sana AI v1 · GDPR Art. 9 · PII fjernet · Revisjonslogg aktiv</div>
+      </div>
+    </div>
+    <div>
+      <div class="sec-label">Nøkkeltall</div>
+      <div class="stat-stack">
+        <div class="sbox"><span class="snum">184</span><div><div class="slbl">Gjennomsnittlig sideantall</div><div class="ssub">i en kompleks helseforsikringsklage</div></div></div>
+        <div class="sbox"><span class="snum g">&lt;5s</span><div><div class="slbl">AI-analysetid</div><div class="ssub">fra opplasting til strukturert standpunkt</div></div></div>
+        <div class="sbox"><span class="snum">0</span><div><div class="slbl">Pasientdata hos AI-leverandør</div><div class="ssub">PII fjernes automatisk før sending</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="fbrand">SANA<em>_AI</em></span>
+  <div class="flinks">
+    <a href="#">Klagesak-verktøyet</a>
+    <a href="#">Compliance</a>
+    <a href="#">Kontakt</a>
+  </div>
+  <span class="fcopy">© 2026 SANA AI · AWS eu-north-1 · GDPR Art. 9</span>
+</footer>
+
+</body>
+</html>

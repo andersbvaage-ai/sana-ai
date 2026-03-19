@@ -1,0 +1,79 @@
+{\rtf1\ansi\deff0
+{\fonttbl{\f0\fswiss\fcharset0 Calibri;}{\f1\fswiss\fcharset0 Calibri;}}
+{\colortbl;\red27\green58\blue75;\red184\green147\blue90;\red100\green100\blue100;}
+
+\paperw12240\paperh15840\margl1800\margr1800\margt1440\margb1440
+
+{\pard\f0\fs32\b\cf1\sb0\sa240 To-do \u8212? Sana AI\par}
+
+{\pard\f0\fs20\cf3\sb0\sa360 Oppdatert 14. mars 2026\par}
+
+{\pard\f0\fs26\b\cf1\sb360\sa160 1. Juridisk / Regulatorisk\par}
+{\pard\f0\fs20\cf3\sb0\sa60 Blokkerer reell bruk av systemet.\par}
+
+{\pard\f0\fs22\sb120\sa80 \u9744? \b DPA med AWS\b0\par}
+{\pard\f0\fs20\cf3\sb0\sa120 Data Processing Agreement m\u229? signeres f\u248?r reelle pasientdata kan behandles i AWS Bedrock.\par}
+
+{\pard\f0\fs22\sb120\sa80 \u9744? \b DPIA\b0\par}
+{\pard\f0\fs20\cf3\sb0\sa120 Datatilsynet krever vurdering av personvernkonsekvenser for behandling av Art. 9-data (helseopplysninger).\par}
+
+{\pard\f0\fs22\sb120\sa80 \u9744? \b Rettslig grunnlag\b0\par}
+{\pard\f0\fs20\cf3\sb0\sa120 Avklare hjemmelsgrunnlag for behandling \u8212? berettiget interesse, samtykke eller avtalef\u248?relse.\par}
+
+{\pard\f0\fs22\sb120\sa80 \u9744? \b Advokatgjennnomgang av systemdokumentasjon\b0\par}
+{\pard\f0\fs20\cf3\sb0\sa120 docs/personvern-systemdokumentasjon.docx er forberedt og klar for ekstern juridisk vurdering.\par}
+
+
+{\pard\f0\fs26\b\cf1\sb360\sa160 2. Sikkerhet\par}
+{\pard\f0\fs20\cf3\sb0\sa60 Blokkerer produksjonssetting.\par}
+
+{\pard\f0\fs22\sb120\sa80 \u9744? \b Ekte brukerautentisering\b0\par}
+{\pard\f0\fs20\cf3\sb0\sa120 Bytt ut admin-JWT med brukerlogin \u8212? BankID eller SSO mot eksisterende EPJ-system. Leger m\u229? ha individuelle brukerkontoer.\par}
+
+{\pard\f0\fs22\sb120\sa80 \u9744? \b Kryptert lagring\b0\par}
+{\pard\f0\fs20\cf3\sb0\sa120 cases.json lagrer sensitiv data i klartekst p\u229? disk. M\u229? krypteres eller erstattes med en ordentlig database.\par}
+
+{\pard\f0\fs22\sb120\sa80 \u9744? \b Fjern hardkodede testdata\b0\par}
+{\pard\f0\fs20\cf3\sb0\sa120 Mock-f\u248?dselsnummer og testdata m\u229? ut av kildekoden f\u248?r prosjektet deles eller publiseres.\par}
+
+{\pard\f0\fs22\sb120\sa80 \u9744? \b Rollestyring\b0\par}
+{\pard\f0\fs20\cf3\sb0\sa120 Implementer skille mellom roller: lege, administrator og eventuell saksbehandler.\par}
+
+
+{\pard\f0\fs26\b\cf1\sb360\sa160 3. Infrastruktur\par}
+{\pard\f0\fs20\cf3\sb0\sa60 Blokkerer produksjonssetting.\par}
+
+{\pard\f0\fs22\sb120\sa80 \u9744? \b Produksjonshosting\b0\par}
+{\pard\f0\fs20\cf3\sb0\sa120 Erstatt ngrok med en permanent l\u248?sning \u8212? AWS App Runner, ECS eller tilsvarende.\par}
+
+{\pard\f0\fs22\sb120\sa80 \u9744? \b Database\b0\par}
+{\pard\f0\fs20\cf3\sb0\sa120 Bytt ut cases.json med en ordentlig database (RDS, DynamoDB e.l.) med backup og tilgangsstyring.\par}
+
+{\pard\f0\fs22\sb120\sa80 \u9744? \b Milj\u248?variabel-h\u229?ndtering\b0\par}
+{\pard\f0\fs20\cf3\sb0\sa120 .env-filer skal ikke v\u230?re i kildekoden. Bruk AWS Secrets Manager eller tilsvarende l\u248?sning.\par}
+
+
+{\pard\f0\fs26\b\cf1\sb360\sa160 4. Produkt / Funksjonalitet\par}
+
+{\pard\f0\fs22\sb120\sa80 \u9744? \b Slette saker\b0\par}
+{\pard\f0\fs20\cf3\sb0\sa120 Ingen slettefunksjon er implementert per n\u229?.\par}
+
+{\pard\f0\fs22\sb120\sa80 \u9744? \b Eksport\b0\par}
+{\pard\f0\fs20\cf3\sb0\sa120 Legen b\u248?r kunne eksportere godkjent vurdering som PDF.\par}
+
+{\pard\f0\fs22\sb120\sa80 \u9744? \b Demo-modus\b0\par}
+{\pard\f0\fs20\cf3\sb0\sa120 Tydeligere skille mellom demo og reel bruk i UI \u8212? viktig for presentasjoner.\par}
+
+{\pard\f0\fs22\sb120\sa80 \u9744? \b Feilh\u229?ndtering i UI\b0\par}
+{\pard\f0\fs20\cf3\sb0\sa120 Vise fornuftige feilmeldinger ved API-feil, timeout og ugyldige filer.\par}
+
+
+{\pard\f0\fs26\b\cf1\sb360\sa160 5. Landingsside\par}
+
+{\pard\f0\fs22\sb120\sa80 \u9744? \b Ekte kontaktskjema\b0\par}
+{\pard\f0\fs20\cf3\sb0\sa120 \u171?Pr\u248?v gratis\u187?-knappen g\u229?r direkte til verkt\u248?yet. Beh\u248?ver et skjema for leads/demo-foresp\u248?rsler f\u248?r produksjonsl\u230?nsering.\par}
+
+{\pard\f0\fs22\sb120\sa80 \u9744? \b Mobiltest\b0\par}
+{\pard\f0\fs20\cf3\sb0\sa120 Verifiser responsivt design p\u229? faktisk mobil og nettbrett.\par}
+
+}

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Innholdsadmin – Sana AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --fjord: #1B3A4B; --gold: #B8935A; --cream: #FAF8F4;
+      --ink: #1A1A1A; --ink-2: #374151; --muted: #6B7280;
+      --border: #E5E0D8; --green: #1A5C3A; --green-lt: #D1FAE5;
+      --red: #991B1B; --red-lt: #FEE2E2;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--ink); font-size: 14px; }
+
+    /* ── Layout ── */
+    .layout { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      background: var(--fjord); color: white;
+      padding: 28px 20px; position: sticky; top: 0; height: 100vh;
+      overflow-y: auto; display: flex; flex-direction: column; gap: 6px;
+    }
+    .sidebar-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.4px; color: rgba(255,255,255,0.4); margin: 16px 0 6px; padding: 0 8px; }
+    .sidebar-title:first-child { margin-top: 0; }
+    .sidebar a {
+      display: block; padding: 8px 12px; border-radius: 6px;
+      color: rgba(255,255,255,0.7); text-decoration: none; font-size: 13.5px; font-weight: 500;
+      transition: all 0.15s;
+    }
+    .sidebar a:hover, .sidebar a.active { background: rgba(255,255,255,0.1); color: white; }
+    .sidebar-logo { font-size: 17px; font-weight: 700; color: white; margin-bottom: 24px; padding: 0 8px; }
+    .sidebar-logo em { color: var(--gold); font-style: italic; }
+
+    /* ── Main ── */
+    .main { padding: 40px 48px; max-width: 900px; }
+    .page-header { margin-bottom: 32px; }
+    .page-header h1 { font-size: 22px; font-weight: 700; color: var(--fjord); margin-bottom: 6px; }
+    .page-header p { font-size: 14px; color: var(--muted); }
+
+    /* ── Section card ── */
+    .card {
+      background: white; border: 1px solid var(--border); border-radius: 12px;
+      padding: 28px; margin-bottom: 20px;
+    }
+    .card-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); margin-bottom: 20px; }
+
+    /* ── Form ── */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .form-group:last-child { margin-bottom: 0; }
+    label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); }
+    input[type="text"], textarea, select {
+      padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 7px;
+      font-size: 13.5px; font-family: inherit; color: var(--ink); background: var(--cream);
+      transition: all 0.15s; outline: none; width: 100%;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--fjord); background: white; box-shadow: 0 0 0 3px rgba(27,58,75,0.08); }
+    textarea { min-height: 90px; resize: vertical; }
+    .hint { font-size: 11.5px; color: var(--muted); margin-top: 4px; }
+
+    /* ── Font preview ── */
+    .font-preview { margin-top: 12px; padding: 14px 16px; background: var(--cream); border: 1px solid var(--border); border-radius: 8px; font-size: 22px; font-weight: 700; color: var(--fjord); letter-spacing: -0.3px; transition: font-family 0.2s; }
+    .font-preview em { font-style: italic; color: var(--gold); }
+
+    /* ── Action bar ── */
+    .action-bar {
+      position: sticky; bottom: 0;
+      background: rgba(250,248,244,0.95); backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border);
+      padding: 14px 48px; display: flex; align-items: center; gap: 14px;
+      margin-left: -48px; width: calc(100% + 96px);
+    }
+    .btn-save {
+      padding: 10px 24px; background: var(--fjord); color: white;
+      border: none; border-radius: 7px; font-size: 14px; font-weight: 700;
+      font-family: inherit; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-save:hover:not(:disabled) { background: #243F52; }
+    .btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-preview { padding: 10px 20px; color: var(--fjord); background: white; border: 1.5px solid var(--border); border-radius: 7px; font-size: 14px; font-weight: 600; font-family: inherit; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s; }
+    .btn-preview:hover { border-color: var(--fjord); }
+    .save-msg { font-size: 13px; font-weight: 600; }
+    .save-msg.ok   { color: var(--green); }
+    .save-msg.err  { color: var(--red); }
+
+    /* ── Login screen ── */
+    .login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--cream); }
+    .login-box { background: white; border: 1px solid var(--border); border-radius: 14px; padding: 40px; width: 360px; box-shadow: 0 4px 24px rgba(0,0,0,0.06); }
+    .login-box h1 { font-size: 20px; font-weight: 700; color: var(--fjord); margin-bottom: 6px; }
+    .login-box p { font-size: 14px; color: var(--muted); margin-bottom: 24px; }
+    .login-box .btn-save { width: 100%; padding: 12px; font-size: 15px; }
+    .login-err { font-size: 13px; color: var(--red); background: var(--red-lt); border: 1px solid #FECACA; border-radius: 6px; padding: 9px 12px; margin-bottom: 14px; display: none; }
+    .login-err.visible { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- ── Login (shown if no token) ── -->
+<div class="login-wrap" id="login-wrap">
+  <div class="login-box">
+    <h1>Sana<em style="color:var(--gold);font-style:italic">AI</em> Admin</h1>
+    <p>Logg inn for å redigere innhold på landingssiden.</p>
+    <div class="login-err" id="login-err"></div>
+    <div class="form-group">
+      <label for="l-user">Brukernavn</label>
+      <input type="text" id="l-user" autocomplete="username" />
+    </div>
+    <div class="form-group" style="margin-bottom:20px">
+      <label for="l-pass">Passord</label>
+      <input type="password" id="l-pass" autocomplete="current-password" />
+    </div>
+    <button class="btn-save" id="login-btn" style="width:100%;padding:12px;font-size:15px">Logg inn</button>
+  </div>
+</div>
+
+<!-- ── Main admin UI ── -->
+<div class="layout" id="admin-wrap" style="display:none">
+  <aside class="sidebar">
+    <div class="sidebar-logo">Sana<em>AI</em></div>
+    <div class="sidebar-title">Innhold</div>
+    <a href="#fonts" class="active">Fonter</a>
+    <a href="#hero">Hero</a>
+    <a href="#problem">Problem-seksjon</a>
+    <a href="#contact">Kontakt-overskrift</a>
+    <a href="#cta">CTA-seksjon</a>
+    <div class="sidebar-title">Verktøy</div>
+    <a href="/index.html" target="_blank">↗ Vis landingsside</a>
+    <a href="#" id="logout-link">Logg ut</a>
+  </aside>
+
+  <div class="main">
+    <div class="page-header">
+      <h1>Innholdsadministrasjon</h1>
+      <p>Endringer lagres umiddelbart og vises på landingssiden.</p>
+    </div>
+
+    <!-- Fonter -->
+    <div class="card" id="fonts">
+      <div class="card-title">Fonter</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="headingFont">Overskriftsfont</label>
+          <select id="headingFont"></select>
+          <div class="font-preview" id="heading-preview">Medisinsk presisjon.<em> Juridisk.</em></div>
+        </div>
+        <div class="form-group">
+          <label for="bodyFont">Brødtekstfont</label>
+          <select id="bodyFont"></select>
+          <div class="font-preview" id="body-preview" style="font-size:15px;font-weight:400;letter-spacing:0">Timer brukt per klagesak på hundrevis av sider.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero -->
+    <div class="card" id="hero">
+      <div class="card-title">Hero</div>
+      <div class="form-group">
+        <label for="hero-kicker">Kicker-tekst</label>
+        <input type="text" id="hero-kicker" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="hero-h1Line1">H1 linje 1 (vanlig)</label>
+          <input type="text" id="hero-h1Line1" />
+        </div>
+        <div class="form-group">
+          <label for="hero-h1Line2">H1 linje 2 (kursiv/gull)</label>
+          <input type="text" id="hero-h1Line2" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="hero-h1Line3">H1 linje 3 (vanlig)</label>
+        <input type="text" id="hero-h1Line3" />
+      </div>
+      <div class="form-group">
+        <label for="hero-sub">Ingress</label>
+        <textarea id="hero-sub"></textarea>
+      </div>
+    </div>
+
+    <!-- Problem -->
+    <div class="card" id="problem">
+      <div class="card-title">Problem-seksjon</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="problem-heading">Overskrift (før kursiv)</label>
+          <input type="text" id="problem-heading" />
+        </div>
+        <div class="form-group">
+          <label for="problem-headingEm">Overskrift kursiv</label>
+          <input type="text" id="problem-headingEm" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="problem-body">Brødtekst</label>
+        <textarea id="problem-body" style="min-height:120px"></textarea>
+        <div class="hint">Bruk to linjeskift (Enter+Enter) for avsnittsskift.</div>
+      </div>
+    </div>
+
+    <!-- Kontakt -->
+    <div class="card" id="contact">
+      <div class="card-title">Kontakt-overskrift</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="contact-heading">Tekst (før kursiv)</label>
+          <input type="text" id="contact-heading" />
+        </div>
+        <div class="form-group">
+          <label for="contact-headingEm">Kursiv del</label>
+          <input type="text" id="contact-headingEm" />
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="card" id="cta">
+      <div class="card-title">CTA-seksjon</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="cta-heading">Overskrift (før kursiv)</label>
+          <input type="text" id="cta-heading" />
+        </div>
+        <div class="form-group">
+          <label for="cta-headingEm">Kursiv del</label>
+          <input type="text" id="cta-headingEm" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="cta-sub">Undertekst</label>
+        <textarea id="cta-sub"></textarea>
+      </div>
+    </div>
+
+    <div class="action-bar">
+      <button class="btn-save" id="save-btn">Lagre endringer</button>
+      <a class="btn-preview" href="/index.html" target="_blank">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7s2.5-4.5 6-4.5S13 7 13 7s-2.5 4.5-6 4.5S1 7 1 7z" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="7" r="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+        Forhåndsvis side
+      </a>
+      <span class="save-msg" id="save-msg"></span>
+    </div>
+  </div>
+</div>
+
+<script src="/content-admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sana AI — Awwwards</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #EDECEA;
+      --ink:    #0D0D0D;
+      --muted:  #888;
+      --faint:  #BBB;
+      --border: rgba(0,0,0,0.1);
+      --gold:   #B8935A;
+      --green:  #1A7A4A;
+      --red:    #C0392B;
+      --amber:  #C47C1A;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 28px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 8px;
+      text-decoration: none; color: var(--ink);
+    }
+    .nav-icon { width: 18px; height: 18px; }
+    .nav-name { font-size: 13px; font-weight: 700; letter-spacing: -0.3px; }
+
+    .nav-links { display: flex; gap: 0; }
+    .nav-links a {
+      font-size: 12px; font-weight: 400; color: var(--muted);
+      text-decoration: none; padding: 0 14px; line-height: 47px;
+      border-left: 1px solid var(--border);
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+
+    .nav-right { display: flex; align-items: center; gap: 0; }
+    .nav-login {
+      font-size: 12px; font-weight: 400; color: var(--muted);
+      text-decoration: none; padding: 0 16px; line-height: 47px;
+      border-left: 1px solid var(--border);
+      transition: color 0.15s;
+    }
+    .nav-login:hover { color: var(--ink); }
+    .nav-signup {
+      font-size: 12px; font-weight: 600; color: var(--bg);
+      background: var(--ink); text-decoration: none;
+      padding: 0 18px; line-height: 47px;
+      border-left: 1px solid var(--border);
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .nav-signup:hover { background: #333; }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 48px 0 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Top metadata bar */
+    .hero-meta {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 28px;
+      border-bottom: 1px solid var(--border);
+    }
+    .meta-left { display: flex; align-items: center; gap: 24px; }
+    .meta-tag {
+      font-size: 11px; font-weight: 500; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .meta-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--faint); }
+    .meta-right { font-size: 11px; color: var(--muted); letter-spacing: 0.03em; }
+
+    /* Big heading */
+    .hero-title-wrap {
+      padding: 28px 28px 0;
+      overflow: hidden;
+    }
+    .hero-title {
+      font-size: clamp(72px, 10.5vw, 160px);
+      font-weight: 900;
+      line-height: 0.92;
+      letter-spacing: -4px;
+      color: var(--ink);
+      text-transform: uppercase;
+    }
+    .hero-title em {
+      font-style: italic;
+      font-weight: 300;
+      color: var(--muted);
+    }
+
+    /* Below title: two-col layout */
+    .hero-body {
+      display: grid;
+      grid-template-columns: 1fr 480px;
+      gap: 0;
+      border-top: 1px solid var(--border);
+      margin-top: 28px;
+    }
+    .hero-body-left {
+      padding: 32px 28px;
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .hero-sub {
+      font-size: 16px; font-weight: 400; color: var(--muted);
+      line-height: 1.65; max-width: 420px;
+      margin-bottom: 40px;
+    }
+    .hero-sub strong { color: var(--ink); font-weight: 500; }
+
+    .hero-actions { display: flex; gap: 10px; align-items: center; }
+    .btn-primary {
+      font-size: 12px; font-weight: 600; color: var(--bg);
+      background: var(--ink); padding: 10px 20px;
+      text-decoration: none; transition: background 0.15s;
+      display: inline-flex; align-items: center; gap: 8px;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .btn-primary:hover { background: #333; }
+    .btn-ghost {
+      font-size: 12px; font-weight: 500; color: var(--muted);
+      padding: 10px 20px; text-decoration: none; transition: color 0.15s;
+      border: 1px solid var(--border);
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .btn-ghost:hover { color: var(--ink); border-color: rgba(0,0,0,0.3); }
+
+    .hero-body-stats {
+      display: flex; gap: 0;
+      margin-top: 40px;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+    }
+    .hs {
+      flex: 1; padding-right: 20px;
+    }
+    .hs + .hs { padding-left: 20px; border-left: 1px solid var(--border); }
+    .hs-num { font-size: 28px; font-weight: 700; letter-spacing: -1px; color: var(--ink); }
+    .hs-label { font-size: 11px; color: var(--muted); line-height: 1.5; margin-top: 4px; }
+
+    /* Right panel — app preview */
+    .hero-body-right {
+      background: #0D0D0D;
+      overflow: hidden;
+      position: relative;
+    }
+    .app-preview {
+      display: flex; flex-direction: column;
+      height: 100%;
+      min-height: 480px;
+    }
+    .ap-header {
+      padding: 14px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .ap-title { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.08em; }
+    .ap-status { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #4ADE80; font-weight: 500; }
+    .ap-dot { width: 5px; height: 5px; border-radius: 50%; background: #22C55E; }
+
+    .ap-case {
+      padding: 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .ap-case-name { font-size: 13px; font-weight: 500; color: #fff; margin-bottom: 4px; }
+    .ap-case-meta { font-size: 11px; color: rgba(255,255,255,0.3); }
+
+    .ap-verdict {
+      padding: 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .ap-verdict-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.25); margin-bottom: 12px; }
+    .ap-verdict-pill {
+      display: inline-block;
+      font-size: 12px; font-weight: 700; padding: 4px 14px;
+      background: rgba(34,197,94,0.15); color: #4ADE80;
+      border: 1px solid rgba(34,197,94,0.25);
+      margin-bottom: 12px;
+    }
+    .ap-score-row { display: flex; align-items: center; gap: 10px; }
+    .ap-score-bar { flex: 1; height: 2px; background: rgba(255,255,255,0.08); }
+    .ap-score-fill { height: 100%; width: 97%; background: #B8935A; }
+    .ap-score-num { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.5); }
+
+    .ap-findings { padding: 18px; }
+    .ap-findings-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.25); margin-bottom: 10px; }
+    .ap-finding {
+      font-size: 11.5px; color: rgba(255,255,255,0.4); line-height: 1.6;
+      padding-left: 14px; position: relative; margin-bottom: 8px;
+    }
+    .ap-finding::before { content: '→'; position: absolute; left: 0; color: #B8935A; font-size: 10px; top: 1px; }
+
+    .ap-footer {
+      margin-top: auto;
+      padding: 12px 18px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      font-size: 10px; color: rgba(255,255,255,0.15);
+    }
+
+    /* ── FEATURES ── */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--border);
+    }
+    .feature {
+      padding: 40px 28px;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+    .feature:hover { background: rgba(0,0,0,0.03); }
+    .feature:nth-child(3n) { border-right: none; }
+    .feature-num {
+      font-size: 11px; font-weight: 600; color: var(--faint);
+      margin-bottom: 20px;
+    }
+    .feature h3 {
+      font-size: 16px; font-weight: 600; color: var(--ink);
+      margin-bottom: 10px; letter-spacing: -0.3px;
+      line-height: 1.25;
+    }
+    .feature p { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+    /* ── QUOTE SECTION ── */
+    .quote-section {
+      padding: 80px 28px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .quote-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+    .quote-text {
+      font-size: clamp(22px, 3vw, 36px);
+      font-weight: 400;
+      line-height: 1.3;
+      letter-spacing: -0.5px;
+      color: var(--ink);
+    }
+    .quote-text em { font-style: italic; color: var(--muted); }
+
+    /* ── CTA ── */
+    .cta-section {
+      padding: 80px 28px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+    .cta-left h2 {
+      font-size: clamp(36px, 4.5vw, 64px);
+      font-weight: 800; letter-spacing: -2px;
+      line-height: 1.0; color: var(--ink);
+      text-transform: uppercase;
+    }
+    .cta-left p {
+      font-size: 15px; color: var(--muted); margin-top: 16px; max-width: 420px; line-height: 1.6;
+    }
+    .cta-right { display: flex; flex-direction: column; gap: 12px; align-items: flex-end; }
+    .cta-note { font-size: 11px; color: var(--faint); text-align: right; }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 28px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--border);
+    }
+    .f-brand { font-size: 13px; font-weight: 700; color: var(--ink); letter-spacing: -0.2px; }
+    .f-links { display: flex; gap: 24px; }
+    .f-links a { font-size: 12px; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+    .f-links a:hover { color: var(--ink); }
+    .f-copy { font-size: 11px; color: var(--faint); }
+
+    @media (max-width: 900px) {
+      .hero-body { grid-template-columns: 1fr; }
+      .hero-body-right { min-height: 360px; }
+      .features { grid-template-columns: 1fr 1fr; }
+      .features .feature:nth-child(3n) { border-right: 1px solid var(--border); }
+      .features .feature:nth-child(2n) { border-right: none; }
+      .quote-section { grid-template-columns: 1fr; gap: 20px; }
+      .cta-section { flex-direction: column; gap: 40px; align-items: flex-start; }
+    }
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .hero-title { letter-spacing: -2px; }
+      .features { grid-template-columns: 1fr; }
+      .hero-body-stats { flex-direction: column; }
+      .hs + .hs { border-left: none; padding-left: 0; border-top: 1px solid var(--border); padding-top: 16px; margin-top: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <svg class="nav-icon" viewBox="0 0 18 18" fill="none">
+      <path d="M1.5 9h3L6 13.5 10 3l2 5.5H16.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span class="nav-name">Sana AI</span>
+  </a>
+  <div class="nav-links">
+    <a href="#">Utfordringen</a>
+    <a href="#">Arbeidsflyt</a>
+    <a href="#">Sikkerhet</a>
+    <a href="#">Kontakt</a>
+  </div>
+  <div class="nav-right">
+    <a href="#" class="nav-login">Logg inn</a>
+    <a href="#" class="nav-signup">Prøv gratis →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+
+  <!-- Metadata bar -->
+  <div class="hero-meta">
+    <div class="meta-left">
+      <span class="meta-tag">AI-verktøy</span>
+      <div class="meta-dot"></div>
+      <span class="meta-tag">Helsesektoren</span>
+      <div class="meta-dot"></div>
+      <span class="meta-tag">GDPR Art. 9</span>
+    </div>
+    <span class="meta-right">Ny funksjon: Automatisk prioritetsscore →</span>
+  </div>
+
+  <!-- Big title -->
+  <div class="hero-title-wrap">
+    <h1 class="hero-title">Klage<em>saks-</em><br>analyse</h1>
+  </div>
+
+  <!-- Two-col body -->
+  <div class="hero-body">
+    <div class="hero-body-left">
+      <div>
+        <p class="hero-sub">
+          Fra hundrevis av sider til klar medisinsk anbefaling.
+          <strong>Legen bestemmer — AI fjerner støyen.</strong>
+        </p>
+        <div class="hero-actions">
+          <a href="#" class="btn-primary">Kom i gang →</a>
+          <a href="#" class="btn-ghost">Se arbeidsflyt</a>
+        </div>
+      </div>
+      <div class="hero-body-stats">
+        <div class="hs">
+          <div class="hs-num">184</div>
+          <div class="hs-label">Gjennomsnittlig sideantall<br>per klagesak</div>
+        </div>
+        <div class="hs">
+          <div class="hs-num">&lt; 5s</div>
+          <div class="hs-label">Fra opplasting<br>til standpunkt</div>
+        </div>
+        <div class="hs">
+          <div class="hs-num">0</div>
+          <div class="hs-label">Pasientdata hos<br>AI-leverandør</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- App preview -->
+    <div class="hero-body-right">
+      <div class="app-preview">
+        <div class="ap-header">
+          <span class="ap-title">Aktiv analyse</span>
+          <div class="ap-status"><div class="ap-dot"></div>Fullført</div>
+        </div>
+        <div class="ap-case">
+          <div class="ap-case-name">thorvaldsen-kne-2026.pdf</div>
+          <div class="ap-case-meta">184 sider · 3 dokumenter · 14.03.2026</div>
+        </div>
+        <div class="ap-verdict">
+          <div class="ap-verdict-label">AI-standpunkt</div>
+          <div class="ap-verdict-pill">Støttes</div>
+          <div class="ap-score-row">
+            <div class="ap-score-bar"><div class="ap-score-fill"></div></div>
+            <span class="ap-score-num">97%</span>
+          </div>
+        </div>
+        <div class="ap-findings">
+          <div class="ap-findings-label">Nøkkelfunn</div>
+          <div class="ap-finding">Feilimplantasjon av femoral komponent — 11° rotasjonsavvik utenfor NOF-toleranse</div>
+          <div class="ap-finding">Forsinket PJI-diagnostikk: kliniske tegn dag 1–2, utredning dag 4</div>
+          <div class="ap-finding">Kausalitet mellom sviktene og dødsfallet overveiende sannsynlig</div>
+        </div>
+        <div class="ap-footer">claude-sonnet-4-6 · eu-north-1 · PII fjernet · GDPR Art. 9</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div class="features">
+  <div class="feature">
+    <div class="feature-num">01</div>
+    <h3>PDF og Word-støtte</h3>
+    <p>Last opp journalnotater, epikriser og sakkyndige erklæringer. Sana AI håndterer alt.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-num">02</div>
+    <h3>Automatisk PII-fjerning</h3>
+    <p>Fødselsnummer, adresser og kontaktdata strippes ut automatisk. Kun klinisk innhold sendes videre.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-num">03</div>
+    <h3>Legen godkjenner alltid</h3>
+    <p>AI-standpunktet er et verktøy, ikke en beslutning. All bruk krever aktiv godkjenning.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-num">04</div>
+    <h3>Prioritetsscore 0–100%</h3>
+    <p>Sorterer sakskøen automatisk. De mest komplekse sakene håndteres alltid først.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-num">05</div>
+    <h3>Uforanderlig revisjonslogg</h3>
+    <p>Hvert AI-kall og hvert legevedtak loggføres med tidsstempel og bruker-ID.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-num">06</div>
+    <h3>&lt; 5 sekunder</h3>
+    <p>Fra opplasting til strukturert medisinsk standpunkt. Uansett dokumentlengde.</p>
+  </div>
+</div>
+
+<!-- QUOTE -->
+<div class="quote-section">
+  <span class="quote-label">Utgangspunktet</span>
+  <blockquote class="quote-text">
+    «Sana AI fjerner ikke legens ansvar. Det fjerner <em>støyen</em> mellom dokumentene og avgjørelsen.»
+  </blockquote>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="cta-left">
+    <h2>Kom i<br>gang nå</h2>
+    <p>Ta kontakt for en demo, eller logg inn og last opp din første klagesak i dag.</p>
+  </div>
+  <div class="cta-right">
+    <a href="#" class="btn-primary" style="font-size:13px; padding: 14px 28px;">Prøv gratis →</a>
+    <span class="cta-note">AWS eu-north-1 · GDPR Art. 9 · PII fjernet automatisk</span>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="f-brand">Sana AI</span>
+  <div class="f-links">
+    <a href="#">Compliance</a>
+    <a href="#">Personvern</a>
+    <a href="#">Kontakt</a>
+  </div>
+  <span class="f-copy">© 2026 Sana AI · AWS eu-north-1</span>
+</footer>
+
+</body>
+</html>

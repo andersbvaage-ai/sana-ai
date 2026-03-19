@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sana AI — Institusjon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:   #1B3A4B;
+      --ink:    #1A1A1A;
+      --muted:  #6B7280;
+      --light:  #9CA3AF;
+      --border: #E0E0E0;
+      --bg:     #FFFFFF;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 58px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 56px;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-line { width: 4px; height: 22px; background: var(--navy); }
+    .nav-name { font-family: 'Libre Baskerville', serif; font-size: 16px; font-weight: 700; color: var(--ink); }
+    .nav-links { display: flex; gap: 0; }
+    .nav-links a {
+      display: flex; align-items: baseline; gap: 5px;
+      font-size: 13px; font-weight: 400; color: var(--muted);
+      text-decoration: none; padding: 0 18px;
+      border-right: 1px solid var(--border);
+      transition: color 0.15s;
+    }
+    .nav-links a:first-child { border-left: 1px solid var(--border); }
+    .nav-links a:hover { color: var(--navy); }
+    .nav-num { font-size: 10px; color: var(--light); font-weight: 400; font-variant-numeric: tabular-nums; }
+    .nav-btn {
+      font-size: 13px; font-weight: 600; color: white;
+      background: var(--navy); padding: 9px 22px;
+      text-decoration: none; border-radius: 0;
+      transition: background 0.15s;
+    }
+    .nav-btn:hover { background: #243F52; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      padding: 100px 56px 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      max-width: 1240px;
+      margin: 0 auto;
+      position: relative;
+    }
+    /* Navy sidebar bar */
+    .hero::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 80px; bottom: 0;
+      width: 6px;
+      background: var(--navy);
+    }
+
+    .hero-left { padding-left: 28px; }
+
+    .hero-kicker {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 600; color: var(--navy);
+      text-transform: uppercase; letter-spacing: 1.6px;
+      margin-bottom: 28px;
+    }
+    .kicker-dot { width: 5px; height: 5px; background: var(--navy); }
+
+    h1 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: clamp(44px, 5.5vw, 72px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.5px;
+      color: var(--ink);
+      margin-bottom: 24px;
+    }
+    h1 .line2 { color: var(--navy); display: block; }
+
+    hr.h-rule { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+    .hero-sub {
+      font-size: 16px; color: var(--muted);
+      line-height: 1.8; max-width: 440px;
+      margin-bottom: 40px;
+    }
+    .hero-actions { display: flex; gap: 12px; align-items: center; }
+    .btn-p {
+      font-size: 14px; font-weight: 600; color: white;
+      background: var(--navy); padding: 13px 28px;
+      text-decoration: none; border-radius: 0;
+      border: 2px solid var(--navy);
+      transition: all 0.15s;
+    }
+    .btn-p:hover { background: transparent; color: var(--navy); }
+    .btn-s {
+      font-size: 14px; font-weight: 500; color: var(--muted);
+      padding: 13px 22px; text-decoration: none;
+      border: 1px solid var(--border);
+      border-radius: 0;
+      transition: all 0.15s;
+    }
+    .btn-s:hover { border-color: var(--navy); color: var(--navy); }
+
+    /* Hero right — data table */
+    .hero-data {
+      border: 1px solid var(--border);
+    }
+    .data-head {
+      background: var(--navy); color: white;
+      padding: 12px 20px;
+      font-size: 11px; font-weight: 600; letter-spacing: 1.2px;
+      text-transform: uppercase;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .data-head span { opacity: 0.5; font-weight: 400; }
+    .data-row {
+      display: grid; grid-template-columns: 130px 1fr;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      align-items: baseline;
+      gap: 12px;
+    }
+    .data-row:last-child { border-bottom: none; }
+    .data-key { font-size: 11px; font-weight: 600; color: var(--light); text-transform: uppercase; letter-spacing: 0.8px; }
+    .data-val { font-size: 13.5px; color: var(--ink); }
+    .data-val.code { font-variant-numeric: tabular-nums; }
+    .data-val.pos { color: #1A5C3A; font-weight: 600; }
+    .data-val.redact { color: var(--light); font-size: 13px; }
+
+    /* ── FACTS STRIP ── */
+    .facts {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .facts-inner {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      max-width: 1240px; margin: 0 auto;
+    }
+    .fact {
+      padding: 48px 48px;
+      border-right: 1px solid var(--border);
+    }
+    .fact:last-child { border-right: none; }
+    .fact-num {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 56px; font-weight: 700;
+      color: var(--navy); line-height: 1;
+      margin-bottom: 10px; letter-spacing: -1px;
+    }
+    .fact-label { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+    .fact-desc { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+    /* ── PROBLEM ── */
+    .problem {
+      max-width: 720px; margin: 0 auto;
+      padding: 96px 56px;
+      text-align: center;
+    }
+    blockquote {
+      font-family: 'Libre Baskerville', serif;
+      font-size: clamp(20px, 2.2vw, 28px);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--navy);
+      line-height: 1.55;
+      margin-bottom: 32px;
+    }
+    .problem-body { font-size: 16px; color: var(--muted); line-height: 1.8; }
+
+    /* Rule between sections */
+    .section-rule { border: none; border-top: 1px solid var(--border); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy);
+      padding: 28px 56px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .f-brand { font-family: 'Libre Baskerville', serif; font-size: 15px; font-weight: 700; color: white; }
+    .f-links { display: flex; gap: 28px; }
+    .f-links a { font-size: 13px; color: rgba(255,255,255,0.45); text-decoration: none; transition: color 0.15s; }
+    .f-links a:hover { color: white; }
+    .f-copy { font-size: 12px; color: rgba(255,255,255,0.2); }
+
+    @media (max-width: 960px) {
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; padding: 90px 24px 64px; gap: 40px; }
+      .hero::before { display: none; }
+      .hero-left { padding-left: 0; }
+      .facts-inner { grid-template-columns: 1fr; }
+      .fact { border-right: none; border-bottom: 1px solid var(--border); padding: 36px 24px; }
+      .fact:last-child { border-bottom: none; }
+      .problem { padding: 64px 24px; }
+      footer { flex-direction: column; gap: 16px; align-items: flex-start; padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">
+    <div class="nav-line"></div>
+    <span class="nav-name">Sana AI</span>
+  </a>
+  <div class="nav-links">
+    <a href="#"><span class="nav-num">01 /</span> Utfordringen</a>
+    <a href="#"><span class="nav-num">02 /</span> Arbeidsflyt</a>
+    <a href="#"><span class="nav-num">03 /</span> Sikkerhet</a>
+    <a href="#"><span class="nav-num">04 /</span> Kontakt</a>
+  </div>
+  <a href="#" class="nav-btn">Logg inn</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-kicker">
+      <div class="kicker-dot"></div>
+      AI-assistert klagesaksbehandling
+    </div>
+
+    <h1>
+      Medisinsk presisjon.
+      <span class="line2">Juridisk sporbarhet.</span>
+    </h1>
+
+    <hr class="h-rule" />
+
+    <p class="hero-sub">
+      Timer brukt per klagesak på hundrevis av sider. Sana AI gir leger et strukturert medisinsk standpunkt på sekunder — med full revisjonslogg og GDPR-compliance.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#" class="btn-p">Prøv gratis</a>
+      <a href="#" class="btn-s">Se arbeidsflyt</a>
+    </div>
+  </div>
+
+  <div class="hero-data">
+    <div class="data-head">
+      Aktiv klagesak
+      <span>REF-2026-0847</span>
+    </div>
+    <div class="data-row">
+      <span class="data-key">Klageref</span>
+      <span class="data-val code">NPE-2026-0847</span>
+    </div>
+    <div class="data-row">
+      <span class="data-key">Pasient</span>
+      <span class="data-val redact">████████ [anonymisert]</span>
+    </div>
+    <div class="data-row">
+      <span class="data-key">Dokumenter</span>
+      <span class="data-val">184 sider · 7 vedlegg</span>
+    </div>
+    <div class="data-row">
+      <span class="data-key">Analysetid</span>
+      <span class="data-val code">&lt; 5 sekunder</span>
+    </div>
+    <div class="data-row">
+      <span class="data-key">Standpunkt</span>
+      <span class="data-val pos">Støttes — 97% prioritet</span>
+    </div>
+    <div class="data-row">
+      <span class="data-key">Sikkerhet</span>
+      <span class="data-val">GDPR Art. 9 · eu-north-1</span>
+    </div>
+  </div>
+</div>
+
+<hr class="section-rule" />
+
+<div class="facts">
+  <div class="facts-inner">
+    <div class="fact">
+      <div class="fact-num">184</div>
+      <div class="fact-label">Gjennomsnittlig sideantall</div>
+      <div class="fact-desc">i en kompleks helseforsikringsklage — journalnotater, epikriser og sakkyndige erklæringer</div>
+    </div>
+    <div class="fact">
+      <div class="fact-num">&lt;5s</div>
+      <div class="fact-label">AI-analysetid</div>
+      <div class="fact-desc">fra opplasting til strukturert medisinsk standpunkt med begrunnelse og prioritetsscore</div>
+    </div>
+    <div class="fact">
+      <div class="fact-num">0</div>
+      <div class="fact-label">Pasientdata eksponert</div>
+      <div class="fact-desc">PII fjernes automatisk. Ingen pasientidentifiserbar informasjon forlater din server</div>
+    </div>
+  </div>
+</div>
+
+<hr class="section-rule" />
+
+<div class="problem">
+  <blockquote>
+    "Sana AI fjerner ikke legens ansvar. Det fjerner støyen mellom dokumentene og avgjørelsen."
+  </blockquote>
+  <p class="problem-body">
+    En enkelt klagesak kan inneholde hundrevis av sider. Legen må lese, forstå og vurdere — ofte under tidspress, med sakskø. Vi endrer ikke arbeidsmåten din. Vi fjerner det manuelle arbeidet.
+  </p>
+</div>
+
+<hr class="section-rule" />
+
+<footer>
+  <span class="f-brand">Sana AI</span>
+  <div class="f-links">
+    <a href="#">Klagesak-verktøyet</a>
+    <a href="#">Compliance</a>
+    <a href="#">Kontakt</a>
+  </div>
+  <span class="f-copy">© 2026 Sana AI · AWS eu-north-1 · GDPR Art. 9</span>
+</footer>
+
+</body>
+</html>
