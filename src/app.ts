@@ -14,6 +14,7 @@ import { contactRouter } from './routes/contact';
 import { exportRouter } from './routes/export';
 import { statsRouter } from './routes/stats';
 import { contentRouter } from './routes/content';
+import { journalRouter } from './routes/journal';
 
 export function createApp(): express.Application {
   const app = express();
@@ -70,6 +71,9 @@ export function createApp(): express.Application {
 
   // ── Kontaktskjema (ingen auth) ────────────────────────────────────────────
   app.use('/api/contact', contactRouter);
+
+  // ── Journal AI (krever innlogging) ───────────────────────────────────────
+  app.use('/api/journal', requireAuth, journalRouter);
 
   // ── Klagesaker (krever innlogging) ────────────────────────────────────────
   app.use('/api/cases', requireAuth, casesRouter);
