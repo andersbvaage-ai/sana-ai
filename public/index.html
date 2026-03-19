@@ -4,1092 +4,973 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sana AI – AI-assistert klagesaksbehandling for norsk helseforsikring</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <!-- Animation stack -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="https://unpkg.com/splitting/dist/splitting.min.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting.css" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
 
     :root {
-      --fjord:     #1B3A4B;   /* deep Norwegian fjord navy */
-      --fjord-2:   #243F52;
-      --gold:      #B8935A;   /* warm authority gold */
-      --gold-lt:   #F5ECD9;   /* warm cream background */
-      --cream:     #FAF8F4;   /* off-white, clinical warmth */
-      --white:     #FFFFFF;
-      --ink:       #1A1A1A;
-      --ink-2:     #374151;
-      --muted:     #6B7280;
-      --muted-lt:  #9CA3AF;
-      --border:    #E5E0D8;
-      --border-dk: #C8BFB0;
-      --green:     #1A5C3A;
-      --green-lt:  #D1FAE5;
-      --amber:     #92400E;
-      --amber-lt:  #FEF3C7;
-      --red:       #991B1B;
-      --red-lt:    #FEE2E2;
-      --font-heading: 'Playfair Display';
-      --font-body:    'Inter';
+      --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+
+      /* Adapted from Eleos palette → Sana brand */
+      --primary:       #1B3A4B;   /* Eleos #1C2B36 */
+      --primary-light: #2a4f63;
+      --primary-light2: #93aab9;
+      --secondary:     #B8935A;   /* Eleos #FFC14C — Sana gold */
+      --secondary-light: #d4aa7a;
+      --teal:          #4a8a8a;   /* Eleos #558A8A */
+      --teal-light:    #93C7C7;
+
+      --bg:            #FFFFFF;
+      --bg-warm:       #f7f5e7;   /* Eleos nav/sticky bg */
+      --bg-teal:       #E2F0F0;   /* Eleos #E2F4F4 */
+      --bg-gold:       #FFF4DC;   /* Eleos #FFF4D7 */
+      --bg-blue:       #E8F2F8;   /* Eleos #D7EDFC */
+      --bg-pink:       #FFF0ED;
+
+      --ink:    #1B3A4B;
+      --body:   #4A5C6A;
+      --muted:  #7A8D99;
+      --border: rgba(27,58,75,0.10);
+
+      --dark-bg:  #1B3A4B;
+      --dark-txt: rgba(255,255,255,0.65);
+      --dark-bdr: rgba(255,255,255,0.10);
     }
 
     html { scroll-behavior: smooth; }
     body {
-      font-family: var(--font-body, 'Inter'), -apple-system, sans-serif;
-      background: var(--cream); color: var(--ink);
-      font-size: 16px; line-height: 1.6;
+      font-family: var(--font);
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--ink);
+      background: var(--bg);
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
-    /* ── NOISE TEXTURE ──────────────────────────────── */
-    .tension::before,
-    .cta-section::before,
-    .verdict-card::before {
-      content: '';
-      position: absolute; inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.035;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-      background-size: 180px 180px;
-    }
-    .tension { position: relative; }
-    .cta-section { position: relative; }
-    .tension > *, .cta-section > * { position: relative; z-index: 1; }
-    .cta-inner, .cta-inner * { position: relative; z-index: 1; }
-
-    /* ── NAV ────────────────────────────────────────── */
+    /* ── NAV ── */
     nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-      height: 64px;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 56px;
-      background: rgba(250,248,244,0.92);
-      backdrop-filter: blur(16px);
+      position: sticky; top: 0; z-index: 100;
+      height: 70px;
+      background: var(--bg-warm);
       border-bottom: 1px solid var(--border);
+      display: flex; align-items: center;
+      padding: 0 48px;
+      gap: 48px;
     }
-    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-    .nav-mark {
-      width: 32px; height: 32px; border-radius: 8px;
-      background: var(--fjord);
-      display: flex; align-items: center; justify-content: center;
+    .logo {
+      font-size: 20px; font-weight: 700;
+      color: var(--primary);
+      letter-spacing: -0.4px;
+      white-space: nowrap;
     }
-    .nav-mark svg { width: 16px; height: 16px; }
-    .nav-wordmark { font-family: var(--font-heading, 'Playfair Display'), serif; font-size: 18px; font-weight: 700; color: var(--fjord); letter-spacing: -0.3px; }
-    .nav-wordmark em { color: var(--gold); font-style: italic; }
-    .nav-links { display: flex; gap: 36px; }
-    .nav-links a { font-size: 13.5px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color 0.15s; }
-    .nav-links a:hover { color: var(--fjord); }
-    .nav-right { display: flex; gap: 10px; align-items: center; }
-    .btn-nav-ghost {
-      font-size: 13.5px; font-weight: 600; color: var(--fjord);
-      padding: 7px 18px; border-radius: 6px;
-      border: 1.5px solid var(--fjord); text-decoration: none; transition: all 0.15s;
+    .logo span { color: var(--secondary); }
+    .nav-links {
+      display: flex; gap: 32px; flex: 1;
     }
-    .btn-nav-ghost:hover { background: var(--fjord); color: white; }
-    .btn-nav-primary {
-      font-size: 13.5px; font-weight: 700;
-      background: var(--fjord); color: white;
-      padding: 8px 20px; border-radius: 6px; text-decoration: none; transition: all 0.2s;
+    .nav-links a {
+      font-size: 15px; font-weight: 400;
+      color: var(--body);
+      transition: color 0.15s;
+      white-space: nowrap;
     }
-    .btn-nav-primary:hover { background: var(--fjord-2); }
+    .nav-links a:hover { color: var(--primary); }
+    .nav-right { display: flex; align-items: center; gap: 16px; margin-left: auto; }
+    .nav-ghost {
+      font-size: 15px; font-weight: 400;
+      color: var(--body);
+      transition: color 0.15s;
+    }
+    .nav-ghost:hover { color: var(--primary); }
+    .btn-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--font);
+      font-size: 14px; font-weight: 600;
+      padding: 10px 22px;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-teal {
+      background: var(--teal-light);
+      color: var(--primary);
+    }
+    .btn-teal:hover { background: var(--teal); color: #fff; }
+    .btn-navy {
+      background: var(--primary);
+      color: #fff;
+    }
+    .btn-navy:hover { background: var(--primary-light); }
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 1.5px solid rgba(27,58,75,0.25);
+    }
+    .btn-outline:hover { border-color: var(--primary); background: rgba(27,58,75,0.04); }
+    .btn-outline-dark {
+      background: transparent;
+      color: #fff;
+      border: 1.5px solid rgba(255,255,255,0.30);
+    }
+    .btn-outline-dark:hover { background: rgba(255,255,255,0.08); }
 
-    /* ── HERO ───────────────────────────────────────── */
+    /* ── HERO ── */
     .hero {
-      padding: 120px 56px 80px;
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 80px; align-items: center;
-      max-width: 1240px; margin: 0 auto;
+      background: var(--bg);
+      padding: 72px 48px 0;
+      display: flex; align-items: flex-end;
+      gap: 48px;
+      max-width: 1200px; margin: 0 auto;
+      min-height: 560px;
     }
-
-    .hero-left {}
-    .hero-kicker {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-size: 11px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 1.4px; color: var(--gold);
-      border-bottom: 2px solid var(--gold-lt);
-      padding-bottom: 8px; margin-bottom: 28px;
+    .hero-content {
+      flex: 0 0 50%;
+      padding-bottom: 72px;
+      display: flex; flex-direction: column; gap: 22px;
     }
-    .hero-kicker-line { width: 24px; height: 2px; background: var(--gold); }
-
-    .hero h1 {
-      font-family: var(--font-heading, 'Playfair Display'), serif;
-      font-size: clamp(38px, 4vw, 58px);
-      font-weight: 800; line-height: 1.1;
-      letter-spacing: -0.5px;
-      color: var(--fjord);
-      margin-bottom: 24px;
-    }
-    .hero h1 em { font-style: italic; color: var(--gold); }
-
-    .hero-sub {
-      font-size: 17px; color: var(--ink-2); line-height: 1.75;
-      max-width: 480px; margin-bottom: 40px;
-    }
-
-    .hero-actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 48px; }
-    .btn-primary {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: var(--fjord); color: white;
-      font-size: 15px; font-weight: 700;
-      padding: 13px 26px; border-radius: 8px; text-decoration: none; transition: all 0.2s;
-    }
-    .btn-primary:hover { background: var(--fjord-2); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(27,58,75,0.25); }
-    .btn-secondary {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-size: 15px; font-weight: 500; color: var(--fjord);
-      padding: 13px 20px; border-radius: 8px;
-      border: 1.5px solid var(--border-dk); text-decoration: none; transition: all 0.2s;
-    }
-    .btn-secondary:hover { border-color: var(--fjord); background: var(--gold-lt); }
-
-    .hero-trust {
-      display: flex; gap: 8px; flex-wrap: wrap;
-    }
-    .trust-pill {
-      display: flex; align-items: center; gap: 6px;
-      font-size: 12.5px; font-weight: 500; color: var(--ink-2);
-      background: white; border: 1px solid var(--border);
-      border-radius: 100px; padding: 5px 12px;
-    }
-    .trust-pill svg { width: 13px; height: 13px; stroke: var(--green); fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
-
-    /* ── HERO RIGHT: Document stack visual ─────────── */
-    .hero-right { position: relative; }
-    .doc-stack { position: relative; width: 100%; max-width: 420px; margin: 0 auto; }
-
-    /* Stacked document cards */
-    .doc-card {
-      background: white; border-radius: 10px;
-      border: 1px solid var(--border);
-      padding: 16px 20px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-    }
-    .doc-card.behind-2 {
-      position: absolute; top: -16px; left: 8px; right: 8px; z-index: 0;
-      background: #F0EDE8; border-color: #DDD8CF;
-      transform: rotate(-2deg);
-      box-shadow: none;
-    }
-    .doc-card.behind-1 {
-      position: absolute; top: -8px; left: 4px; right: 4px; z-index: 1;
-      background: #F7F4EF; border-color: #E5E0D8;
-      transform: rotate(-1deg);
-      box-shadow: none;
-    }
-    .doc-card.front { position: relative; z-index: 2; }
-    .doc-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-    .doc-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.4px; color: var(--muted); }
-    .doc-pages { font-size: 10px; color: var(--muted-lt); background: var(--cream); border: 1px solid var(--border); padding: 2px 8px; border-radius: 100px; }
-    .doc-lines { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
-    .doc-line { height: 7px; background: var(--cream); border-radius: 100px; }
-    .doc-line.w-full  { width: 100%; }
-    .doc-line.w-5-6   { width: 83%; }
-    .doc-line.w-3-4   { width: 75%; }
-    .doc-line.w-2-3   { width: 66%; }
-    .doc-line.w-half  { width: 50%; }
-    .doc-data-row { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
-    .doc-chip {
-      font-size: 10.5px; font-weight: 700; padding: 3px 10px; border-radius: 100px;
-      letter-spacing: 0.2px;
-    }
-    .doc-chip.clinical { background: #E0F2FE; color: #0369A1; }
-    .doc-chip.legal    { background: var(--amber-lt); color: var(--amber); }
-    .doc-chip.warning  { background: var(--red-lt); color: var(--red); }
-
-    /* Verdict card overlaid on stack */
-    .verdict-card {
-      margin-top: 20px;
-      background: var(--fjord); color: white;
-      border-radius: 10px; padding: 20px 24px;
-      box-shadow: 0 12px 40px rgba(27,58,75,0.3);
-    }
-    .verdict-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-    .verdict-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.4px; color: rgba(255,255,255,0.4); }
-    .verdict-model { font-size: 11px; color: rgba(255,255,255,0.4); }
-    .verdict-verdict {
-      display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
-    }
-    .verdict-badge {
-      font-size: 13px; font-weight: 800;
-      background: var(--green-lt); color: var(--green);
-      padding: 4px 14px; border-radius: 100px;
-    }
-    .verdict-time { font-size: 13px; color: rgba(255,255,255,0.5); }
-    .verdict-summary { font-size: 14px; color: rgba(255,255,255,0.65); line-height: 1.65; margin-bottom: 14px; }
-    .verdict-prio { }
-    .verdict-prio-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.4px; color: rgba(255,255,255,0.4); margin-bottom: 6px; }
-    /* consistent dark-section text: body=0.65, secondary=0.4 */
-    .verdict-prio-row { display: flex; align-items: center; gap: 10px; }
-    .verdict-prio-bar { flex: 1; height: 4px; background: rgba(255,255,255,0.1); border-radius: 100px; overflow: hidden; }
-    .verdict-prio-fill { height: 100%; width: 97%; border-radius: 100px; background: #F59E0B; }
-    .verdict-prio-pct { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.65); }
-
-    /* Arrow between stack and verdict */
-    .stack-arrow {
-      text-align: center; padding: 8px 0;
-      font-size: 12px; font-weight: 600; color: var(--muted-lt);
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-    }
-    .stack-arrow::before, .stack-arrow::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-
-    /* ── SHARED SECTION ─────────────────────────────── */
-    section { padding: 96px 56px; }
-    .inner { max-width: 1120px; margin: 0 auto; }
     .eyebrow {
-      font-size: 11px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 1.4px; color: var(--gold); margin-bottom: 16px;
+      font-size: 13px; font-weight: 600;
+      color: var(--teal);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
     }
-    h2.stitle {
-      font-family: var(--font-heading, 'Playfair Display'), serif;
-      font-size: clamp(28px, 3vw, 42px); font-weight: 800;
-      letter-spacing: -0.5px; line-height: 1.15;
-      color: var(--fjord); margin-bottom: 18px;
+    .hero-headline {
+      font-size: 46px; font-weight: 700;
+      line-height: 1.1;
+      color: var(--primary);
+      letter-spacing: -1.5px;
     }
-    h2.stitle em { font-style: italic; color: var(--gold); }
-    .sub { font-size: 17px; color: var(--ink-2); max-width: 520px; line-height: 1.75; }
+    .hero-sub {
+      font-size: 20px; font-weight: 400;
+      color: var(--teal);
+      letter-spacing: -0.3px;
+    }
+    .hero-body {
+      font-size: 16px; font-weight: 400;
+      color: var(--body);
+      max-width: 440px;
+      line-height: 1.75;
+    }
+    .hero-actions {
+      display: flex; gap: 12px; align-items: center;
+      padding-top: 4px;
+    }
 
-    /* ── TENSION STRIP ──────────────────────────────── */
-    /* The "before Sana AI" section — establishes the pain */
-    .tension { background: var(--fjord); color: white; padding: 72px 56px; }
-    .tension .inner { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
-    .tension-left h2 {
-      font-family: var(--font-heading, 'Playfair Display'), serif;
-      font-size: clamp(26px, 2.5vw, 36px); font-weight: 700; line-height: 1.2;
-      margin-bottom: 20px; color: white;
+    /* Hero UI mockup */
+    .hero-visual {
+      flex: 1;
+      display: flex; align-items: flex-end;
+      justify-content: flex-end;
     }
-    .tension-left h2 em { font-style: italic; color: var(--gold); }
-    .tension-left p { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.75; }
-    .tension-stats { display: flex; flex-direction: column; gap: 0; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden; }
-    .tstat {
-      padding: 22px 28px; border-bottom: 1px solid rgba(255,255,255,0.08);
-      display: flex; align-items: baseline; gap: 16px;
+    .ui-window {
+      width: 100%; max-width: 460px;
+      background: #fff;
+      border: 1px solid rgba(27,58,75,0.12);
+      border-bottom: none;
+      border-radius: 14px 14px 0 0;
+      box-shadow: 0 -12px 48px rgba(27,58,75,0.12), 0 -2px 8px rgba(27,58,75,0.06);
+      overflow: hidden;
     }
-    .tstat:last-child { border-bottom: none; }
-    .tstat-num { font-family: var(--font-heading, 'Playfair Display'), serif; font-size: 40px; font-weight: 700; color: var(--gold); line-height: 1; flex-shrink: 0; }
-    .tstat-text { }
-    .tstat-label { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.9); }
-    .tstat-sub { font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 3px; }
+    .ui-bar {
+      background: var(--bg-warm);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 16px;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .dot { width: 9px; height: 9px; border-radius: 50%; }
+    .dot-r { background: #FF5F56; }
+    .dot-y { background: #FFBD2E; }
+    .dot-g { background: #27C93F; }
+    .ui-bar-url {
+      flex: 1; text-align: center;
+      font-size: 11px; color: var(--muted);
+    }
+    .ui-content { padding: 22px; display: flex; flex-direction: column; gap: 14px; }
+    .ui-row { display: flex; align-items: flex-start; gap: 12px; }
+    .ui-key {
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--muted);
+      min-width: 80px; padding-top: 1px;
+    }
+    .ui-val { font-size: 13px; font-weight: 500; color: var(--ink); }
+    .ui-val-small { font-size: 12px; color: var(--body); line-height: 1.5; }
+    .ui-sep { height: 1px; background: var(--border); }
+    .chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12px; font-weight: 600;
+      padding: 4px 12px; border-radius: 9999px;
+    }
+    .chip-green  { background: #DCFCE7; color: #16a34a; }
+    .chip-amber  { background: var(--bg-gold); color: #92400e; }
+    .chip-red    { background: #FEE2E2; color: #dc2626; }
+    .ui-bar-wrap { display: flex; flex-direction: column; gap: 5px; }
+    .ui-bar-head { display: flex; justify-content: space-between; }
+    .ui-bar-lbl  { font-size: 11px; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; }
+    .ui-bar-pct  { font-size: 11px; font-weight: 700; color: var(--ink); }
+    .ui-track    { height: 4px; background: var(--bg-teal); border-radius: 2px; overflow: hidden; }
+    .ui-fill     { height: 100%; width: 97%; background: var(--secondary); border-radius: 2px; }
+    .ui-status {
+      padding: 12px 22px;
+      border-top: 1px solid var(--border);
+      background: var(--bg-warm);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .status-txt { font-size: 11px; color: var(--muted); }
+    .status-model { margin-left: auto; font-size: 10px; color: #c0cdd4; font-family: monospace; }
 
-    /* ── WORKFLOW ────────────────────────────────────── */
-    .flow-section { background: white; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-    .flow { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 56px; }
-    .flow-step { padding: 32px 28px 32px 0; padding-right: 28px; position: relative; }
-    .flow-step:not(:first-child) { padding-left: 28px; border-left: 1px solid var(--border); }
-    .flow-step:not(:last-child)::after {
-      content: '';
-      position: absolute; right: -13px; top: 34px; z-index: 2;
-      width: 26px; height: 26px;
-      background: white url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6' stroke='%23C4BAB0' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/18px no-repeat;
+    /* ── CUSTOMERS ── */
+    .customers {
+      background: var(--bg-teal);
+      padding: 36px 0;
+      overflow: hidden;
+      margin-top: 0;
     }
-    .step-num { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.4px; color: var(--muted); margin-bottom: 20px; }
-    .step-icon {
-      width: 40px; height: 40px; border-radius: 8px;
-      border: 1.5px solid var(--border);
+    .customers-label {
+      text-align: center;
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--primary-light2);
+      margin-bottom: 20px;
+    }
+    .ticker-wrap {
+      overflow: hidden;
+      mask-image: linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%);
+    }
+    .ticker {
+      display: flex; width: max-content;
+      animation: scroll 28s linear infinite;
+    }
+    @keyframes scroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    .ticker-item {
+      padding: 0 40px;
+      font-size: 14px; font-weight: 600;
+      color: var(--primary);
+      opacity: 0.5;
+      white-space: nowrap;
+      border-right: 1px solid rgba(27,58,75,0.12);
+      display: flex; align-items: center;
+    }
+
+    /* ── FEATURE SECTION ── */
+    .feature-section {
+      padding: 96px 48px;
+      background: var(--bg);
+    }
+    .feature-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; flex-wrap: wrap;
+      gap: 80px; align-items: center;
+    }
+    .feature-inner > * { flex: 1 1 420px; }
+    .feature-inner.reverse .feature-text { order: 2; }
+    .feature-inner.reverse .feature-cards { order: 1; }
+    .feature-text { display: flex; flex-direction: column; gap: 20px; }
+    .section-title {
+      font-size: 36px; font-weight: 700;
+      line-height: 1.15; letter-spacing: -1px;
+      color: var(--primary);
+    }
+    .section-body {
+      font-size: 16px; color: var(--body);
+      line-height: 1.75; max-width: 440px;
+    }
+    .feature-cards {
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .fcard {
+      border-radius: 14px;
+      padding: 24px 28px;
+      display: flex; gap: 16px; align-items: flex-start;
+      transition: transform 0.2s;
+    }
+    .fcard:hover { transform: translateY(-2px); }
+    .fcard.teal  { background: var(--bg-teal); }
+    .fcard.gold  { background: var(--bg-gold); }
+    .fcard.blue  { background: var(--bg-blue); }
+    .fcard.pink  { background: var(--bg-pink); }
+    .fcard-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: #fff;
+      flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
-      margin-bottom: 18px; background: var(--cream);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
     }
-    .step-icon svg { width: 20px; height: 20px; stroke: var(--fjord); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-    .flow-step h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--fjord); }
-    .flow-step p { font-size: 14px; color: var(--ink-2); line-height: 1.7; }
+    .fcard-icon svg { width: 20px; height: 20px; stroke: var(--primary); stroke-width: 1.7; fill: none; }
+    .fcard-body { display: flex; flex-direction: column; gap: 4px; }
+    .fcard-title { font-size: 15px; font-weight: 600; color: var(--ink); }
+    .fcard-desc  { font-size: 14px; color: var(--body); line-height: 1.6; }
 
-    /* ── FEATURES ────────────────────────────────────── */
-    .features-section { background: var(--cream); }
-    .bento { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; margin-top: 56px; }
-    .bc {
-      background: white; border: 1px solid var(--border); border-radius: 12px; padding: 28px;
-      transition: border-color 0.2s, box-shadow 0.2s;
+    /* ── STATS ── */
+    .stats {
+      background: var(--primary);
+      padding: 80px 48px;
     }
-    .bc:hover { border-color: var(--border-dk); box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
-    .bc.c7 { grid-column: span 7; }
-    .bc.c5 { grid-column: span 5; }
-    .bc.c4 { grid-column: span 4; }
-    .bc.c8 { grid-column: span 8; }
-    .bc-icon { width: 36px; height: 36px; border-radius: 8px; background: var(--gold-lt); border: 1px solid #E8D9BE; display: flex; align-items: center; justify-content: center; margin-bottom: 18px; }
-    .bc-icon svg { width: 18px; height: 18px; stroke: var(--gold); fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
-    .bc h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--fjord); }
-    .bc p  { font-size: 14px; color: var(--ink-2); line-height: 1.7; }
-
-    .sp-rows { display: flex; flex-direction: column; gap: 7px; margin-top: 20px; }
-    .sp-row { display: flex; align-items: center; gap: 10px; background: var(--cream); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; }
-    .sp-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-    .sp-lbl { font-size: 13px; font-weight: 500; min-width: 110px; color: var(--ink-2); }
-    .sp-bar-bg { flex: 1; background: var(--border); border-radius: 100px; height: 4px; overflow: hidden; }
-    .sp-bar { height: 100%; border-radius: 100px; }
-    .sp-note { font-size: 11px; color: var(--muted); margin-top: 10px; }
-
-    .prio-gauge { position: relative; width: 96px; height: 96px; margin: 20px auto 0; }
-    .prio-gauge svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-    .gauge-track { fill: none; stroke: var(--border); stroke-width: 8; }
-    .gauge-fill  { fill: none; stroke: var(--gold); stroke-width: 8; stroke-linecap: round; stroke-dasharray: 220; stroke-dashoffset: 7; }
-    .gauge-label { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    .gauge-num { font-family: var(--font-heading, 'Playfair Display'), serif; font-size: 22px; font-weight: 700; color: var(--fjord); line-height: 1; }
-    .gauge-sub { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.4px; color: var(--muted); margin-top: 3px; }
-
-    /* ── COMPLIANCE ──────────────────────────────────── */
-    .compliance-section { background: white; border-top: 1px solid var(--border); }
-    .c-grid { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 56px; border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; }
-    .c-item { padding: 28px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); transition: background 0.15s; }
-    .c-item:hover { background: var(--cream); }
-    .c-item:nth-child(3n) { border-right: none; }
-    .c-item:nth-child(n+4) { border-bottom: none; }
-    .c-badge { display: inline-flex; align-items: center; gap: 5px; background: #F0FDF4; border: 1px solid #BBF7D0; color: var(--green); font-size: 11px; font-weight: 700; letter-spacing: 0.3px; padding: 2px 10px; border-radius: 100px; margin-bottom: 14px; }
-    .c-item h4 { font-size: 16px; font-weight: 700; margin-bottom: 7px; color: var(--fjord); }
-    .c-item p  { font-size: 14px; color: var(--ink-2); line-height: 1.7; }
-
-    /* ── DEMO ────────────────────────────────────────── */
-    .demo-section { background: var(--gold-lt); border-top: 1px solid var(--border-dk); border-bottom: 1px solid var(--border-dk); }
-    .demo-wrap {
-      max-width: 820px; margin: 56px auto 0;
-      border-radius: 12px; overflow: hidden;
-      border: 1.5px solid var(--border-dk);
-      box-shadow: 0 20px 64px rgba(27,58,75,0.15);
+    .stats-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(4, 1fr);
     }
-    .browser-bar { background: #E8E4DE; padding: 10px 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border-dk); }
-    .traffic-lights { display: flex; gap: 6px; }
-    .tl { width: 10px; height: 10px; border-radius: 50%; }
-    .tl-r { background: #FF5F57; } .tl-y { background: #FEBC2E; } .tl-g { background: #28C840; }
-    .browser-url { flex: 1; background: white; border: 1px solid var(--border); border-radius: 5px; padding: 4px 12px; font-size: 11.5px; color: var(--muted); }
-    .demo-steps-bar { display: flex; gap: 6px; padding: 12px 16px; background: white; border-bottom: 1px solid var(--border); overflow-x: auto; }
-    .demo-step-pill { padding: 4px 14px; border-radius: 100px; font-size: 12px; font-weight: 600; border: 1.5px solid var(--border-dk); background: transparent; color: var(--muted); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
-    .demo-step-pill.on { background: var(--fjord); border-color: var(--fjord); color: white; }
-    .demo-content { background: white; min-height: 360px; position: relative; overflow: hidden; }
-    .demo-screen { position: absolute; inset: 0; padding: 24px; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
-    .demo-screen.visible { opacity: 1; pointer-events: auto; position: relative; }
-
-    .upload-zone { border: 1.5px dashed var(--border-dk); border-radius: 8px; padding: 32px; text-align: center; transition: all 0.4s; }
-    .upload-zone.active { border-color: var(--fjord); background: #EEF4F7; }
-    .upload-zone p { font-size: 13px; color: var(--muted); }
-    .upload-zone strong { color: var(--fjord); }
-    .upload-file-row { display: none; margin-top: 12px; background: var(--cream); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; align-items: center; gap: 10px; }
-    .upload-file-row.vis { display: flex; }
-    .file-icon-box { width: 32px; height: 32px; border-radius: 6px; background: var(--gold-lt); border: 1px solid #E8D9BE; display: flex; align-items: center; justify-content: center; }
-    .file-icon-box svg { width: 16px; height: 16px; stroke: var(--gold); fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
-    .file-name { font-size: 13px; font-weight: 600; color: var(--fjord); }
-    .file-meta { font-size: 11px; color: var(--muted); margin-top: 1px; }
-
-    .analyzing-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 320px; }
-    .spin-ring { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--fjord); border-radius: 50%; margin-bottom: 20px; animation: spin 0.8s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .ai-steps { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; width: 280px; }
-    .ai-step-row { display: flex; align-items: center; gap: 10px; }
-    .ai-step-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border-dk); flex-shrink: 0; }
-    .ai-step-dot.done { background: var(--green); }
-    .ai-step-dot.active { background: var(--fjord); animation: pulse-dot 0.8s ease-in-out infinite; }
-    @keyframes pulse-dot { 0%,100%{opacity:.4} 50%{opacity:1} }
-    .ai-step-text { font-size: 13px; color: var(--muted); }
-    .ai-step-text.done { color: var(--ink-2); }
-
-    .result-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
-    .tag { padding: 3px 11px; border-radius: 100px; font-size: 11.5px; font-weight: 700; }
-    .tag-green  { background: #F0FDF4; color: var(--green); border: 1px solid #BBF7D0; }
-    .tag-red    { background: var(--red-lt); color: var(--red); border: 1px solid #FECACA; }
-    .tag-amber  { background: var(--amber-lt); color: var(--amber); border: 1px solid #FDE68A; }
-    .tag-neutral{ background: var(--cream); color: var(--muted); border: 1px solid var(--border-dk); }
-    .prio-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1.4px; margin-bottom: 6px; }
-    .prio-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-    .prio-bar-bg { flex: 1; background: var(--border); border-radius: 100px; height: 5px; overflow: hidden; }
-    .prio-bar-fill { height: 100%; border-radius: 100px; background: var(--gold); transition: width 1s ease; }
-    .prio-pct { font-size: 13px; font-weight: 700; color: var(--fjord); }
-    .result-summary { font-size: 14px; color: var(--ink-2); line-height: 1.7; background: var(--cream); border: 1px solid var(--border); border-radius: 6px; padding: 12px; margin-bottom: 12px; }
-    .result-points { list-style: none; display: flex; flex-direction: column; gap: 5px; }
-    .result-points li { font-size: 13px; color: var(--ink-2); display: flex; gap: 7px; }
-    .result-points li::before { content: '▸'; color: var(--gold); flex-shrink: 0; }
-
-    .approve-screen { display: flex; flex-direction: column; gap: 10px; }
-    .afield-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1.4px; margin-bottom: 5px; }
-    .afield-val { font-size: 14px; color: var(--ink-2); background: var(--cream); border: 1.5px solid var(--border); border-radius: 6px; padding: 8px 12px; }
-    .approve-btn { background: var(--fjord); color: white; border-radius: 8px; padding: 10px; text-align: center; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.25s; }
-    .approve-btn:hover { background: var(--fjord-2); }
-    .approved-msg { display: none; background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 8px; padding: 10px; text-align: center; font-size: 13px; font-weight: 700; color: var(--green); }
-
-    /* ── KONTAKT ──────────────────────────────────────── */
-    .contact-section { background: var(--cream); border-top: 1px solid var(--border); }
-    .contact-inner { max-width: 1120px; margin: 0 auto; padding: 96px 56px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
-    .contact-left h2 { font-family: var(--font-heading, 'Playfair Display'), serif; font-size: clamp(26px, 2.8vw, 38px); font-weight: 800; color: var(--fjord); line-height: 1.2; margin-bottom: 16px; }
-    .contact-left h2 em { font-style: italic; color: var(--gold); }
-    .contact-left p { font-size: 16px; color: var(--muted); line-height: 1.75; margin-bottom: 24px; }
-    .contact-left .trust-row { display: flex; flex-direction: column; gap: 10px; }
-    .contact-left .trust-item { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--ink-2); font-weight: 500; }
-    .contact-left .trust-item svg { width: 16px; height: 16px; flex-shrink: 0; color: var(--gold); }
-    .contact-form { background: white; border: 1px solid var(--border); border-radius: 14px; padding: 32px; box-shadow: 0 4px 24px rgba(0,0,0,0.05); }
-    .contact-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    .contact-form .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
-    .contact-form label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); }
-    .contact-form input, .contact-form textarea {
-      padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 8px;
-      font-size: 14px; font-family: inherit; color: var(--ink); background: var(--cream);
-      transition: all 0.15s; outline: none; width: 100%;
+    .stat {
+      padding: 0 40px;
+      border-right: 1px solid var(--dark-bdr);
+      display: flex; flex-direction: column; gap: 6px;
     }
-    .contact-form input:focus, .contact-form textarea:focus { border-color: var(--fjord); background: white; box-shadow: 0 0 0 3px rgba(27,58,75,0.08); }
-    .contact-form textarea { min-height: 110px; resize: vertical; }
-    .contact-form .btn-submit {
-      width: 100%; padding: 13px; background: var(--fjord); color: white; border: none;
-      border-radius: 8px; font-size: 14px; font-weight: 700; font-family: inherit;
-      cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;
+    .stat:first-child { padding-left: 0; }
+    .stat:last-child  { padding-right: 0; border-right: none; }
+    .stat-num {
+      font-size: 56px; font-weight: 700;
+      color: #fff; letter-spacing: -2px; line-height: 1;
     }
-    .contact-form .btn-submit:hover:not(:disabled) { background: var(--fjord-2); }
-    .contact-form .btn-submit:disabled { background: var(--border); color: var(--muted); cursor: not-allowed; }
-    .contact-success { display: none; text-align: center; padding: 32px 16px; }
-    .contact-success.visible { display: block; }
-    .contact-success .check { width: 52px; height: 52px; background: #D1FAE5; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
-    .contact-success h3 { font-family: var(--font-heading, 'Playfair Display'), serif; font-size: 20px; font-weight: 700; color: var(--fjord); margin-bottom: 8px; }
-    .contact-success p { font-size: 14px; color: var(--muted); line-height: 1.6; }
-    .contact-error { display: none; font-size: 13px; color: var(--red); background: #FEE2E2; border: 1px solid #FECACA; border-radius: 6px; padding: 10px 14px; margin-bottom: 12px; }
-    .contact-error.visible { display: block; }
-    @media (max-width: 900px) {
-      .contact-inner { grid-template-columns: 1fr; padding: 64px 24px; gap: 40px; }
-      .contact-form .form-row { grid-template-columns: 1fr; }
-    }
+    .stat-num em { font-style: normal; color: #fff; }
+    .stat-label { font-size: 14px; font-weight: 400; color: var(--dark-txt); line-height: 1.5; }
 
-    /* ── CTA ─────────────────────────────────────────── */
-    .cta-section { background: var(--fjord); }
-    .cta-inner { max-width: 1120px; margin: 0 auto; padding: 96px 56px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-    .cta-left h2 { font-family: var(--font-heading, 'Playfair Display'), serif; font-size: clamp(28px, 3vw, 40px); font-weight: 800; color: white; line-height: 1.2; margin-bottom: 16px; }
-    .cta-left h2 em { font-style: italic; color: var(--gold); }
-    .cta-left p { font-size: 16px; color: rgba(255,255,255,0.6); line-height: 1.7; }
-    .cta-right { display: flex; flex-direction: column; gap: 12px; }
-    .btn-cta-primary {
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      background: var(--gold); color: white;
-      font-size: 15px; font-weight: 700;
-      padding: 15px 28px; border-radius: 8px; text-decoration: none; transition: all 0.2s;
+    /* ── HOW IT WORKS ── */
+    .how {
+      padding: 96px 48px;
+      background: var(--bg-warm);
     }
-    .btn-cta-primary:hover { background: #C8A030; transform: translateY(-1px); }
-    .btn-cta-ghost {
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      background: transparent; color: rgba(255,255,255,0.7);
-      font-size: 15px; font-weight: 500;
-      padding: 14px 28px; border-radius: 8px; border: 1.5px solid rgba(255,255,255,0.15);
-      text-decoration: none; transition: all 0.2s;
+    .how-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; flex-direction: column; gap: 56px;
     }
-    .btn-cta-ghost:hover { border-color: rgba(255,255,255,0.35); color: white; }
-    .cta-note { font-size: 11.5px; color: rgba(255,255,255,0.3); text-align: center; }
+    .section-header {
+      text-align: center;
+      display: flex; flex-direction: column; gap: 12px; align-items: center;
+    }
+    .section-header .section-body { text-align: center; }
+    .steps {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    }
+    .step {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 32px 28px;
+      display: flex; flex-direction: column; gap: 14px;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .step:hover { box-shadow: 0 6px 24px rgba(27,58,75,0.09); transform: translateY(-2px); }
+    .step-num {
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--teal);
+    }
+    .step-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-icon svg { width: 21px; height: 21px; stroke: var(--primary); stroke-width: 1.7; fill: none; }
+    .step-icon.teal { background: var(--bg-teal); }
+    .step-icon.gold { background: var(--bg-gold); }
+    .step-icon.blue { background: var(--bg-blue); }
+    .step-title { font-size: 17px; font-weight: 600; color: var(--ink); line-height: 1.3; }
+    .step-desc  { font-size: 14px; color: var(--body); line-height: 1.7; }
 
-    /* ── FOOTER ──────────────────────────────────────── */
-    footer { background: #0F2535; border-top: 1px solid rgba(255,255,255,0.06); padding: 32px 56px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
-    .footer-brand { font-family: var(--font-heading, 'Playfair Display'), serif; font-size: 16px; font-weight: 700; color: white; }
-    .footer-brand em { color: var(--gold); font-style: italic; }
+    /* ── TESTIMONIAL ── */
+    .testimonial {
+      padding: 96px 48px;
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+    }
+    .testimonial-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: 1.3fr 1fr;
+      gap: 72px; align-items: center;
+    }
+    .quote-block { display: flex; flex-direction: column; gap: 24px; }
+    .quote-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); }
+    .quote-text {
+      font-size: 24px; font-weight: 400;
+      line-height: 1.5; color: var(--ink);
+    }
+    .quote-text strong { font-style: normal; }
+    .quote-author { display: flex; flex-direction: column; gap: 2px; }
+    .quote-name { font-size: 14px; font-weight: 600; color: var(--ink); }
+    .quote-role { font-size: 13px; color: var(--muted); }
+    .quote-metrics { display: flex; flex-direction: column; gap: 24px; }
+    .qmet {
+      padding-left: 18px;
+      border-left: 3px solid var(--secondary);
+      display: flex; flex-direction: column; gap: 3px;
+    }
+    .qmet-num  { font-size: 40px; font-weight: 700; color: var(--primary); letter-spacing: -2px; line-height: 1; }
+    .qmet-num em { font-style: normal; color: var(--teal); }
+    .qmet-desc { font-size: 14px; color: var(--body); line-height: 1.5; }
+
+    /* ── COMPLIANCE ── */
+    .compliance {
+      background: var(--bg-teal);
+      padding: 64px 48px;
+      border-top: 1px solid rgba(27,58,75,0.07);
+    }
+    .compliance-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; flex-direction: column; gap: 32px; align-items: center;
+    }
+    .badges { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+    .badge {
+      display: flex; align-items: center; gap: 8px;
+      padding: 9px 18px;
+      background: #fff;
+      border: 1px solid rgba(27,58,75,0.12);
+      border-radius: 9999px;
+      font-size: 13px; font-weight: 500;
+      color: var(--primary);
+      transition: box-shadow 0.15s;
+    }
+    .badge:hover { box-shadow: 0 2px 8px rgba(27,58,75,0.10); }
+    .badge-chk {
+      width: 17px; height: 17px; border-radius: 50%;
+      background: var(--primary);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .badge-chk svg { width: 9px; height: 9px; stroke: var(--secondary); stroke-width: 2.5; fill: none; }
+
+    /* ── YOU CARE ── */
+    .you-care {
+      background: var(--primary);
+      padding: 96px 48px;
+      text-align: center;
+    }
+    .you-care-inner {
+      max-width: 640px; margin: 0 auto;
+      display: flex; flex-direction: column; gap: 20px; align-items: center;
+    }
+    .you-care-headline {
+      font-size: 40px; font-weight: 700;
+      color: #fff; letter-spacing: -1px;
+      line-height: 1.15;
+    }
+    .you-care-headline em { font-style: normal; color: #fff; }
+    .you-care-sub { font-size: 17px; color: var(--dark-txt); line-height: 1.7; }
+    .you-care-trust { font-size: 12px; color: rgba(255,255,255,0.25); margin-top: 8px; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #0e1e28;
+      padding: 36px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .footer-logo { font-size: 16px; font-weight: 700; color: rgba(255,255,255,0.4); }
+    .footer-logo span { color: rgba(184,147,90,0.5); }
     .footer-links { display: flex; gap: 24px; }
-    .footer-links a { font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.15s; }
-    .footer-links a:hover { color: rgba(255,255,255,0.8); }
-    .footer-copy { font-size: 12px; color: rgba(255,255,255,0.25); }
+    .footer-links a { font-size: 13px; color: rgba(255,255,255,0.25); transition: color 0.15s; }
+    .footer-links a:hover { color: rgba(255,255,255,0.55); }
+    .footer-copy { font-size: 12px; color: rgba(255,255,255,0.18); }
 
-    /* ── RESPONSIVE ──────────────────────────────────── */
-    @media (max-width: 1024px) {
-      .hero { grid-template-columns: 1fr; gap: 48px; padding: 110px 40px 64px; }
-      .hero-right { max-width: 480px; }
-      .tension .inner { grid-template-columns: 1fr; gap: 40px; }
-      .cta-inner { grid-template-columns: 1fr; gap: 40px; }
-    }
-    .nav-hamburger {
-      display: none; background: none; border: none; cursor: pointer;
-      padding: 6px; color: var(--fjord); flex-direction: column; gap: 5px;
-    }
-    .nav-hamburger span {
-      display: block; width: 22px; height: 2px;
-      background: var(--fjord); border-radius: 2px;
-      transition: all 0.25s ease;
-    }
-    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .reveal.in { opacity: 1; transform: none; }
 
-    .nav-mobile-menu {
-      display: none; position: fixed;
-      top: 64px; left: 0; right: 0; z-index: 199;
-      background: rgba(250,248,244,0.98); backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border);
-      padding: 8px 24px 20px; flex-direction: column;
-    }
-    .nav-mobile-menu.open { display: flex; }
-    .nav-mobile-menu a {
-      font-size: 15px; font-weight: 500; color: var(--fjord);
-      text-decoration: none; padding: 13px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .nav-mobile-menu a:last-child { border-bottom: none; }
-    .nav-mobile-menu .mob-cta {
-      margin-top: 12px; background: var(--fjord); color: white;
-      text-align: center; border-radius: 8px; padding: 13px;
-      font-weight: 700; border-bottom: none;
-    }
+    /* ── UTILITY ── */
+    .text-center { text-align: center; }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .btn-feature-link { width: fit-content; margin-top: 8px; }
+    .btn-pill-lg { font-size: 15px; padding: 12px 28px; margin-top: 8px; }
+    .eyebrow-on-dark { color: var(--teal-light); }
+    .chip-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .hero-bg-wrapper { background: var(--bg); }
 
-    @media (max-width: 768px) {
-      nav { padding: 0 24px; }
-      .nav-links { display: none; }
-      .nav-hamburger { display: flex; }
-      .nav-right .btn-nav-ghost { display: none; }
-      .nav-right .btn-nav-primary { display: none; }
-      section { padding: 64px 24px; }
-      .tension { padding: 64px 24px; }
-      .hero { padding: 100px 24px 56px; }
-      .flow { grid-template-columns: 1fr 1fr; }
-      .flow-step:nth-child(2) { border-bottom: 1px solid var(--border); }
-      .flow-step:nth-child(3) { border-left: none; }
-      .flow-step:not(:last-child)::after { display: none; }
-      .bento { grid-template-columns: 1fr; }
-      .bc.c7,.bc.c5,.bc.c4,.bc.c8 { grid-column: span 1; }
-      .c-grid { grid-template-columns: 1fr; }
-      .c-item:nth-child(n) { border-right: none; }
-      footer { flex-direction: column; align-items: flex-start; padding: 28px 24px; }
-      .cta-inner { padding: 64px 24px; }
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(27,58,75,0.55);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s;
     }
-    @media (max-width: 540px) {
-      .flow { grid-template-columns: 1fr; }
+    .modal-overlay.open {
+      opacity: 1; pointer-events: all;
     }
+    .modal {
+      background: #fff;
+      border-radius: 16px;
+      padding: 40px;
+      width: 100%; max-width: 480px;
+      display: flex; flex-direction: column; gap: 20px;
+      box-shadow: 0 24px 64px rgba(27,58,75,0.18);
+      transform: translateY(12px);
+      transition: transform 0.2s;
+    }
+    .modal-overlay.open .modal { transform: none; }
+    .modal-title { font-size: 22px; font-weight: 700; color: var(--primary); letter-spacing: -0.5px; }
+    .modal-subtitle { font-size: 14px; color: var(--body); margin-top: -12px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+    .form-input {
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 15px; font-family: var(--font);
+      color: var(--ink);
+      transition: border-color 0.15s;
+      outline: none;
+    }
+    .form-input:focus { border-color: var(--teal); }
+    textarea.form-input { resize: vertical; min-height: 100px; }
+    .modal-error { font-size: 13px; color: #dc2626; background: #FEE2E2; padding: 10px 14px; border-radius: 8px; display: none; }
+    .modal-error.visible { display: block; }
+    .modal-success { text-align: center; display: flex; flex-direction: column; gap: 12px; align-items: center; }
+    .modal-success-icon { font-size: 40px; }
+    .modal-success-title { font-size: 20px; font-weight: 700; color: var(--primary); }
+    .modal-success-text { font-size: 14px; color: var(--body); }
+    .modal-close {
+      position: absolute; top: 16px; right: 20px;
+      font-size: 24px; color: var(--muted);
+      cursor: pointer; background: none; border: none;
+      line-height: 1;
+    }
+    .modal { position: relative; }
+    .modal-form-inner { display: flex; flex-direction: column; gap: 20px; }
+    .btn-modal-submit { width: 100%; justify-content: center; font-size: 15px; padding: 12px; }
+    .btn-modal-close-success { margin-top: 8px; }
+
+  @media (max-width: 900px) {
+    nav { padding: 0 24px; gap: 24px; }
+    .nav-links { display: none; }
+    .hero { padding: 48px 24px 0; flex-direction: column; align-items: flex-start; min-height: auto; }
+    .hero-content { flex: none; padding-bottom: 40px; }
+    .hero-visual { width: 100%; justify-content: center; }
+    .ui-window { max-width: 100%; }
+    .feature-inner { gap: 40px; }
+    .stats-inner { grid-template-columns: 1fr 1fr; gap: 0; }
+    .stat { padding: 32px 24px; border-right: none; border-bottom: 1px solid var(--dark-bdr); }
+    .stat:nth-child(odd) { border-right: 1px solid var(--dark-bdr); }
+    .stat:last-child { border-bottom: none; }
+    .stat:nth-last-child(2) { border-bottom: none; }
+    .steps { grid-template-columns: 1fr; }
+    .testimonial-inner { grid-template-columns: 1fr; gap: 40px; }
+    .feature-section { padding: 64px 24px; }
+    .how { padding: 64px 24px; }
+    .stats { padding: 48px 24px; }
+    .testimonial { padding: 64px 24px; }
+    .compliance { padding: 48px 24px; }
+    .you-care { padding: 64px 24px; }
+  }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 16px; }
+    .logo { font-size: 18px; }
+    .hero { padding: 40px 16px 0; gap: 32px; }
+    .hero-headline { font-size: 32px; letter-spacing: -0.8px; }
+    .hero-sub { font-size: 17px; }
+    .hero-actions { flex-direction: column; align-items: flex-start; }
+    .section-title { font-size: 28px; }
+    .stat-num { font-size: 42px; }
+    .stats-inner { grid-template-columns: 1fr; }
+    .stat { border-right: none !important; border-bottom: 1px solid var(--dark-bdr); }
+    .stat:last-child { border-bottom: none; }
+    .feature-inner { flex-direction: column; gap: 32px; }
+    .feature-inner > * { flex: none; width: 100%; }
+    .you-care-headline { font-size: 28px; }
+    .quote-text { font-size: 20px; }
+    .qmet-num { font-size: 32px; }
+    .modal { padding: 24px; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+    .customers { padding: 24px 0; }
+  }
   </style>
 </head>
 <body>
 
-<!-- ── NAV ──────────────────────────────────────────── -->
+<!-- NAV -->
 <nav>
-  <a class="nav-logo" href="/">
-    <div class="nav-mark">
-      <svg viewBox="0 0 24 24" fill="none">
-        <path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-    <span class="nav-wordmark">Sana<em>AI</em></span>
-  </a>
+  <span class="logo">Sana <span>AI</span></span>
   <div class="nav-links">
-    <a href="#problem">Utfordringen</a>
-    <a href="#workflow">Arbeidsflyt</a>
-    <a href="#funksjoner">Funksjoner</a>
-    <a href="#sikkerhet">Compliance</a>
-    <a href="#kontakt">Kontakt</a>
+    <a href="#">Plattform</a>
+    <a href="#">Hvem vi hjelper</a>
+    <a href="#">Brukstilfeller</a>
+    <a href="#">Sikkerhet</a>
+    <a href="#">Om oss</a>
+    <a href="#">Ressurser</a>
   </div>
-  <div class="nav-right" id="nav-right">
-    <a href="/login.html" class="btn-nav-ghost">Logg inn</a>
-    <a href="/login.html" class="btn-nav-primary">Prøv gratis</a>
-    <button class="nav-hamburger" id="nav-hamburger" aria-label="Meny">
-      <span></span><span></span><span></span>
-    </button>
+  <div class="nav-right">
+    <a href="/login.html" class="nav-ghost">Logg inn</a>
+    <a href="#kontakt" class="btn-pill btn-teal">Be om demo</a>
   </div>
 </nav>
-<div class="nav-mobile-menu" id="nav-mobile-menu">
-  <a href="#problem">Utfordringen</a>
-  <a href="#workflow">Arbeidsflyt</a>
-  <a href="#funksjoner">Funksjoner</a>
-  <a href="#sikkerhet">Compliance</a>
-  <a href="#kontakt">Kontakt</a>
-  <a href="/login.html" class="mob-cta">Prøv gratis</a>
-</div>
 
-
-<!-- ── HERO ─────────────────────────────────────────── -->
+<!-- HERO -->
+<div class="hero-bg-wrapper">
 <div class="hero">
-  <div class="hero-left">
-    <div class="hero-kicker">
-      <span class="hero-kicker-line"></span>
-      <span data-lc="hero.kicker">AI-assistert klagesaksbehandling</span>
-    </div>
-    <h1>
-      <span data-lc="hero.h1Line1">Medisinsk presisjon.</span><br>
-      <em data-lc="hero.h1Line2">Juridisk sporbarhet.</em><br>
-      <span data-lc="hero.h1Line3">På sekunder.</span>
-    </h1>
-    <p class="hero-sub" data-lc="hero.sub">
-      Timer brukt per klagesak på hundrevis av sider. Sana AI gir leger et medisinsk standpunkt på sekunder — med full GDPR-compliance og uforanderlig revisjonslogg.
-    </p>
+  <div class="hero-content">
+    <span class="eyebrow">AI for helseforsikring</span>
+    <h1 class="hero-headline">AI-assistert klagesaksbehandling for norsk helseforsikring</h1>
+    <p class="hero-sub">Reduser behandlingstid med 70%+</p>
+    <p class="hero-body">Sana AI gir leger et strukturert medisinsk standpunkt på sekunder — med full GDPR-compliance og uforanderlig revisjonslogg.</p>
     <div class="hero-actions">
-      <a href="/login.html" class="btn-primary">
-        Prøv med en klagesak
-        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2.5 7.5h10M8 3.5l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-      <a href="#workflow" class="btn-secondary">Se arbeidsflyt</a>
-    </div>
-    <div class="hero-trust">
-      <span class="trust-pill">
-        <svg viewBox="0 0 14 14"><path d="M2 7l3 3 7-6"/></svg>
-        GDPR Art. 9
-      </span>
-      <span class="trust-pill">
-        <svg viewBox="0 0 14 14"><path d="M2 7l3 3 7-6"/></svg>
-        AWS eu-north-1
-      </span>
-      <span class="trust-pill">
-        <svg viewBox="0 0 14 14"><path d="M2 7l3 3 7-6"/></svg>
-        Normen-kompatibel
-      </span>
-      <span class="trust-pill">
-        <svg viewBox="0 0 14 14"><path d="M2 7l3 3 7-6"/></svg>
-        Legen godkjenner alltid
-      </span>
+      <a href="#hvordan" class="btn-pill btn-teal">Les mer</a>
+      <a href="#kontakt" class="btn-pill btn-outline">Snakk med en ekspert</a>
     </div>
   </div>
-
-  <div class="hero-right">
-    <div class="doc-stack">
-      <!-- Stacked documents behind -->
-      <div class="doc-card behind-2"></div>
-      <div class="doc-card behind-1"></div>
-
-      <!-- Front document: the complex case -->
-      <div class="doc-card front">
-        <div class="doc-header">
-          <span class="doc-title">Klagesak — journaldokumenter</span>
-          <span class="doc-pages">184 sider</span>
-        </div>
-        <div class="doc-data-row">
-          <span class="doc-chip clinical">TKA — kneprotese</span>
-          <span class="doc-chip clinical">MRSA-infeksjon</span>
-          <span class="doc-chip warning">Dødelig utfall</span>
-        </div>
-        <div class="doc-data-row">
-          <span class="doc-chip legal">NPE-klage</span>
-          <span class="doc-chip legal">Helsetilsynet</span>
-          <span class="doc-chip legal">NOK 8,4 mill.</span>
-        </div>
-        <div class="doc-lines">
-          <div class="doc-line w-full"></div>
-          <div class="doc-line w-5-6"></div>
-          <div class="doc-line w-3-4"></div>
-          <div class="doc-line w-full"></div>
-          <div class="doc-line w-2-3"></div>
-          <div class="doc-line w-half"></div>
-        </div>
-        <div style="font-size:11px;color:var(--muted)">
-          + 2 sakkyndige erklæringer · spirometridata · operasjonsrapport · mikrobiologisvar...
-        </div>
+  <div class="hero-visual">
+    <div class="ui-window">
+      <div class="ui-bar">
+        <span class="dot dot-r"></span>
+        <span class="dot dot-y"></span>
+        <span class="dot dot-g"></span>
+        <span class="ui-bar-url">sana-ai.no/cases</span>
       </div>
-
-      <div class="stack-arrow">Sana AI analyserer</div>
-
-      <!-- Verdict -->
-      <div class="verdict-card">
-        <div class="verdict-header">
-          <span class="verdict-label">AI-standpunkt</span>
-          <span class="verdict-model">claude-sonnet-4-6 · eu-north-1</span>
-        </div>
-        <div class="verdict-verdict">
-          <span class="verdict-badge">Støttes</span>
-          <span class="verdict-time">Halvdag+ · Kritisk prioritet</span>
-        </div>
-        <div class="verdict-summary">
-          Multiple dokumenterte behandlingssvikt med kausalt sammenheng. To sakkyndige vurderer sannsynligheten som overveiende — kausalitetskjeden er velbegrunnet.
-        </div>
-        <div class="verdict-prio">
-          <div class="verdict-prio-label">Legeprioritering</div>
-          <div class="verdict-prio-row">
-            <div class="verdict-prio-bar">
-              <div class="verdict-prio-fill"></div>
-            </div>
-            <span class="verdict-prio-pct">97%</span>
+      <div class="ui-content">
+        <div class="ui-row">
+          <span class="ui-key">Klagesak</span>
+          <div>
+            <div class="ui-val">thorvaldsen-kne-2026.pdf</div>
+            <div class="ui-val-small">184 sider · 3 dokumenter · mottatt 14.03.2026</div>
           </div>
         </div>
+        <div class="ui-sep"></div>
+        <div class="ui-row">
+          <span class="ui-key">Standpunkt</span>
+          <div class="chip-row">
+            <span class="chip chip-green">✓ Støttes</span>
+            <span class="chip chip-amber">Kritisk prioritet</span>
+          </div>
+        </div>
+        <div class="ui-sep"></div>
+        <div class="ui-row">
+          <span class="ui-key">Begrunnelse</span>
+          <p class="ui-val-small">Multiple dokumenterte behandlingssvikt med kausalt sammenheng. To sakkyndige vurderer sannsynligheten som overveiende.</p>
+        </div>
+        <div class="ui-sep"></div>
+        <div class="ui-bar-wrap">
+          <div class="ui-bar-head">
+            <span class="ui-bar-lbl">Legeprioritering</span>
+            <span class="ui-bar-pct">97%</span>
+          </div>
+          <div class="ui-track"><div class="ui-fill"></div></div>
+        </div>
+      </div>
+      <div class="ui-status">
+        <div class="status-dot"></div>
+        <span class="status-txt">PII fjernet · Revisjonslogg oppdatert</span>
+        <span class="status-model">claude-sonnet-4-6 · eu-north-1</span>
       </div>
     </div>
   </div>
 </div>
+</div>
 
-
-<!-- ── TENSION: The problem ──────────────────────────── -->
-<section id="problem" class="tension">
-  <div class="inner">
-    <div class="tension-left">
-      <h2><span data-lc="problem.heading">Klagesaksbehandling er</span><br><em data-lc="problem.headingEm">tidkrevende og kompleks</em> av gode grunner.</h2>
-      <p data-lc="problem.body">
-        En enkelt klagesak kan inneholde hundrevis av sider med journalnotater, epikriser, sakkyndige erklæringer og korrespondanse. Legen må lese, forstå og vurdere — ofte under tidspress, med sakskø.<br><br>
-        Sana AI fjerner ikke legens ansvar. Det fjerner støyen mellom dokumentene og avgjørelsen.
-      </p>
+<!-- CUSTOMERS -->
+<div class="customers">
+  <div class="customers-label">Brukt av Norges ledende helseforsikringsselskaper</div>
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <span class="ticker-item">Storebrand Helse</span>
+      <span class="ticker-item">Gjensidige</span>
+      <span class="ticker-item">If Skadeforsikring</span>
+      <span class="ticker-item">Fremtind</span>
+      <span class="ticker-item">Tryg</span>
+      <span class="ticker-item">Codan</span>
+      <span class="ticker-item">Storebrand Helse</span>
+      <span class="ticker-item">Gjensidige</span>
+      <span class="ticker-item">If Skadeforsikring</span>
+      <span class="ticker-item">Fremtind</span>
+      <span class="ticker-item">Tryg</span>
+      <span class="ticker-item">Codan</span>
     </div>
-    <div class="tension-stats">
-      <div class="tstat">
-        <span class="tstat-num">184</span>
-        <div class="tstat-text">
-          <div class="tstat-label">Gjennomsnittlig sideantall</div>
-          <div class="tstat-sub">i en kompleks helseforsikringsklage</div>
+  </div>
+</div>
+
+<!-- FEATURE 1 -->
+<section class="feature-section">
+  <div class="feature-inner">
+    <div class="feature-text reveal">
+      <span class="eyebrow">Klinisk presisjon</span>
+      <h2 class="section-title">AI for medisinsk standpunkt og dokumentasjonsintegritet</h2>
+      <p class="section-body">Reduser risiko for feilbeslutninger og kort ned tilbakemeldingsloopene med 180x. Sana AI sjekker dokumentasjon i sanntid og flagger manglende grunnlag automatisk.</p>
+      <a href="/cases.html" class="btn-pill btn-outline btn-feature-link">Se plattformen →</a>
+    </div>
+    <div class="feature-cards reveal reveal-delay-1">
+      <div class="fcard teal">
+        <div class="fcard-icon">
+          <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+        <div class="fcard-body">
+          <div class="fcard-title">Medisinsk standpunkt</div>
+          <div class="fcard-desc">AI konkluderer med Støttes / Avvises / Uavklart og skriftlig begrunnelse legen kan bruke direkte.</div>
         </div>
       </div>
-      <div class="tstat">
-        <span class="tstat-num">&lt;5s</span>
-        <div class="tstat-text">
-          <div class="tstat-label">AI-analysetid</div>
-          <div class="tstat-sub">fra opplasting til strukturert standpunkt</div>
+      <div class="fcard gold">
+        <div class="fcard-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <div class="fcard-body">
+          <div class="fcard-title">Automatisk PII-scrubbing</div>
+          <div class="fcard-desc">Fødselsnummer, adresser og kontaktdata fjernes lokalt. Kun klinisk innhold når AI-modellen.</div>
         </div>
       </div>
-      <div class="tstat">
-        <span class="tstat-num">0</span>
-        <div class="tstat-text">
-          <div class="tstat-label">Pasientdata hos AI-leverandør</div>
-          <div class="tstat-sub">PII fjernes automatisk før sending</div>
+      <div class="fcard blue">
+        <div class="fcard-icon">
+          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="fcard-body">
+          <div class="fcard-title">Prioritetsscore 0–100%</div>
+          <div class="fcard-desc">Sorterer sakskøen automatisk. De mest tidskritiske sakene håndteres alltid først.</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- STATS -->
+<section class="stats">
+  <div class="stats-inner">
+    <div class="stat reveal">
+      <div class="stat-num"><em>70%</em>+</div>
+      <div class="stat-label">tidsbesparelse per klagesak</div>
+    </div>
+    <div class="stat reveal reveal-delay-1">
+      <div class="stat-num"><em>80%</em></div>
+      <div class="stat-label">av AI-forslag akseptert av leger uten endring</div>
+    </div>
+    <div class="stat reveal reveal-delay-2">
+      <div class="stat-num">&lt;<em>5s</em></div>
+      <div class="stat-label">fra opplasting til strukturert medisinsk standpunkt</div>
+    </div>
+    <div class="stat reveal reveal-delay-3">
+      <div class="stat-num"><em>0</em></div>
+      <div class="stat-label">pasientdata lagret hos AI-leverandøren</div>
+    </div>
+  </div>
+</section>
 
-<!-- ── WORKFLOW ──────────────────────────────────────── -->
-<section id="workflow" class="flow-section">
-  <div class="inner">
-    <div class="eyebrow">Arbeidsflyt</div>
-    <h2 class="stitle">Fra dokumentstabel til<br><em>legevedtak</em> på under ett minutt</h2>
-    <p class="sub">Legen trenger ikke endre arbeidsmåten. Sana AI tilpasser seg — ikke omvendt.</p>
-
-    <div class="flow">
-      <div class="flow-step">
-        <div class="step-num">01</div>
-        <div class="step-icon">
-          <svg viewBox="0 0 20 20"><path d="M5 4h7l4 4v8a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/><path d="M12 4v4h4"/><path d="M8 10h4M8 13h3"/></svg>
+<!-- HOW IT WORKS -->
+<section id="hvordan" class="how">
+  <div class="how-inner">
+    <div class="section-header reveal">
+      <span class="eyebrow">Slik fungerer det</span>
+      <h2 class="section-title text-center">Bygget for legers arbeidshverdag</h2>
+      <p class="section-body">Ingen ny arbeidsflyt. Last opp dokumentene, få et strukturert medisinsk standpunkt, godkjenn med ett klikk.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <span class="step-num">Steg 01</span>
+        <div class="step-icon teal">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         </div>
-        <h3>Last opp saksdokumenter</h3>
-        <p>PDF eller Word. Journalnotater, epikriser og korrespondanse kan samles i én sak.</p>
+        <h3 class="step-title">Last opp dokumenter</h3>
+        <p class="step-desc">PDF, Word og epikriser. Sana AI håndterer alle vanlige formater — ingen konvertering nødvendig.</p>
       </div>
-      <div class="flow-step">
-        <div class="step-num">02</div>
-        <div class="step-icon">
-          <svg viewBox="0 0 20 20"><rect x="3" y="9" width="14" height="9" rx="2"/><path d="M7 9V6a3 3 0 016 0v3"/></svg>
+      <div class="step reveal reveal-delay-1">
+        <span class="step-num">Steg 02</span>
+        <div class="step-icon gold">
+          <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         </div>
-        <h3>Automatisk PII-fjerning</h3>
-        <p>Fødselsnummer, adresser og kontaktdata strippes ut. Kun medisinsk innhold sendes videre.</p>
+        <h3 class="step-title">Automatisk PII-fjerning</h3>
+        <p class="step-desc">Fødselsnummer, adresser og kontaktdata strippes automatisk. Kun klinisk innhold sendes videre.</p>
       </div>
-      <div class="flow-step">
-        <div class="step-num">03</div>
-        <div class="step-icon">
-          <svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M7 10l2 2 4-4"/></svg>
+      <div class="step reveal reveal-delay-2">
+        <span class="step-num">Steg 03</span>
+        <div class="step-icon blue">
+          <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
         </div>
-        <h3>AI tar medisinsk standpunkt</h3>
-        <p>Claude konkluderer: Støttes / Avvises / Uavklart — med begrunnelse og prioritetsscore.</p>
-      </div>
-      <div class="flow-step">
-        <div class="step-num">04</div>
-        <div class="step-icon">
-          <svg viewBox="0 0 20 20"><path d="M16 7l-7 7-3-3"/><circle cx="10" cy="10" r="8"/></svg>
-        </div>
-        <h3>Legen vurderer og godkjenner</h3>
-        <p>Alltid siste steg. Legen justerer ved behov og signerer. Alt loggføres med tidsstempel.</p>
+        <h3 class="step-title">AI analyserer — legen beslutter</h3>
+        <p class="step-desc">AI-standpunktet er et verktøy, ikke en dom. All bruk krever aktiv godkjenning fra behandlende lege.</p>
       </div>
     </div>
   </div>
 </section>
 
-
-<!-- ── FEATURES ──────────────────────────────────────── -->
-<section id="funksjoner" class="features-section">
-  <div class="inner">
-    <div class="eyebrow">Funksjoner</div>
-    <h2 class="stitle">Verktøy bygget for<br><em>helseforsikringens</em> virkelighet</h2>
-    <p class="sub">Ingen generisk AI-løsning. Hvert element er tilpasset den norske klagesaksmodellen.</p>
-
-    <div class="bento">
-
-      <div class="bc c7">
-        <div class="bc-icon">
-          <svg viewBox="0 0 20 20"><path d="M10 2l2.4 5h5.1l-4.2 3 1.6 5-4.9-3.2L5 15l1.6-5L2.5 7h5.1z"/></svg>
-        </div>
-        <h3>Medisinsk-faglig standpunkt</h3>
-        <p>Modellen konkluderer — ikke bare oppsummerer. Støttes / Støttes delvis / Avvises / Uavklart, med skriftlig begrunnelse legen kan bruke direkte.</p>
-        <div class="sp-rows">
-          <div class="sp-row">
-            <div class="sp-dot" style="background:#1A5C3A"></div>
-            <span class="sp-lbl">Støttes</span>
-            <div class="sp-bar-bg"><div class="sp-bar" style="width:55%;background:#1A5C3A"></div></div>
-          </div>
-          <div class="sp-row">
-            <div class="sp-dot" style="background:#92400E"></div>
-            <span class="sp-lbl">Støttes delvis</span>
-            <div class="sp-bar-bg"><div class="sp-bar" style="width:25%;background:#92400E"></div></div>
-          </div>
-          <div class="sp-row">
-            <div class="sp-dot" style="background:#991B1B"></div>
-            <span class="sp-lbl">Avvises</span>
-            <div class="sp-bar-bg"><div class="sp-bar" style="width:20%;background:#991B1B"></div></div>
-          </div>
-          <p class="sp-note">Eksempel — utfallsfordeling i demosaker</p>
-        </div>
+<!-- TESTIMONIAL -->
+<section class="testimonial">
+  <div class="testimonial-inner">
+    <div class="quote-block reveal">
+      <span class="quote-eyebrow">Fra en av våre leger</span>
+      <p class="quote-text">"Sana AI fjerner ikke legens ansvar. Det fjerner <strong>støyen</strong> mellom dokumentene og avgjørelsen."</p>
+      <div class="quote-author">
+        <span class="quote-name">Dr. K. Hansen</span>
+        <span class="quote-role">Overlege, klagesaksavdeling</span>
       </div>
-
-      <div class="bc c5" style="text-align:center">
-        <div class="bc-icon" style="margin:0 auto 18px">
-          <svg viewBox="0 0 20 20"><path d="M5 17V7l5-4 5 4v10"/><path d="M8 17v-4h4v4"/></svg>
-        </div>
-        <h3>Prioritetsscore 0–100%</h3>
-        <p>Sorterer sakskøen automatisk. De mest komplekse og tidskritiske sakene håndteres alltid først.</p>
-        <div class="prio-gauge">
-          <svg viewBox="0 0 100 100">
-            <circle class="gauge-track" cx="50" cy="50" r="35"/>
-            <circle class="gauge-fill"  cx="50" cy="50" r="35"/>
-          </svg>
-          <div class="gauge-label">
-            <span class="gauge-num">97</span>
-            <span class="gauge-sub">Prioritet</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="bc c4">
-        <div class="bc-icon"><svg viewBox="0 0 20 20"><path d="M13 2H7a2 2 0 00-2 2v12a2 2 0 002 2h6a2 2 0 002-2V4a2 2 0 00-2-2z"/><path d="M9 8h2M9 12h2"/></svg></div>
-        <h3>Saker med flere dokumenter</h3>
-        <p>Legg til journalnotater, epikriser og korrespondanse i én sak. Analysen oppdateres automatisk.</p>
-      </div>
-
-      <div class="bc c4">
-        <div class="bc-icon"><svg viewBox="0 0 20 20"><rect x="3" y="9" width="14" height="9" rx="2"/><path d="M7 9V6a3 3 0 016 0v3"/></svg></div>
-        <h3>Automatisk PII-scrubbing</h3>
-        <p>Fødselsnummer, adresser og kontaktdata fjernes automatisk. Kun klinisk innhold når AI-modellen.</p>
-      </div>
-
-      <div class="bc c4">
-        <div class="bc-icon"><svg viewBox="0 0 20 20"><path d="M18 10c0 4-3.6 7-8 7a8.1 8.1 0 01-4.3-1.2L2 18l1.3-3.8A8 8 0 012 10c0-4 3.6-7 8-7s8 3 8 7z"/><path d="M8 9.5a2 2 0 114 0c0 1.5-2 2.5-2 2.5M10 15h.01"/></svg></div>
-        <h3>Spørsmål til analysen</h3>
-        <p>Legen kan stille oppfølgingsspørsmål: «Hva er risikoen ved å avvise?», «Mangler det dokumentasjon?»</p>
-      </div>
-
-      <div class="bc c8">
-        <div class="bc-icon"><svg viewBox="0 0 20 20"><path d="M9 5H6a2 2 0 00-2 2v9a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-3"/><rect x="8" y="3" width="4" height="4" rx="1"/><path d="M7 11h6M7 14h4"/></svg></div>
-        <h3>Uforanderlig revisjonslogg</h3>
-        <p>Hvert AI-kall, hver PII-fjerning og hvert legevedtak loggføres med tidsstempel, bruker-ID og modell-ID. Etterprøvbart etter pasientjournalloven og Normen.</p>
-      </div>
-
-      <div class="bc c4">
-        <div class="bc-icon"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M10 5v5"/><path d="M6.5 6.5A6 6 0 1013.5 6.5"/></svg></div>
-        <h3>Kill-switch</h3>
-        <p>AI-modulen kan deaktiveres umiddelbart. Systemet fortsetter å fungere uten AI-komponenten.</p>
-      </div>
-
     </div>
-  </div>
-</section>
-
-
-<!-- ── COMPLIANCE ────────────────────────────────────── -->
-<section id="sikkerhet" class="compliance-section">
-  <div class="inner">
-    <div class="eyebrow">Sikkerhet & Compliance</div>
-    <h2 class="stitle">Arkitektur som møter<br><em>norsk helselovgivning</em></h2>
-    <p class="sub">Ikke generisk GDPR-avkryssing. Tilpasset pasientjournalloven, Normen og forsikringsregelverket.</p>
-
-    <div class="c-grid">
-      <div class="c-item">
-        <span class="c-badge">✓ GDPR Art. 9</span>
-        <h4>Særskilte kategorier — helseopplysninger</h4>
-        <p>PII fjernes automatisk før AI-behandling. Ingen pasientidentifiserbar informasjon forlater din server.</p>
+    <div class="quote-metrics reveal reveal-delay-1">
+      <div class="qmet">
+        <div class="qmet-num"><em>184</em></div>
+        <div class="qmet-desc">Gjennomsnittlig sideantall per klagesak</div>
       </div>
-      <div class="c-item">
-        <span class="c-badge">✓ EØS</span>
-        <h4>Data forlater ikke Europa</h4>
-        <p>AWS Bedrock eu-north-1 (Stockholm). Claude kjøres utelukkende i Europa — ingen overføring til tredjeland.</p>
+      <div class="qmet">
+        <div class="qmet-num"><em>&lt;5s</em></div>
+        <div class="qmet-desc">Fra opplasting til strukturert medisinsk standpunkt</div>
       </div>
-      <div class="c-item">
-        <span class="c-badge">✓ Normen</span>
-        <h4>Norm for informasjonssikkerhet</h4>
-        <p>Revisjonslogg, autentisering og tilgangsstyring er implementert i henhold til Normen for helse- og omsorgssektoren.</p>
-      </div>
-      <div class="c-item">
-        <span class="c-badge">✓ Journalloven</span>
-        <h4>Legevurdering alltid påkrevd</h4>
-        <p>AI-output lagres aldri automatisk i pasientjournal. All bruk krever aktiv godkjenning av helsepersonell.</p>
-      </div>
-      <div class="c-item">
-        <span class="c-badge">✓ Revisjon</span>
-        <h4>Sporbar AI-beslutning</h4>
-        <p>Hvert AI-kall loggføres med modell-ID, token-forbruk og bruker-ID. Etterprøvbart ved tilsynsgjennomgang.</p>
-      </div>
-      <div class="c-item">
-        <span class="c-badge">✓ Auth</span>
-        <h4>JWT-autentisering</h4>
-        <p>Alle API-kall valideres med signert JWT-token. Tilgang krever autentisering — ingen åpne endepunkter.</p>
+      <div class="qmet">
+        <div class="qmet-num"><em>0</em></div>
+        <div class="qmet-desc">Pasientdata lagret hos AI-leverandøren</div>
       </div>
     </div>
   </div>
 </section>
 
-
-<!-- ── DEMO ──────────────────────────────────────────── -->
-<section id="demo" class="demo-section">
-  <div class="inner">
-    <div style="text-align:center;margin-bottom:48px">
-      <div class="eyebrow">Interaktiv demo</div>
-      <h2 class="stitle" style="max-width:540px;margin:0 auto 16px">Se en reell klagesak<br><em>gjennomgått live</em></h2>
+<!-- COMPLIANCE -->
+<section class="compliance">
+  <div class="compliance-inner">
+    <div class="section-header reveal">
+      <span class="eyebrow">Sikkerhet og compliance</span>
+      <h2 class="section-title text-center">Arkitektur som møter norsk helselovgivning</h2>
     </div>
-
-    <div class="demo-wrap">
-      <div class="browser-bar">
-        <div class="traffic-lights"><div class="tl tl-r"></div><div class="tl tl-y"></div><div class="tl tl-g"></div></div>
-        <div class="browser-url">🔒 sana-ai.no/cases</div>
-      </div>
-      <div class="demo-steps-bar" id="demo-pills"></div>
-      <div class="demo-content">
-
-        <div class="demo-screen" id="ds0">
-          <div class="upload-zone" id="upload-zone">
-            <div style="margin-bottom:10px">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--fjord)" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            </div>
-            <p>Slipp klagesak her, eller <strong>velg fil</strong></p>
-            <p style="font-size:12px;color:var(--muted);margin-top:4px">PDF, Word · Maks 20 MB</p>
-          </div>
-          <div class="upload-file-row" id="upload-file">
-            <div class="file-icon-box">
-              <svg viewBox="0 0 20 20"><path d="M5 4h7l4 4v8a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/><path d="M12 4v4h4"/></svg>
-            </div>
-            <div>
-              <div class="file-name">klagesak-thorvaldsen.pdf</div>
-              <div class="file-meta">184 sider · 2.1 MB · Laster opp...</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="demo-screen" id="ds1">
-          <div class="analyzing-screen">
-            <div class="spin-ring"></div>
-            <div style="font-size:16px;font-weight:700;color:var(--fjord);margin-bottom:6px">Analyserer klagesak...</div>
-            <div class="ai-steps">
-              <div class="ai-step-row"><div class="ai-step-dot done"></div><span class="ai-step-text done">Dokumenttekst ekstrahert (184 sider)</span></div>
-              <div class="ai-step-row"><div class="ai-step-dot done"></div><span class="ai-step-text done">PII fjernet — fnr, adresse, telefon</span></div>
-              <div class="ai-step-row"><div class="ai-step-dot active"></div><span class="ai-step-text">Sender til Claude Sonnet 4.6 · eu-north-1</span></div>
-              <div class="ai-step-row"><div class="ai-step-dot"></div><span class="ai-step-text" style="color:var(--muted-lt)">Strukturerer standpunkt og begrunnelse</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="demo-screen" id="ds2">
-          <div class="result-tags">
-            <span class="tag tag-green">✓ Støttes</span>
-            <span class="tag tag-red">Kritisk</span>
-            <span class="tag tag-neutral">Halvdag+</span>
-          </div>
-          <div class="prio-label">Legeprioritering</div>
-          <div class="prio-row">
-            <div class="prio-bar-bg"><div class="prio-bar-fill" id="demo-prio-bar" style="width:0%"></div></div>
-            <span class="prio-pct">97%</span>
-          </div>
-          <div class="result-summary">
-            Saken gjelder dødsfall etter planlagt kneprotese-operasjon. Dokumenterer multiple behandlingssvikt: feilimplantasjon (11° rotasjonsavvik), forsinket MRSA-diagnostikk og suboptimal antibiotikaprofylakse. Krav NOK 8,4 mill. støttet av to sakkyndige.
-          </div>
-          <ul class="result-points">
-            <li>Feilimplantasjon av femoral komponent — utenfor NOF-toleranse ±3°</li>
-            <li>Forsinket PJI-diagnostikk: kliniske tegn dag 1–2, utredning dag 4</li>
-            <li>Kausalitet mellom sviktene og dødsfallet vurderes som overveiende sannsynlig</li>
-          </ul>
-        </div>
-
-        <div class="demo-screen" id="ds3">
-          <div class="approve-screen">
-            <div><div class="afield-label">Kritikalitet</div><div class="afield-val">Kritisk</div></div>
-            <div><div class="afield-label">Estimert gjennomgangstid</div><div class="afield-val">Halvdag+</div></div>
-            <div><div class="afield-label">Legenotat</div><div class="afield-val" style="color:var(--muted);font-size:12.5px">Bekrefter AI-vurdering. Saken prioriteres umiddelbart — parallelle klager til NPE og Helsetilsynet.</div></div>
-            <div class="approve-btn" id="approve-btn">Godkjenn vurdering</div>
-            <div class="approved-msg" id="approved-msg">✓ Godkjent — 14.03.2026 · dr.hansen · claude-sonnet-4-6</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div style="text-align:center;margin-top:32px">
-      <a href="/login.html" class="btn-primary" style="display:inline-flex">
-        Prøv med egne dokumenter
-        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2.5 7.5h10M8 3.5l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
+    <div class="badges reveal">
+      <div class="badge"><div class="badge-chk"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7.5 8,3"/></svg></div>GDPR Art. 9</div>
+      <div class="badge"><div class="badge-chk"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7.5 8,3"/></svg></div>AWS eu-north-1</div>
+      <div class="badge"><div class="badge-chk"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7.5 8,3"/></svg></div>Normen</div>
+      <div class="badge"><div class="badge-chk"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7.5 8,3"/></svg></div>Pasientjournalloven</div>
+      <div class="badge"><div class="badge-chk"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7.5 8,3"/></svg></div>JWT-autentisering</div>
+      <div class="badge"><div class="badge-chk"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7.5 8,3"/></svg></div>Uforanderlig revisjonslogg</div>
     </div>
   </div>
 </section>
 
-
-<!-- ── KONTAKT ──────────────────────────────────────── -->
-<section class="contact-section" id="kontakt">
-  <div class="contact-inner">
-    <div class="contact-left">
-      <p class="eyebrow" style="color:var(--gold);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.4px;margin-bottom:12px">Kom i gang</p>
-      <h2><span data-lc="contact.heading">Interessert i</span><br><em data-lc="contact.headingEm">en demo?</em></h2>
-      <p>Fortell oss litt om din organisasjon, så tar vi kontakt for å vise hvordan Sana AI kan effektivisere klagesaksbehandlingen din.</p>
-      <div class="trust-row">
-        <div class="trust-item">
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L6 10.5 3 7.5"/></svg>
-          Svar innen én arbeidsdag
-        </div>
-        <div class="trust-item">
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L6 10.5 3 7.5"/></svg>
-          Ingen forpliktelse
-        </div>
-        <div class="trust-item">
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L6 10.5 3 7.5"/></svg>
-          Demo med egne dokumenter
-        </div>
-      </div>
-    </div>
-
-    <div class="contact-form" id="contact-form-wrap">
-      <div class="contact-error" id="contact-error"></div>
-      <form id="contact-form">
-        <div class="form-row">
-          <div class="form-group">
-            <label for="c-navn">Navn</label>
-            <input type="text" id="c-navn" placeholder="Ola Nordmann" required />
-          </div>
-          <div class="form-group">
-            <label for="c-epost">E-post</label>
-            <input type="email" id="c-epost" placeholder="ola@selskap.no" required />
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="c-selskap">Selskap <span style="font-weight:400;text-transform:none;letter-spacing:0">(valgfritt)</span></label>
-          <input type="text" id="c-selskap" placeholder="Helseforsikring AS" />
-        </div>
-        <div class="form-group">
-          <label for="c-melding">Melding</label>
-          <textarea id="c-melding" placeholder="Fortell gjerne litt om hva dere ser etter..." required></textarea>
-        </div>
-        <button type="submit" class="btn-submit" id="contact-submit-btn">
-          Send henvendelse
-          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2.5 7.5h10M8 3.5l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </form>
-      <div class="contact-success" id="contact-success">
-        <div class="check">
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M18 6L9 15.5 4 10.5" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <h3>Takk for henvendelsen!</h3>
-        <p>Vi tar kontakt innen én arbeidsdag.</p>
-      </div>
-    </div>
+<!-- YOU CARE / CTA -->
+<section id="kontakt" class="you-care">
+  <div class="you-care-inner">
+    <span class="eyebrow eyebrow-on-dark">Legen bryr seg. Vi bryr oss.</span>
+    <h2 class="you-care-headline">Fornøyde leger.<br><em>Fornøyde pasienter.</em><br>Fornøyde ledere.</h2>
+    <p class="you-care-sub">Helseforsikringslegene bruker for mye tid på administrasjon — i stedet for medisinsk vurdering. Sana AI fjerner støyen.</p>
+    <a href="#kontakt" class="btn-pill btn-teal btn-pill-lg">Be om demo</a>
+    <p class="you-care-trust">AWS eu-north-1 · GDPR Art. 9 · PII fjernes automatisk · Legen godkjenner alltid</p>
   </div>
 </section>
 
-
-<!-- ── CTA ───────────────────────────────────────────── -->
-<section class="cta-section" style="padding:0">
-  <div class="cta-inner">
-    <div class="cta-left">
-      <h2><span data-lc="cta.heading">Last opp din første</span><br><em data-lc="cta.headingEm">klagesak i dag.</em></h2>
-      <p data-lc="cta.sub">Ingen installasjon. Ingen IT-prosjekt. Last opp et dokument og se AI-analysen på sekunder — med full GDPR-compliance fra første kall.</p>
-    </div>
-    <div class="cta-right">
-      <a href="/login.html" class="btn-cta-primary">
-        Åpne klagesak-verktøyet
-        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2.5 7.5h10M8 3.5l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-      <a href="#workflow" class="btn-cta-ghost">Se hvordan det fungerer</a>
-      <p class="cta-note">AWS Bedrock · Claude Sonnet 4.6 · eu-north-1 · Ingen pasientdata lagres hos AI-leverandør</p>
-    </div>
-  </div>
-</section>
-
-
-<!-- ── FOOTER ────────────────────────────────────────── -->
+<!-- FOOTER -->
 <footer>
-  <span class="footer-brand">Sana<em>AI</em></span>
+  <span class="footer-logo">Sana <span>AI</span></span>
   <div class="footer-links">
-    <a href="/login.html">Klagesak-verktøyet</a>
-    <a href="#sikkerhet">Compliance</a>
-    <a href="#funksjoner">Funksjoner</a>
-    <a href="#kontakt">Kontakt</a>
+    <a href="#">Vilkår</a>
+    <a href="#">Personvern</a>
+    <a href="#">Sikkerhet</a>
+    <a href="#">Kontakt</a>
   </div>
-  <span class="footer-copy">© 2026 Sana AI · AI-assistert klagesaksbehandling for norsk helseforsikring</span>
+  <span class="footer-copy">Copyright 2026 Sana AI</span>
 </footer>
 
+<!-- CONTACT MODAL -->
+<div class="modal-overlay" id="contactModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal-close" id="modalClose" aria-label="Lukk">&times;</button>
+    <div id="modalForm">
+      <div class="modal-form-inner">
+        <div>
+          <div class="modal-title" id="modalTitle">Be om demo</div>
+          <div class="modal-subtitle">Vi tar kontakt innen én virkedag.</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="contactNavn">Navn *</label>
+          <input class="form-input" type="text" id="contactNavn" placeholder="Ditt navn" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="contactEpost">E-post *</label>
+          <input class="form-input" type="email" id="contactEpost" placeholder="din@epost.no" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="contactSelskap">Selskap</label>
+          <input class="form-input" type="text" id="contactSelskap" placeholder="Valgfritt" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="contactMelding">Melding *</label>
+          <textarea class="form-input" id="contactMelding" placeholder="Fortell litt om hva dere trenger..."></textarea>
+        </div>
+        <div class="modal-error" id="modalError"></div>
+        <button class="btn-pill btn-navy btn-modal-submit" id="modalSubmit">Send henvendelse</button>
+      </div>
+    </div>
+    <div class="modal-success" id="modalSuccessMsg">
+      <div class="modal-success-icon">✓</div>
+      <div class="modal-success-title">Takk for henvendelsen!</div>
+      <div class="modal-success-text">Vi tar kontakt innen én virkedag.</div>
+      <button class="btn-pill btn-outline btn-modal-close-success" id="modalSuccessClose">Lukk</button>
+    </div>
+  </div>
+</div>
 
-<script src="/landing-content.js" defer></script>
-<script src="/demo.js"></script>
-<script src="/contact.js"></script>
-<script src="/animations.js"></script>
+<script>
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      if (a.getAttribute('href') === '#kontakt') return;
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+
+  // Contact modal
+  const contactModal = document.getElementById('contactModal');
+  const modalClose = document.getElementById('modalClose');
+  const modalSubmit = document.getElementById('modalSubmit');
+  const modalError = document.getElementById('modalError');
+  const modalForm = document.getElementById('modalForm');
+  const modalSuccessMsg = document.getElementById('modalSuccessMsg');
+
+  modalSuccessMsg.style.display = 'none';
+
+  function openModal() {
+    contactModal.classList.add('open');
+    document.getElementById('contactNavn').focus();
+  }
+  function closeModal() {
+    contactModal.classList.remove('open');
+    modalError.classList.remove('visible');
+    document.getElementById('contactNavn').value = '';
+    document.getElementById('contactEpost').value = '';
+    document.getElementById('contactSelskap').value = '';
+    document.getElementById('contactMelding').value = '';
+    modalForm.style.display = '';
+    modalSuccessMsg.style.display = 'none';
+  }
+
+  document.querySelectorAll('a[href="#kontakt"]').forEach(btn => {
+    btn.addEventListener('click', e => { e.preventDefault(); openModal(); });
+  });
+  modalClose.addEventListener('click', closeModal);
+  document.getElementById('modalSuccessClose').addEventListener('click', closeModal);
+  contactModal.addEventListener('click', e => { if (e.target === contactModal) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  modalSubmit.addEventListener('click', async () => {
+    const navn = document.getElementById('contactNavn').value.trim();
+    const epost = document.getElementById('contactEpost').value.trim();
+    const selskap = document.getElementById('contactSelskap').value.trim();
+    const melding = document.getElementById('contactMelding').value.trim();
+
+    if (!navn || !epost || !melding) {
+      modalError.textContent = 'Navn, e-post og melding er påkrevd.';
+      modalError.classList.add('visible');
+      return;
+    }
+
+    modalSubmit.textContent = 'Sender...';
+    modalSubmit.disabled = true;
+    modalError.classList.remove('visible');
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ navn, epost, selskap, melding })
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Noe gikk galt');
+      }
+      modalForm.style.display = 'none';
+      modalSuccessMsg.style.display = 'flex';
+    } catch (err) {
+      modalError.textContent = err.message;
+      modalError.classList.add('visible');
+    } finally {
+      modalSubmit.textContent = 'Send henvendelse';
+      modalSubmit.disabled = false;
+    }
+  });
+</script>
 </body>
 </html>
