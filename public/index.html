@@ -477,6 +477,61 @@
     .eyebrow-on-dark { color: var(--teal-light); }
     .chip-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
     .hero-bg-wrapper { background: var(--bg); }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(27,58,75,0.55);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .modal-overlay.open {
+      opacity: 1; pointer-events: all;
+    }
+    .modal {
+      background: #fff;
+      border-radius: 16px;
+      padding: 40px;
+      width: 100%; max-width: 480px;
+      display: flex; flex-direction: column; gap: 20px;
+      box-shadow: 0 24px 64px rgba(27,58,75,0.18);
+      transform: translateY(12px);
+      transition: transform 0.2s;
+    }
+    .modal-overlay.open .modal { transform: none; }
+    .modal-title { font-size: 22px; font-weight: 700; color: var(--primary); letter-spacing: -0.5px; }
+    .modal-subtitle { font-size: 14px; color: var(--body); margin-top: -12px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+    .form-input {
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 15px; font-family: var(--font);
+      color: var(--ink);
+      transition: border-color 0.15s;
+      outline: none;
+    }
+    .form-input:focus { border-color: var(--teal); }
+    textarea.form-input { resize: vertical; min-height: 100px; }
+    .modal-error { font-size: 13px; color: #dc2626; background: #FEE2E2; padding: 10px 14px; border-radius: 8px; display: none; }
+    .modal-error.visible { display: block; }
+    .modal-success { text-align: center; display: flex; flex-direction: column; gap: 12px; align-items: center; }
+    .modal-success-icon { font-size: 40px; }
+    .modal-success-title { font-size: 20px; font-weight: 700; color: var(--primary); }
+    .modal-success-text { font-size: 14px; color: var(--body); }
+    .modal-close {
+      position: absolute; top: 16px; right: 20px;
+      font-size: 24px; color: var(--muted);
+      cursor: pointer; background: none; border: none;
+      line-height: 1;
+    }
+    .modal { position: relative; }
+    .modal-form-inner { display: flex; flex-direction: column; gap: 20px; }
+    .btn-modal-submit { width: 100%; justify-content: center; font-size: 15px; padding: 12px; }
+    .btn-modal-close-success { margin-top: 8px; }
   </style>
 </head>
 <body>
@@ -749,6 +804,45 @@
   <span class="footer-copy">Copyright 2026 Sana AI</span>
 </footer>
 
+<!-- CONTACT MODAL -->
+<div class="modal-overlay" id="contactModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal-close" id="modalClose" aria-label="Lukk">&times;</button>
+    <div id="modalForm">
+      <div class="modal-form-inner">
+        <div>
+          <div class="modal-title" id="modalTitle">Be om demo</div>
+          <div class="modal-subtitle">Vi tar kontakt innen én virkedag.</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="contactNavn">Navn *</label>
+          <input class="form-input" type="text" id="contactNavn" placeholder="Ditt navn" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="contactEpost">E-post *</label>
+          <input class="form-input" type="email" id="contactEpost" placeholder="din@epost.no" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="contactSelskap">Selskap</label>
+          <input class="form-input" type="text" id="contactSelskap" placeholder="Valgfritt" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="contactMelding">Melding *</label>
+          <textarea class="form-input" id="contactMelding" placeholder="Fortell litt om hva dere trenger..."></textarea>
+        </div>
+        <div class="modal-error" id="modalError"></div>
+        <button class="btn-pill btn-navy btn-modal-submit" id="modalSubmit">Send henvendelse</button>
+      </div>
+    </div>
+    <div class="modal-success" id="modalSuccessMsg">
+      <div class="modal-success-icon">✓</div>
+      <div class="modal-success-title">Takk for henvendelsen!</div>
+      <div class="modal-success-text">Vi tar kontakt innen én virkedag.</div>
+      <button class="btn-pill btn-outline btn-modal-close-success" id="modalSuccessClose">Lukk</button>
+    </div>
+  </div>
+</div>
+
 <script>
   const io = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
@@ -757,9 +851,80 @@
 
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
+      if (a.getAttribute('href') === '#kontakt') return;
       const t = document.querySelector(a.getAttribute('href'));
       if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
     });
+  });
+
+  // Contact modal
+  const contactModal = document.getElementById('contactModal');
+  const modalClose = document.getElementById('modalClose');
+  const modalSubmit = document.getElementById('modalSubmit');
+  const modalError = document.getElementById('modalError');
+  const modalForm = document.getElementById('modalForm');
+  const modalSuccessMsg = document.getElementById('modalSuccessMsg');
+
+  modalSuccessMsg.style.display = 'none';
+
+  function openModal() {
+    contactModal.classList.add('open');
+    document.getElementById('contactNavn').focus();
+  }
+  function closeModal() {
+    contactModal.classList.remove('open');
+    modalError.classList.remove('visible');
+    document.getElementById('contactNavn').value = '';
+    document.getElementById('contactEpost').value = '';
+    document.getElementById('contactSelskap').value = '';
+    document.getElementById('contactMelding').value = '';
+    modalForm.style.display = '';
+    modalSuccessMsg.style.display = 'none';
+  }
+
+  document.querySelectorAll('a[href="#kontakt"]').forEach(btn => {
+    btn.addEventListener('click', e => { e.preventDefault(); openModal(); });
+  });
+  modalClose.addEventListener('click', closeModal);
+  document.getElementById('modalSuccessClose').addEventListener('click', closeModal);
+  contactModal.addEventListener('click', e => { if (e.target === contactModal) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  modalSubmit.addEventListener('click', async () => {
+    const navn = document.getElementById('contactNavn').value.trim();
+    const epost = document.getElementById('contactEpost').value.trim();
+    const selskap = document.getElementById('contactSelskap').value.trim();
+    const melding = document.getElementById('contactMelding').value.trim();
+
+    if (!navn || !epost || !melding) {
+      modalError.textContent = 'Navn, e-post og melding er påkrevd.';
+      modalError.classList.add('visible');
+      return;
+    }
+
+    modalSubmit.textContent = 'Sender...';
+    modalSubmit.disabled = true;
+    modalError.classList.remove('visible');
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ navn, epost, selskap, melding })
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Noe gikk galt');
+      }
+      modalForm.style.display = 'none';
+      modalSuccessMsg.style.display = 'flex';
+    } catch (err) {
+      modalError.textContent = err.message;
+      modalError.classList.add('visible');
+    } finally {
+      modalSubmit.textContent = 'Send henvendelse';
+      modalSubmit.disabled = false;
+    }
   });
 </script>
 </body>
