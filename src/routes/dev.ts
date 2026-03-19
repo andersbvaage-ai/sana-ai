@@ -7,7 +7,7 @@ import { Router, Request, Response } from 'express';
 import multer from 'multer';
 import { spawn } from 'child_process';
 import path from 'path';
-import { scrubInput } from '../services/scrubbing/inputScrubber';
+import { scrubInput } from '../services/scrubbing/legacyScrubber';
 import { issueToken } from '../mock/issueToken';
 import { UserRole } from '../config/types';
 

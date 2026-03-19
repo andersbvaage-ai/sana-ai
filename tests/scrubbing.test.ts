@@ -1,4 +1,4 @@
-import { scrubInput } from '../src/services/scrubbing/inputScrubber';
+import { scrubInput } from '../src/services/scrubbing/legacyScrubber';
 
 describe('inputScrubber', () => {
   test('fjerner fødselsnummer', () => {

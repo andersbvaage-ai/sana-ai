@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { caseStore } from '../services/cases/caseStore';
 import { analyzeCaseText } from '../services/cases/caseAnalyzer';
 import { extractTextFromPdf, extractTextFromWord } from '../services/cases/extractText';
-import { scrubInput } from '../services/scrubbing/inputScrubber';
+import { scrubInput } from '../services/scrubbing/legacyScrubber';
 import { writeCaseAuditLog } from '../logging/auditLogger';
 import { invokeModel } from '../services/ai/bedrockClient';
 import { Case, CaseDocument, DoctorAssessment, CriticalityLevel } from '../config/types';

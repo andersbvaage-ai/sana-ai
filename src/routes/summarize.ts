@@ -11,7 +11,7 @@
 
 import { Router, Request, Response } from 'express';
 import { z } from 'zod';
-import { scrubInput, validateInputLength } from '../services/scrubbing/inputScrubber';
+import { scrubInput, validateInputLength } from '../services/scrubbing/legacyScrubber';
 import { callAI } from '../services/ai/bedrockClient';
 import { validateOutput } from '../services/validation/outputValidator';
 import { writeAuditLog, makeErrorEntry } from '../logging/auditLogger';
