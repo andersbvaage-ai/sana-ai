@@ -10,7 +10,7 @@
  * for å hindre prompt injection.
  */
 
-import { BedrockRuntimeClient, InvokeModelCommand } from '@aws-sdk/client-bedrock-runtime';
+import { BedrockRuntimeClient, InvokeModelCommand, InvokeModelWithResponseStreamCommand } from '@aws-sdk/client-bedrock-runtime';
 import { config } from '../../config';
 import { AIRequest, AIResponse, ClinicalContext } from '../../config/types';
 import { mockAzureAICall } from '../../mock/mockAzureAI';
@@ -66,7 +66,8 @@ export async function invokeModel(
   systemPrompt: string,
   userMessage: string,
   requestId: string,
-  maxTokens?: number
+  maxTokens?: number,
+  modelId?: string
 ): Promise<{ text: string; inputTokens: number; outputTokens: number; modelId: string }> {
   const body = {
     anthropic_version: 'bedrock-2023-05-31',
@@ -77,7 +78,7 @@ export async function invokeModel(
   };
 
   const command = new InvokeModelCommand({
-    modelId: config.aws.modelId,
+    modelId: modelId ?? config.aws.modelId,
     contentType: 'application/json',
     accept: 'application/json',
     // F3-4: ingen innholdslogging — bruker-request-id for sporing
@@ -101,6 +102,41 @@ export async function invokeModel(
     outputTokens: result.usage.output_tokens,
     modelId: result.model ?? config.aws.modelId,
   };
+}
+
+// ─── Streaming-variant for journal-chat ───────────────────────────────────────
+export async function* invokeModelStream(
+  systemPrompt: string,
+  messages: Array<{ role: 'user' | 'assistant'; content: string }>,
+  requestId: string,
+  maxTokens = 8192
+): AsyncGenerator<string> {
+  const body = {
+    anthropic_version: 'bedrock-2023-05-31',
+    max_tokens: maxTokens,
+    system: systemPrompt,
+    messages: messages.slice(-20),
+  };
+
+  const command = new InvokeModelWithResponseStreamCommand({
+    modelId: config.aws.modelId,
+    contentType: 'application/json',
+    accept: 'application/json',
+    body: JSON.stringify(body),
+  });
+
+  const response = await bedrockClient.send(command);
+  for await (const event of response.body!) {
+    if (event.chunk?.bytes) {
+      const json = JSON.parse(new TextDecoder().decode(event.chunk.bytes)) as {
+        type: string;
+        delta?: { type: string; text?: string };
+      };
+      if (json.type === 'content_block_delta' && json.delta?.type === 'text_delta' && json.delta.text) {
+        yield json.delta.text;
+      }
+    }
+  }
 }
 
 // ─── Hoved-klient for /api/summarize ──────────────────────────────────────────
