@@ -209,7 +209,7 @@
     .ui-bar-wrap { display: flex; flex-direction: column; gap: 5px; }
     .ui-bar-head { display: flex; justify-content: space-between; }
     .ui-bar-lbl  { font-size: 11px; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; }
-    .ui-bar-pct  { font-size: 11px; font-weight: 700; color: var(--secondary); }
+    .ui-bar-pct  { font-size: 11px; font-weight: 700; color: var(--ink); }
     .ui-track    { height: 4px; background: var(--bg-teal); border-radius: 2px; overflow: hidden; }
     .ui-fill     { height: 100%; width: 97%; background: var(--secondary); border-radius: 2px; }
     .ui-status {
@@ -263,11 +263,12 @@
     }
     .feature-inner {
       max-width: 1100px; margin: 0 auto;
-      display: grid; grid-template-columns: 1fr 1fr;
+      display: flex; flex-wrap: wrap;
       gap: 80px; align-items: center;
     }
-    .feature-inner.reverse { direction: rtl; }
-    .feature-inner.reverse > * { direction: ltr; }
+    .feature-inner > * { flex: 1 1 420px; }
+    .feature-inner.reverse .feature-text { order: 2; }
+    .feature-inner.reverse .feature-cards { order: 1; }
     .feature-text { display: flex; flex-direction: column; gap: 20px; }
     .section-title {
       font-size: 36px; font-weight: 700;
@@ -324,7 +325,7 @@
       font-size: 56px; font-weight: 700;
       color: #fff; letter-spacing: -2px; line-height: 1;
     }
-    .stat-num em { font-style: normal; color: var(--secondary); }
+    .stat-num em { font-style: normal; color: #fff; }
     .stat-label { font-size: 14px; font-weight: 400; color: var(--dark-txt); line-height: 1.5; }
 
     /* ── HOW IT WORKS ── */
@@ -385,7 +386,6 @@
     .quote-text {
       font-size: 24px; font-weight: 400;
       line-height: 1.5; color: var(--ink);
-      font-style: italic;
     }
     .quote-text strong { font-style: normal; }
     .quote-author { display: flex; flex-direction: column; gap: 2px; }
@@ -445,7 +445,7 @@
       color: #fff; letter-spacing: -1px;
       line-height: 1.15;
     }
-    .you-care-headline em { font-style: normal; color: var(--secondary); }
+    .you-care-headline em { font-style: normal; color: #fff; }
     .you-care-sub { font-size: 17px; color: var(--dark-txt); line-height: 1.7; }
     .you-care-trust { font-size: 12px; color: rgba(255,255,255,0.25); margin-top: 8px; }
 
