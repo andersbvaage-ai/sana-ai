@@ -98,8 +98,35 @@ Før deploy — gå gjennom denne listen:
 
 ---
 
+## GitHub
+
+Repo: https://github.com/andersbvaage-ai/sana-ai (privat)
+Inviter Morten som collaborator når GitHub-brukernavn er kjent.
+
+**OBS:** AWS-nøkler i `.env` bør roteres — filen har ligget på Dropbox.
+
+---
+
+## Landingsside — designretning
+
+Aktiv mockup: `public/mockup-eleos.html` — inspirert av eleos.health.
+- System font stack (ikke Google Fonts)
+- Lys hero (hvit bakgrunn, mørk tekst)
+- Teal pill-knapper (`#93C7C7`)
+- Pastell feature-cards
+- Nav: kremfarget (`#f7f5e7`)
+
+`public/mockup-harvey.html` — alternativ mørk video-retning (ikke valgt enda).
+Beslutning om endelig retning og overføring til `index.html` gjenstår.
+
+---
+
 ## Gjenstående oppgaver
 
+- [ ] **Roter AWS-nøkler** i IAM (nøkler lå i .env på Dropbox)
+- [ ] Bestem landingsside-retning (eleos vs harvey) og oppdater index.html
+- [ ] **Journal AI-integrasjon** — branch `feature/journal-ai-integration` (worktree `.worktrees/journal-ai`). Task 1+2 done, Task 3–10 gjenstår. Plan: `docs/superpowers/plans/2026-03-19-journal-ai-integration.md`
+- [x] Inviter Morten til GitHub-repo (gjort)
 - [ ] E-post ved ny kontakthenvendelse (AWS SES)
 - [ ] Mobiltest av landingsside
 - [ ] Refresh-knapp på stats.html — dukker opp feil sted (ved siden av logoen i headeren), må debugges

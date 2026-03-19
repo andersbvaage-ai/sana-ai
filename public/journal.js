@@ -3,6 +3,11 @@
 // ── State ────────────────────────────────────────────────────────────────────
 let isSending = false;
 
+function authHeaders() {
+  const token = localStorage.getItem('sana_token');
+  return token ? { 'Authorization': 'Bearer ' + token } : {};
+}
+
 // ── DOM refs ─────────────────────────────────────────────────────────────────
 const uploadBtn = document.getElementById('upload-btn');
 const uploadStatus = document.getElementById('upload-status');
@@ -21,7 +26,7 @@ const userNameEl = document.getElementById('user-name');
 const fileInputs = {
   journal:      { input: document.getElementById('file-journal'),       wrapper: document.getElementById('wrapper-journal'),       label: document.getElementById('label-journal') },
   nav:          { input: document.getElementById('file-nav'),           wrapper: document.getElementById('wrapper-nav'),           label: document.getElementById('label-nav') },
-  legeerklaring:{ input: document.getElementById('file-legeerklaring'), wrapper: document.getElementById('wrapper-legeerklaring'), label: document.getElementById('label-legeerklaring') },
+  'legeerklæring':{ input: document.getElementById('file-legeerklaring'), wrapper: document.getElementById('wrapper-legeerklaring'), label: document.getElementById('label-legeerklaring') },
   mandat:       { input: document.getElementById('file-mandat'),        wrapper: document.getElementById('wrapper-mandat'),        label: document.getElementById('label-mandat') },
   samlet:       { input: document.getElementById('file-samlet'),        wrapper: document.getElementById('wrapper-samlet'),        label: document.getElementById('label-samlet') },
   zip:          { input: document.getElementById('file-zip'),           wrapper: document.getElementById('wrapper-zip'),           label: document.getElementById('label-zip') },
@@ -65,6 +70,7 @@ async function uploadDocuments() {
   try {
     const res = await fetch('/api/journal/last-opp', {
       method: 'POST',
+      headers: authHeaders(),
       body: formData,
     });
 
@@ -140,7 +146,7 @@ async function sendMessage(text) {
   try {
     const res = await fetch('/api/journal/chat', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...authHeaders() },
       body: JSON.stringify({ melding: text }),
     });
 
@@ -229,7 +235,7 @@ async function loadFacts() {
   loadFactsBtn.textContent = 'Henter\u2026';
 
   try {
-    const res = await fetch('/api/journal/fakta', { method: 'POST' });
+    const res = await fetch('/api/journal/fakta', { method: 'POST', headers: authHeaders() });
     if (!res.ok) {
       const err = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
       throw new Error(err.error || res.status);
@@ -266,7 +272,7 @@ function setFact(id, value) {
 // ── Reset session ─────────────────────────────────────────────────────────────
 async function resetSession() {
   try {
-    await fetch('/api/journal/reset', { method: 'POST' });
+    await fetch('/api/journal/reset', { method: 'POST', headers: authHeaders() });
   } catch { /* ignore */ }
 
   // Clear UI
@@ -310,11 +316,11 @@ async function loadStatus() {
   statusText.textContent = 'Sjekker\u2026';
 
   try {
-    const res = await fetch('/api/journal/session-status');
+    const res = await fetch('/api/journal/session-status', { headers: authHeaders() });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
 
-    if (data.hasDocuments) {
+    if (data.harDokumenter) {
       setStatusIndicator(true);
       enableChat();
       if (data.scores) updateScores(data.scores);
@@ -328,13 +334,13 @@ async function loadStatus() {
 
 // ── Auth helpers ──────────────────────────────────────────────────────────────
 function initAuth() {
-  const token = localStorage.getItem('token');
-  const name = localStorage.getItem('userName');
+  const token = localStorage.getItem('sana_token');
+  const user = JSON.parse(localStorage.getItem('sana_user') || 'null');
   if (!token) {
     window.location.href = '/login.html';
     return;
   }
-  if (name && userNameEl) userNameEl.textContent = name;
+  if (user?.name && userNameEl) userNameEl.textContent = user.name;
 }
 
 // ── Event listeners ───────────────────────────────────────────────────────────
@@ -355,8 +361,8 @@ resetBtn.addEventListener('click', resetSession);
 loadFactsBtn.addEventListener('click', loadFacts);
 
 logoutBtn.addEventListener('click', () => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('userName');
+  localStorage.removeItem('sana_token');
+  localStorage.removeItem('sana_user');
   window.location.href = '/login.html';
 });
 
