@@ -17,7 +17,9 @@ const upload = multer({
 });
 
 function getUserId(req: Request): string {
-  return req.currentUser?.sub ?? 'anonymous';
+  const sub = req.currentUser?.sub;
+  if (!sub) throw new Error('Unauthenticated');
+  return sub;
 }
 
 // ── Upload documents ────────────────────────────────────────────────────────
@@ -69,7 +71,8 @@ journalRouter.post(
       setSession(userId, session);
       res.status(201).json({ ok: true, harMandat: !!session.documents.mandat });
     } catch (err) {
-      res.status(500).json({ error: (err as Error).message, code: 'PARSE_ERROR' });
+      console.error('[journal/last-opp] parse error:', (err as Error).message);
+      res.status(500).json({ error: 'Kunne ikke lese dokumentet. Sjekk at filen ikke er korrupt.', code: 'PARSE_ERROR' });
     }
   }
 );

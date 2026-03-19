@@ -36,7 +36,8 @@ ${docBlock.substring(0, 40000)}`;
     const match = result.text.match(/\{[\s\S]*\}/);
     if (!match) return FALLBACK;
     return JSON.parse(match[0]) as JournalFacts;
-  } catch {
+  } catch (err) {
+    console.error('[factExtractor] extractFacts failed:', (err as Error).message);
     return FALLBACK;
   }
 }

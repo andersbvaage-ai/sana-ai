@@ -525,6 +525,22 @@
     }
     #upload-status.success { color: var(--green); }
     #upload-status.error { color: var(--red); }
+
+    /* ── LOAD FACTS BUTTON ── */
+    #load-facts-btn {
+      margin-top: 14px;
+      width: 100%;
+      padding: 9px 16px;
+      background: var(--cream);
+      border: 1.5px solid var(--border);
+      color: var(--fjord);
+      font-size: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
   </style>
 </head>
 <body>
@@ -692,7 +708,7 @@
             <span class="fact-value empty" id="fact-uforegrad">Ikke hentet</span>
           </div>
         </div>
-        <button id="load-facts-btn" style="margin-top:14px;width:100%;padding:9px 16px;background:var(--cream);border:1.5px solid var(--border);color:var(--fjord);font-size:12px;font-weight:600;font-family:inherit;border-radius:var(--radius-sm);cursor:pointer;transition:all var(--transition)">Hent fakta</button>
+        <button id="load-facts-btn">Hent fakta</button>
       </div>
     </section>
 

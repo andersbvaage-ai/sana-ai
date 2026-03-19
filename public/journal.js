@@ -188,8 +188,8 @@ async function sendMessage(text) {
 function handleSseEvent(eventType, data, assistantEl) {
   if (eventType === 'token') {
     try {
-      const { token } = JSON.parse(data);
-      assistantEl.textContent += token;
+      const { text } = JSON.parse(data);
+      assistantEl.textContent += text;
       conversationHistory.scrollTop = conversationHistory.scrollHeight;
     } catch { /* ignore parse errors */ }
   } else if (eventType === 'scores') {
@@ -245,9 +245,9 @@ async function loadFacts() {
 }
 
 function populateFacts(facts) {
-  setFact('fact-skadedato', facts.skadedato);
+  setFact('fact-skadedato', facts.symptomDato);
   setFact('fact-vmi', facts.vmi);
-  setFact('fact-vmi-konfidens', facts.vmiKonfidens);
+  setFact('fact-vmi-konfidens', facts.vmiKonfidensNiva);
   setFact('fact-uforegrad', facts.uforegrad);
 }
 
