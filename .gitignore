@@ -33,3 +33,6 @@ Thumbs.db
 *.swp
 *.mp4
 .claude/settings.local.json
+
+# Superpowers brainstorm sessions
+.superpowers/
