@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kontakt – Sana AI</title>
+  <link rel="stylesheet" href="/site.css" />
+  <style>
+    /* ── PAGE ── */
+    .page-wrap {
+      min-height: calc(100vh - 70px - 80px);
+      background: var(--bg-warm);
+      padding: 72px 48px 80px;
+      display: flex; gap: 72px;
+      max-width: 1100px; margin: 0 auto;
+    }
+
+    /* ── LEFT ── */
+    .contact-left { flex: 1; display: flex; flex-direction: column; gap: 32px; padding-top: 8px; }
+    .page-title { font-size: 40px; font-weight: 700; line-height: 1.1; color: var(--primary); letter-spacing: -1.2px; }
+    .page-body { font-size: 16px; color: var(--body); line-height: 1.75; max-width: 380px; }
+    .contact-details { display: flex; flex-direction: column; gap: 16px; margin-top: 8px; }
+    .contact-detail { display: flex; flex-direction: column; gap: 2px; }
+    .contact-detail-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+    .contact-detail-value { font-size: 15px; color: var(--ink); }
+    .trust-note { font-size: 12px; color: var(--muted); line-height: 1.6; padding-top: 8px; border-top: 1px solid var(--border); }
+
+    /* ── FORM CARD ── */
+    .form-card { flex: 0 0 460px; background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 40px; display: flex; flex-direction: column; gap: 20px; box-shadow: 0 4px 24px rgba(27,58,75,0.07); height: fit-content; }
+    .form-card-title { font-size: 20px; font-weight: 700; color: var(--primary); letter-spacing: -0.4px; }
+    .form-card-sub { font-size: 14px; color: var(--body); margin-top: -12px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+    .form-input { padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 15px; font-family: var(--font); color: var(--ink); transition: border-color 0.15s; outline: none; }
+    .form-input:focus { border-color: var(--teal); }
+    textarea.form-input { resize: vertical; min-height: 110px; }
+    .form-fields { display: flex; flex-direction: column; gap: 20px; }
+    .form-error { font-size: 13px; color: #dc2626; background: #FEE2E2; padding: 10px 14px; border-radius: 8px; display: none; }
+    .form-error.visible { display: block; }
+    .btn-submit { width: 100%; justify-content: center; font-size: 15px; padding: 13px; }
+    .form-success { text-align: center; display: none; flex-direction: column; gap: 12px; align-items: center; padding: 24px 0; }
+    .form-success.visible { display: flex; }
+    .form-success-icon { width: 48px; height: 48px; border-radius: 50%; background: var(--bg-teal); display: flex; align-items: center; justify-content: center; }
+    .form-success-icon svg { width: 22px; height: 22px; stroke: var(--teal); stroke-width: 2; fill: none; }
+    .form-success-title { font-size: 18px; font-weight: 700; color: var(--primary); }
+    .form-success-text { font-size: 14px; color: var(--body); }
+
+    @media (max-width: 900px) {
+      .page-wrap { padding: 48px 24px 64px; flex-direction: column; gap: 40px; }
+      .form-card { flex: none; }
+    }
+    @media (max-width: 600px) {
+      .page-wrap { padding: 40px 16px 48px; }
+      .page-title { font-size: 30px; }
+      .form-card { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav></nav>
+
+<div class="page-wrap">
+  <div class="contact-left">
+    <span class="eyebrow">Ta kontakt</span>
+    <h1 class="page-title">Be om en demo</h1>
+    <p class="page-body">Vi viser deg hvordan Sana AI fungerer i din klagesaksavdeling. Tilpasset din stack og dine prosesser.</p>
+    <div class="contact-details">
+      <div class="contact-detail">
+        <span class="contact-detail-label">E-post</span>
+        <span class="contact-detail-value">hei@sana-ai.no</span>
+      </div>
+      <div class="contact-detail">
+        <span class="contact-detail-label">Responstid</span>
+        <span class="contact-detail-value">Innen én virkedag</span>
+      </div>
+      <div class="contact-detail">
+        <span class="contact-detail-label">Lokasjon</span>
+        <span class="contact-detail-value">Oslo, Norge</span>
+      </div>
+    </div>
+    <p class="trust-note">All kommunikasjon behandles konfidensielt. Vi selger ikke videre kontaktinformasjon.</p>
+  </div>
+
+  <div class="form-card">
+    <div id="formContent">
+      <div class="form-fields">
+        <div>
+          <div class="form-card-title">Send oss en henvendelse</div>
+          <div class="form-card-sub">Vi tar kontakt innen én virkedag.</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="navn">Navn *</label>
+          <input class="form-input" type="text" id="navn" placeholder="Ditt navn" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="epost">E-post *</label>
+          <input class="form-input" type="email" id="epost" placeholder="din@selskap.no" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="selskap">Selskap</label>
+          <input class="form-input" type="text" id="selskap" placeholder="Valgfritt" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="melding">Melding *</label>
+          <textarea class="form-input" id="melding" placeholder="Fortell litt om hva dere trenger..."></textarea>
+        </div>
+        <div class="form-error" id="formError"></div>
+        <button class="btn-pill btn-navy btn-submit" id="submitBtn">Send henvendelse</button>
+      </div>
+    </div>
+    <div class="form-success" id="formSuccess">
+      <div class="form-success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="form-success-title">Takk for henvendelsen!</div>
+      <div class="form-success-text">Vi tar kontakt innen én virkedag.</div>
+    </div>
+  </div>
+</div>
+
+<footer></footer>
+<script src="/site.js"></script>
+<script>
+  const submitBtn = document.getElementById('submitBtn');
+  const formError = document.getElementById('formError');
+  const formContent = document.getElementById('formContent');
+  const formSuccess = document.getElementById('formSuccess');
+
+  submitBtn.addEventListener('click', async () => {
+    const navn = document.getElementById('navn').value.trim();
+    const epost = document.getElementById('epost').value.trim();
+    const selskap = document.getElementById('selskap').value.trim();
+    const melding = document.getElementById('melding').value.trim();
+
+    if (!navn || !epost || !melding) {
+      formError.textContent = 'Navn, e-post og melding er påkrevd.';
+      formError.classList.add('visible');
+      return;
+    }
+
+    submitBtn.textContent = 'Sender...';
+    submitBtn.disabled = true;
+    formError.classList.remove('visible');
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ navn, epost, selskap, melding })
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Noe gikk galt');
+      }
+      formContent.style.display = 'none';
+      formSuccess.classList.add('visible');
+    } catch (err) {
+      formError.textContent = err.message;
+      formError.classList.add('visible');
+    } finally {
+      submitBtn.textContent = 'Send henvendelse';
+      submitBtn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>

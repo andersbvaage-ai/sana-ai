@@ -109,28 +109,39 @@ Inviter Morten som collaborator når GitHub-brukernavn er kjent.
 
 ## Landingsside — designretning
 
-Aktiv mockup: `public/mockup-eleos.html` — inspirert av eleos.health.
+Valgt retning: **Eleos/lys** — implementert i `index.html`.
 - System font stack (ikke Google Fonts)
 - Lys hero (hvit bakgrunn, mørk tekst)
 - Teal pill-knapper (`#93C7C7`)
 - Pastell feature-cards
 - Nav: kremfarget (`#f7f5e7`)
 
-`public/mockup-harvey.html` — alternativ mørk video-retning (ikke valgt enda).
-Beslutning om endelig retning og overføring til `index.html` gjenstår.
+**Felles infrastruktur:**
+- `public/site.css` — delte stiler (nav, footer, knapper, tokens, reveal-animasjoner)
+- `public/site.js` — rendrer nav + footer dynamisk, hamburger-meny, IntersectionObserver
+- Alle nye HTML-sider linker til disse — legg til `<link rel="stylesheet" href="/site.css">` og `<script src="/site.js"></script>` på nye sider.
+
+**Sidestruktur:**
+- `index.html` — forside
+- `plattform.html` — produktside
+- `sikkerhet.html` — compliance
+- `om-oss.html` — team og visjon
+- `kontakt.html` — kontaktskjema (erstatter modal, bruker `/api/contact`)
 
 ---
 
 ## Gjenstående oppgaver
 
 - [ ] **Roter AWS-nøkler** i IAM (nøkler lå i .env på Dropbox)
-- [ ] Bestem landingsside-retning (eleos vs harvey) og oppdater index.html
 - [ ] **Journal AI-integrasjon** — branch `feature/journal-ai-integration` (worktree `.worktrees/journal-ai`). Task 1+2 done, Task 3–10 gjenstår. Plan: `docs/superpowers/plans/2026-03-19-journal-ai-integration.md`
 - [x] Inviter Morten til GitHub-repo (gjort)
+- [x] Bestem landingsside-retning — valgt Eleos/lys
+- [x] Mobiltest av landingsside — mobilnav implementert
 - [ ] E-post ved ny kontakthenvendelse (AWS SES)
-- [ ] Mobiltest av landingsside
 - [ ] Refresh-knapp på stats.html — dukker opp feil sted (ved siden av logoen i headeren), må debugges
 - [ ] AWS Secrets Manager for miljøvariabler (lav prioritet)
+- [ ] `/csp-audit` på alle nye HTML-filer før deploy
+- [ ] Landingsside — neste iterasjon (se under)
 
 **Juridisk (blokkerer reell bruk):**
 - [ ] DPA med AWS

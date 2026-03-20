@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sikkerhet og compliance – Sana AI</title>
+  <link rel="stylesheet" href="/site.css" />
+  <style>
+    /* ── PAGE HERO ── */
+    .page-hero { background: var(--primary); padding: 80px 48px 72px; }
+    .page-hero-inner { max-width: 720px; display: flex; flex-direction: column; gap: 20px; }
+    .page-hero h1 { font-size: 48px; font-weight: 700; line-height: 1.1; letter-spacing: -1.5px; color: #fff; }
+    .page-hero-body { font-size: 18px; color: var(--dark-txt); line-height: 1.7; }
+    .badges-hero { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+    .badge-hero { display: flex; align-items: center; gap: 8px; padding: 8px 16px; background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.15); border-radius: 9999px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.85); }
+    .badge-chk { width: 17px; height: 17px; border-radius: 50%; background: var(--teal-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .badge-chk svg { width: 9px; height: 9px; stroke: var(--primary); stroke-width: 2.5; fill: none; }
+
+    /* ── COMPLIANCE GRID ── */
+    .compliance-section { padding: 96px 48px; background: var(--bg); }
+    .compliance-inner { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 56px; }
+    .compliance-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .comp-card { border: 1px solid var(--border); border-radius: 16px; padding: 32px; display: flex; flex-direction: column; gap: 16px; transition: box-shadow 0.2s; }
+    .comp-card:hover { box-shadow: 0 4px 20px rgba(27,58,75,0.08); }
+    .comp-card-head { display: flex; align-items: flex-start; gap: 16px; }
+    .comp-icon { width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .comp-icon svg { width: 20px; height: 20px; stroke: var(--primary); stroke-width: 1.7; fill: none; }
+    .comp-icon.teal { background: var(--bg-teal); } .comp-icon.gold { background: var(--bg-gold); }
+    .comp-icon.blue { background: var(--bg-blue); } .comp-icon.pink { background: var(--bg-pink); }
+    .comp-card-title { font-size: 18px; font-weight: 600; color: var(--ink); line-height: 1.3; }
+    .comp-card-sub { font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--teal); margin-top: 2px; }
+    .comp-card-body { font-size: 14px; color: var(--body); line-height: 1.75; }
+    .comp-card-detail { background: var(--bg-warm); border-radius: 8px; padding: 14px 16px; font-size: 13px; color: var(--body); line-height: 1.65; }
+    .comp-card-detail strong { color: var(--ink); font-weight: 600; }
+
+    /* ── ARCHITECTURE ── */
+    .arch-section { background: var(--bg-warm); padding: 80px 48px; border-top: 1px solid var(--border); }
+    .arch-inner { max-width: 1100px; margin: 0 auto; display: flex; gap: 72px; align-items: flex-start; }
+    .arch-text { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+    .arch-diagram { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+    .arch-row { display: flex; align-items: center; gap: 16px; }
+    .arch-box { border-radius: 10px; padding: 14px 20px; display: flex; flex-direction: column; gap: 2px; flex: 1; }
+    .arch-box.white { background: #fff; border: 1px solid var(--border); }
+    .arch-box.teal { background: var(--bg-teal); border: 1px solid rgba(74,138,138,0.2); }
+    .arch-box.gold { background: var(--bg-gold); border: 1px solid rgba(184,147,90,0.2); }
+    .arch-box.navy { background: var(--primary); }
+    .arch-box-label { font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); }
+    .arch-box.navy .arch-box-label { color: rgba(255,255,255,0.45); }
+    .arch-box-value { font-size: 13px; font-weight: 500; color: var(--ink); }
+    .arch-box.navy .arch-box-value { color: rgba(255,255,255,0.9); }
+    .arch-arrow { display: flex; justify-content: center; padding: 6px 0; color: var(--muted); font-size: 18px; }
+    .arch-plus { display: flex; align-items: center; color: var(--muted); font-size: 18px; flex-shrink: 0; }
+    .arch-notes { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
+    .arch-note { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+    .arch-note-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); flex-shrink: 0; }
+
+    /* ── CTA ── */
+    .cta-section { background: var(--primary); padding: 80px 48px; text-align: center; }
+    .cta-inner { max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; align-items: center; }
+    .cta-headline { font-size: 36px; font-weight: 700; color: #fff; letter-spacing: -1px; line-height: 1.15; }
+    .cta-sub { font-size: 16px; color: var(--dark-txt); line-height: 1.7; }
+
+    @media (max-width: 900px) {
+      .page-hero { padding: 56px 24px; }
+      .page-hero h1 { font-size: 36px; }
+      .compliance-section { padding: 64px 24px; }
+      .compliance-grid { grid-template-columns: 1fr; }
+      .arch-section { padding: 64px 24px; }
+      .arch-inner { flex-direction: column; gap: 40px; }
+      .cta-section { padding: 64px 24px; }
+    }
+    @media (max-width: 600px) {
+      .page-hero h1 { font-size: 28px; }
+      .section-title { font-size: 28px; }
+      .cta-headline { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav></nav>
+
+<div class="page-hero">
+  <div class="page-hero-inner reveal">
+    <span class="eyebrow eyebrow-on-dark">Sikkerhet og compliance</span>
+    <h1>Bygget for norsk helselovgivning</h1>
+    <p class="page-hero-body">Sana AI er designet fra grunnen av for å møte de strengeste kravene til behandling av særlige kategorier personopplysninger. Arkitekturen — ikke bare policy — sikrer compliance.</p>
+    <div class="badges-hero">
+      <div class="badge-hero"><div class="badge-chk"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7.5 8,3"/></svg></div>GDPR Art. 9</div>
+      <div class="badge-hero"><div class="badge-chk"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7.5 8,3"/></svg></div>AWS eu-north-1</div>
+      <div class="badge-hero"><div class="badge-chk"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7.5 8,3"/></svg></div>Normen</div>
+      <div class="badge-hero"><div class="badge-chk"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7.5 8,3"/></svg></div>Pasientjournalloven</div>
+      <div class="badge-hero"><div class="badge-chk"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7.5 8,3"/></svg></div>JWT-autentisering</div>
+      <div class="badge-hero"><div class="badge-chk"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7.5 8,3"/></svg></div>Uforanderlig revisjonslogg</div>
+    </div>
+  </div>
+</div>
+
+<section class="compliance-section">
+  <div class="compliance-inner">
+    <div class="section-header reveal">
+      <span class="eyebrow">Krav for krav</span>
+      <h2 class="section-title text-center">Seks grunnpilarer for trygg helsedata</h2>
+      <p class="section-body text-center">Hvert krav er implementert arkitekturelt — ikke bare dokumentert i en policy.</p>
+    </div>
+    <div class="compliance-grid">
+      <div class="comp-card reveal">
+        <div class="comp-card-head">
+          <div class="comp-icon teal"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div><div class="comp-card-title">GDPR Art. 9 — særlige kategorier</div><div class="comp-card-sub">Personvernforordningen</div></div>
+        </div>
+        <div class="comp-card-body">Helseopplysninger er særlige kategorier persondata under GDPR Art. 9 og krever eksplisitt rettslig grunnlag og tilleggssikring. Sana AI behandler aldri helseopplysninger uten at PII er fjernet lokalt først.</div>
+        <div class="comp-card-detail"><strong>Tiltak:</strong> PII-scrubbing skjer på norsk server (Elastic Beanstalk eu-north-1) før data forlater systemet. AI-modellen mottar aldri navn, fødselsnummer eller kontaktdata — kun klinisk innhold.</div>
+      </div>
+      <div class="comp-card reveal reveal-delay-1">
+        <div class="comp-card-head">
+          <div class="comp-icon gold"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+          <div><div class="comp-card-title">Normen — norm for informasjonssikkerhet</div><div class="comp-card-sub">Helsesektornormen</div></div>
+        </div>
+        <div class="comp-card-body">Normen er bransjestandarden for informasjonssikkerhet i helse- og omsorgssektoren i Norge. Den stiller krav til tilgangsstyring, logging og hendelseshåndtering.</div>
+        <div class="comp-card-detail"><strong>Tiltak:</strong> Rollebasert tilgangskontroll (RBAC), JWT-sesjon med 8 timers utløp, bcrypt-passordhashing, og fullstendig logging av alle tilgangsoperasjoner til CloudWatch.</div>
+      </div>
+      <div class="comp-card reveal">
+        <div class="comp-card-head">
+          <div class="comp-icon blue"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+          <div><div class="comp-card-title">Pasientjournalloven</div><div class="comp-card-sub">Lov om pasientjournal</div></div>
+        </div>
+        <div class="comp-card-body">Pasientjournalloven regulerer hvordan helseopplysninger i journaler kan behandles, hvem som har tilgang, og krav til integritet og sporbarhet.</div>
+        <div class="comp-card-detail"><strong>Tiltak:</strong> Uforanderlig revisjonslogg for alle operasjoner på klagesaker. Kun autentiserte brukere med riktig rolle kan lese eller oppdatere en sak. Sletting er ikke mulig via UI.</div>
+      </div>
+      <div class="comp-card reveal reveal-delay-1">
+        <div class="comp-card-head">
+          <div class="comp-icon pink"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+          <div><div class="comp-card-title">AWS eu-north-1 — dataresidency</div><div class="comp-card-sub">Geografisk datakontroll</div></div>
+        </div>
+        <div class="comp-card-body">All behandling og lagring skjer i AWS eu-north-1 (Stockholm, Sverige) — innenfor EØS. Data overføres ikke til tredjeland. AWS Bedrock-kall er konfigurert til eu-north-1 endpoint.</div>
+        <div class="comp-card-detail"><strong>Tiltak:</strong> Explicit region-parameter på alle AWS SDK-kall. S3-bøtter er konfigurert med region-lock. Ingen CDN-distribusjon av sensitiv data utenfor EØS.</div>
+      </div>
+      <div class="comp-card reveal">
+        <div class="comp-card-head">
+          <div class="comp-icon teal"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div><div class="comp-card-title">JWT-autentisering og tilgangskontroll</div><div class="comp-card-sub">Identitet og sesjonsstyring</div></div>
+        </div>
+        <div class="comp-card-body">Alle API-endepunkter krever gyldig JWT-token. Tokens har 8 timers levetid og bruker HS256-signering. Passord lagres som bcrypt-hash med tilstrekkelig kostfaktor.</div>
+        <div class="comp-card-detail"><strong>Tiltak:</strong> <code>requireAuth</code>-middleware på alle beskyttede ruter. Brukerliste styres via miljøvariabel, ikke hardkodet. Sesjon invalideres ved utlogging.</div>
+      </div>
+      <div class="comp-card reveal reveal-delay-1">
+        <div class="comp-card-head">
+          <div class="comp-icon gold"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+          <div><div class="comp-card-title">Uforanderlig revisjonslogg</div><div class="comp-card-sub">Audit trail</div></div>
+        </div>
+        <div class="comp-card-body">Hvert steg i klagesaksbehandlingen — opplasting, PII-scrubbing, AI-analyse, legesgodkjenning, eksport — loggføres med tidsstempel, bruker-ID og AI-modellversjon.</div>
+        <div class="comp-card-detail"><strong>Tiltak:</strong> Logger sendes til AWS CloudWatch Logs (<code>AUDIT_BACKEND=cloudwatch</code>). Logger kan ikke endres eller slettes via applikasjonen. Tilgjengelig for internrevisjon og Datatilsynet.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="arch-section">
+  <div class="arch-inner">
+    <div class="arch-text reveal">
+      <span class="eyebrow">Dataflyt</span>
+      <h2 class="section-title">Ingen PII når AI-modellen</h2>
+      <p class="section-body">Det tekniske prinsippet er enkelt: personopplysninger og klinisk innhold skilles allerede på serveren. AI-modellen ser aldri hvem pasienten er.</p>
+      <p class="section-body" style="margin-top:8px">Dette er ikke en policy som kan omgås — det er arkitekturen som håndhever det.</p>
+    </div>
+    <div class="arch-diagram reveal reveal-delay-1">
+      <div class="arch-row">
+        <div class="arch-box white">
+          <span class="arch-box-label">Innkommende dokument</span>
+          <span class="arch-box-value">PDF med fullt navn, fnr, adresse og klinisk innhold</span>
+        </div>
+      </div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-row">
+        <div class="arch-box gold">
+          <span class="arch-box-label">PII-scrubbing (lokal server)</span>
+          <span class="arch-box-value">Fjerner navn, fødselsnummer, adresser og kontaktdata</span>
+        </div>
+      </div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-row">
+        <div class="arch-box teal">
+          <span class="arch-box-label">Til AI-modell</span>
+          <span class="arch-box-value">Kun anonymisert klinisk innhold</span>
+        </div>
+        <div class="arch-plus">+</div>
+        <div class="arch-box white">
+          <span class="arch-box-label">Lagret lokalt</span>
+          <span class="arch-box-value">Original (kryptert S3) + revisjonslogg</span>
+        </div>
+      </div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-row">
+        <div class="arch-box navy">
+          <span class="arch-box-label">AWS Bedrock — claude-sonnet-4-6 — eu-north-1</span>
+          <span class="arch-box-value">Mottar aldri PII. Returnerer strukturert medisinsk standpunkt.</span>
+        </div>
+      </div>
+      <div class="arch-notes">
+        <div class="arch-note"><span class="arch-note-dot"></span>Alle kall til AWS Bedrock er begrenset til eu-north-1 endpoint</div>
+        <div class="arch-note"><span class="arch-note-dot"></span>S3-lagring med server-side kryptering (AES-256)</div>
+        <div class="arch-note"><span class="arch-note-dot"></span>Audit-logger sendt til CloudWatch — ikke mulig å slette via app</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-inner reveal">
+    <span class="eyebrow eyebrow-on-dark">Dokumentasjon</span>
+    <h2 class="cta-headline">Ta kontakt for sikkerhetsdokumentasjon</h2>
+    <p class="cta-sub">Vi stiller med teknisk sikkerhetsgjennomgang, systemdokumentasjon og DPA-utkast for innkjøpsprosessen.</p>
+    <a href="/kontakt.html" class="btn-pill btn-teal btn-pill-lg">Be om dokumentasjon</a>
+  </div>
+</section>
+
+<footer></footer>
+<script src="/site.js"></script>
+</body>
+</html>

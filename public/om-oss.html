@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Om oss – Sana AI</title>
+  <link rel="stylesheet" href="/site.css" />
+  <style>
+    /* ── PAGE HERO ── */
+    .page-hero { background: var(--bg); padding: 80px 48px 72px; border-bottom: 1px solid var(--border); }
+    .page-hero-inner { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+    .page-hero h1 { font-size: 48px; font-weight: 700; line-height: 1.1; letter-spacing: -1.5px; color: var(--primary); }
+    .page-hero-body { font-size: 20px; color: var(--body); line-height: 1.7; max-width: 600px; }
+
+    /* ── VISION ── */
+    .vision-section { padding: 80px 48px; background: var(--bg-warm); }
+    .vision-inner { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+    .vision-quote { font-size: 22px; font-weight: 400; color: var(--ink); line-height: 1.6; padding-left: 24px; border-left: 3px solid var(--secondary); }
+    .vision-body { font-size: 16px; color: var(--body); line-height: 1.8; }
+
+    /* ── TEAM ── */
+    .team-section { padding: 96px 48px; background: var(--bg); }
+    .team-inner { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 56px; }
+    .team-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; }
+    .person-card { border: 1px solid var(--border); border-radius: 16px; padding: 36px; display: flex; flex-direction: column; gap: 20px; }
+    .person-name { font-size: 22px; font-weight: 700; color: var(--primary); letter-spacing: -0.5px; }
+    .person-role { font-size: 14px; font-weight: 600; color: var(--teal); letter-spacing: 0.04em; }
+    .person-bio { font-size: 15px; color: var(--body); line-height: 1.75; }
+    .person-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag { display: inline-flex; padding: 5px 12px; border-radius: 9999px; font-size: 12px; font-weight: 500; background: var(--bg-warm); color: var(--body); border: 1px solid var(--border); }
+
+    /* ── VALUES ── */
+    .values-section { padding: 80px 48px; background: var(--bg-teal); }
+    .values-inner { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 48px; }
+    .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .value-item { background: #fff; border-radius: 14px; padding: 28px 24px; display: flex; flex-direction: column; gap: 10px; }
+    .value-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--bg-teal); display: flex; align-items: center; justify-content: center; }
+    .value-icon svg { width: 19px; height: 19px; stroke: var(--primary); stroke-width: 1.7; fill: none; }
+    .value-title { font-size: 16px; font-weight: 600; color: var(--ink); }
+    .value-desc { font-size: 14px; color: var(--body); line-height: 1.65; }
+
+    /* ── CTA ── */
+    .cta-section { padding: 96px 48px; background: var(--primary); text-align: center; }
+    .cta-inner { max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; align-items: center; }
+    .cta-headline { font-size: 36px; font-weight: 700; color: #fff; letter-spacing: -1px; line-height: 1.15; }
+    .cta-sub { font-size: 16px; color: var(--dark-txt); line-height: 1.7; }
+
+    @media (max-width: 900px) {
+      .page-hero { padding: 56px 24px; }
+      .page-hero h1 { font-size: 36px; }
+      .vision-section { padding: 56px 24px; }
+      .team-section { padding: 64px 24px; }
+      .team-grid { grid-template-columns: 1fr; }
+      .values-section { padding: 64px 24px; }
+      .values-grid { grid-template-columns: 1fr 1fr; }
+      .cta-section { padding: 64px 24px; }
+    }
+    @media (max-width: 600px) {
+      .page-hero h1 { font-size: 28px; }
+      .section-title { font-size: 28px; }
+      .values-grid { grid-template-columns: 1fr; }
+      .cta-headline { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav></nav>
+
+<div class="page-hero">
+  <div class="page-hero-inner reveal">
+    <span class="eyebrow">Om oss</span>
+    <h1>Vi bygger fremtidens klagesaksbehandling</h1>
+    <p class="page-hero-body">Sana AI ble til fordi vi så hvor mye tid norske helseforsikringsleger bruker på å bla gjennom dokumenter — i stedet for å ta medisinske beslutninger.</p>
+  </div>
+</div>
+
+<section class="vision-section">
+  <div class="vision-inner reveal">
+    <span class="eyebrow">Hvorfor Sana AI</span>
+    <p class="vision-quote">"En erfaren klagesaksbehandler bruker 40–60 minutter per sak. Det meste av den tiden er lesing og oppsummering — ikke medisinsk vurdering."</p>
+    <p class="vision-body">Vi tror at AI kan ta over lesearbeidet uten å ta over det medisinske skjønnet. Sana AI er ikke et system som tar beslutninger — det er et system som gir legene bedre grunnlag for å gjøre det.</p>
+    <p class="vision-body">Vi bygger for norske helseforsikringsselskaper fra dag én: norsk lovgivning, norske compliance-krav, norsk infrastruktur. Ikke en global plattform som er tilpasset Norge — men et system bygget herfra.</p>
+  </div>
+</section>
+
+<section class="team-section">
+  <div class="team-inner">
+    <div class="reveal">
+      <span class="eyebrow">Teamet</span>
+      <h2 class="section-title" style="margin-top:12px">To grunnleggere. Én misjon.</h2>
+    </div>
+    <div class="team-grid">
+      <div class="person-card reveal">
+        <div>
+          <div class="person-name">Anders Bvaage</div>
+          <div class="person-role">Medgründer — Teknologi og produkt</div>
+        </div>
+        <p class="person-bio">Anders bygger den tekniske plattformen: arkitektur, AI-integrasjon, backend og sikkerhet. Med bakgrunn i produktutvikling og enterprise-systemer bringer han strukturert tenkning om skalerbarhet og compliance til Sana AI.</p>
+        <p class="person-bio">Ansvarlig for AWS Bedrock-integrasjonen, PII-scrubbing-arkitekturen og hele deploy-pipelinen.</p>
+        <div class="person-tags">
+          <span class="tag">Node.js / TypeScript</span>
+          <span class="tag">AWS Bedrock</span>
+          <span class="tag">Systemarkitektur</span>
+          <span class="tag">Produktutvikling</span>
+        </div>
+      </div>
+      <div class="person-card reveal reveal-delay-1">
+        <div>
+          <div class="person-name">Morten</div>
+          <div class="person-role">Medgründer — Medisin og AI</div>
+        </div>
+        <p class="person-bio">Morten er medisinsk fagansvarlig og driver AI-arbeidet som krever klinisk innsikt. Med bakgrunn som lege bringer han forståelsen av hva som faktisk trengs i en klagesaksavdeling — og hva som ikke kan overlates til en algoritme.</p>
+        <p class="person-bio">Ansvarlig for AI-prompt-engineering, medisinsk kvalitetssikring og validering av standpunkt-modellen.</p>
+        <div class="person-tags">
+          <span class="tag">Medisin</span>
+          <span class="tag">AI-prompt engineering</span>
+          <span class="tag">Klinisk beslutningsstøtte</span>
+          <span class="tag">Helsejuss</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="values-section">
+  <div class="values-inner">
+    <div class="section-header reveal">
+      <span class="eyebrow">Prinsipper</span>
+      <h2 class="section-title">Hva vi ikke kompromisser på</h2>
+    </div>
+    <div class="values-grid">
+      <div class="value-item reveal">
+        <div class="value-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div class="value-title">Legen bestemmer alltid</div>
+        <div class="value-desc">AI-standpunktet er et forslag, ikke en konklusjon. Ingen sak kan lukkes uten aktiv godkjenning fra behandlende lege.</div>
+      </div>
+      <div class="value-item reveal reveal-delay-1">
+        <div class="value-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="value-title">Personvern i arkitekturen</div>
+        <div class="value-desc">PII-scrubbing er ikke en feature du kan slå av. Det er del av datastrømmen — ingen pasientidentifikatorer når AI-modellen.</div>
+      </div>
+      <div class="value-item reveal reveal-delay-2">
+        <div class="value-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+        <div class="value-title">Forklarlighet fremfor svartboks</div>
+        <div class="value-desc">Hvert AI-standpunkt inkluderer skriftlig begrunnelse med dokumentreferanser. Ingen beslutninger uten sporing.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-inner reveal">
+    <span class="eyebrow eyebrow-on-dark">Ta kontakt</span>
+    <h2 class="cta-headline">La oss vise deg hva vi har bygget</h2>
+    <p class="cta-sub">En demo tar 30 minutter. Vi bruker dine egne testdokumenter og viser systemet i arbeid — ingen slides.</p>
+    <a href="/kontakt.html" class="btn-pill btn-teal btn-pill-lg">Be om demo</a>
+  </div>
+</section>
+
+<footer></footer>
+<script src="/site.js"></script>
+</body>
+</html>
