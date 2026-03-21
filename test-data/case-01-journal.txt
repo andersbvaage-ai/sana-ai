@@ -1,0 +1,44 @@
+PASIENTJOURNAL – ANONYMISERT
+Pasient-ID: TEST-001
+Kjønn: Kvinne, 38 år
+Fastlege: Dr. Kari Olsen, Sandvika Legekontor
+
+=== KONSULTASJONER ===
+
+12.04.2022 – Konsultasjon etter trafikkulykke
+Pasienten kom 3 dager etter trafikkulykke 09.04.2022.
+Påkjørt bakfra i kø ved Lysaker, lav fart (~20 km/t).
+Nakkesmerter, hodepine og svimmelhet fra ulykkedagen.
+Ingen bevissthetstap. Røntgen: ingen fraktur.
+Diagnose: S13.4 – Forstuing av nakkeledd (WAD II)
+Behandling: Paracetamol, bevegelse anbefalt.
+Sykmelding: 100%, 2 uker.
+
+28.04.2022 – Kontroll
+Noe bedring, men vedvarende nakkesmerter ved belastning.
+Hodepine 3–4 ganger per uke. Konsentrasjonsvansker.
+Sykmelding forlenget 4 uker, 50%.
+
+15.06.2022 – Spesialist, nevrolog, Bærum Sykehus
+MRI nakke: minimale degenerative forandringer, ingen prolaps.
+Nevrologisk us.: normale reflekser, ingen nevrologiske utfall.
+Vurdering: WAD II bekreftet. Ingen WAD III.
+Anbefaler fysioterapi.
+
+10.08.2022 – Fysioterapinotat (vedlagt)
+12 behandlinger. Noe bedret bevegelighet. Smertepåvirket ved sittestilling og bilkjøring.
+
+05.01.2023 – Oppfølging
+Tilbake i full jobb siden 06.10.2022. Vedvarende:
+- Daglige nakkesmerter VAS 3–4/10
+- Søvnforstyrrelser (smerterelatert)
+- Vegrer bilkjøring på motorvei
+
+=== DIAGNOSEHISTORIKK ===
+S13.4 – WAD II, traumatisk, 09.04.2022
+F41.1 – Angstlidelse, lettere, sekundær
+
+=== ARBEIDSSTATUS ===
+Yrke: Saksbehandler, Oslo Kommune
+Sykmeldt: 09.04.2022 – 05.10.2022 (6 mnd, 50% fra mai)
+Tilbake full stilling: 06.10.2022
