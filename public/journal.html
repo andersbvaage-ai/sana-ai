@@ -162,7 +162,7 @@
       margin: 0 auto;
       display: grid;
       grid-template-columns: 1fr 340px;
-      grid-template-rows: auto 1fr auto;
+      grid-template-rows: auto 1fr auto auto;
       gap: 20px;
     }
 
@@ -541,6 +541,85 @@
       cursor: pointer;
       transition: all var(--transition);
     }
+
+    /* ── RAPPORT SECTION ── */
+    .rapport-section {
+      grid-column: 1 / -1;
+      grid-row: 4;
+    }
+
+    .rapport-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    #rapport-tittel {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    #rapport-dokument {
+      min-height: 200px;
+      padding: 24px 28px;
+      line-height: 1.7;
+      color: var(--ink);
+      font-size: 14px;
+    }
+
+    #rapport-dokument .laster-dokument {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 40px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    #rapport-dokument .laster-ikon {
+      font-size: 28px;
+      animation: puls 1.2s ease-in-out infinite;
+    }
+
+    @keyframes puls {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.35; }
+    }
+
+    #rapport-dokument p { margin-bottom: 0.75em; }
+    #rapport-dokument h4 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--fjord);
+      margin-top: 1.4em;
+      margin-bottom: 0.4em;
+    }
+    #rapport-dokument ul {
+      padding-left: 20px;
+      margin-bottom: 0.75em;
+    }
+    #rapport-dokument li { margin-bottom: 0.3em; }
+    #rapport-dokument strong { font-weight: 700; color: var(--ink); }
+    #rapport-dokument em { font-style: italic; }
+
+    .rapport-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 48px 24px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .rapport-empty svg { opacity: 0.3; }
   </style>
 </head>
 <body>
@@ -729,6 +808,23 @@
       <div class="chat-input-row">
         <input type="text" id="chat-input" placeholder="Still et spørsmål om saken…" disabled />
         <button id="send-btn" disabled>Send</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Rapport section -->
+  <section class="card rapport-section">
+    <div class="card-header rapport-header">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--fjord)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <span class="card-title">Analyseresultat</span>
+      </div>
+      <span id="rapport-tittel"></span>
+    </div>
+    <div id="rapport-dokument">
+      <div class="rapport-empty">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <span>Analyserapporten vises her etter at dokumenter er lastet opp.</span>
       </div>
     </div>
   </section>

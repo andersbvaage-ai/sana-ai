@@ -69,7 +69,7 @@ journalRouter.post(
       }
 
       setSession(userId, session);
-      res.status(201).json({ ok: true, harMandat: !!session.documents.mandat });
+      res.status(201).json({ ok: true, harMandat: !!session.documents.mandat, erSamlet: !!session.documents.samlet });
     } catch (err) {
       console.error('[journal/last-opp] parse error:', (err as Error).message);
       res.status(500).json({ error: 'Kunne ikke lese dokumentet. Sjekk at filen ikke er korrupt.', code: 'PARSE_ERROR' });
