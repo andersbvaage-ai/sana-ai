@@ -1,0 +1,29 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
+  build:
+    commands:
+      - echo Building Docker image...
+      - docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
+  post_build:
+    commands:
+      - echo Pushing image to ECR...
+      - docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+      - echo Deploying to Elastic Beanstalk...
+      - VERSION="deploy-$(date +%Y%m%d-%H%M%S)-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:7}"
+      - aws s3 cp Dockerrun.aws.json s3://$EB_BUCKET/$VERSION/Dockerrun.aws.json
+      - |
+        aws elasticbeanstalk create-application-version \
+          --application-name $EB_APP \
+          --version-label $VERSION \
+          --source-bundle S3Bucket=$EB_BUCKET,S3Key=$VERSION/Dockerrun.aws.json
+      - |
+        aws elasticbeanstalk update-environment \
+          --application-name $EB_APP \
+          --environment-name $EB_ENV \
+          --version-label $VERSION
+      - echo "Deployment triggered:" $VERSION
