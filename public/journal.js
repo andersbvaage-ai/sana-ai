@@ -278,22 +278,34 @@ function escHtml(s) {
 }
 
 function renderMarkdown(tekst) {
-  // Fjern dokumentidentifikasjon-tabell (unødvendig støy i rapporten)
-  let t = tekst.replace(/^.*?DOKUMENTIDENTIFIKASJON[\s\S]*?\n\n/m, '');
+  // Fjern SCORES-prefix og dokumentidentifikasjon-tabell
+  let t = tekst
+    .replace(/^SCORES:\{[^}]+\}\s*\n?/, '')
+    .replace(/^#+\s*DOKUMENTIDENTIFIKASJON[\s\S]*?\n\n/m, '');
 
-  // Render markdown-tabeller
+  // Markdown-tabeller → HTML
   t = t.replace(/^\|(.+)\|\s*\n\|[-| :]+\|\s*\n((?:\|.+\|\s*\n?)*)/gm, (_, header, rows) => {
-    const th = header.split('|').map(c => `<th>${c.trim()}</th>`).join('');
+    const th = header.split('|').filter(c=>c.trim()).map(c => `<TH>${c.trim()}</TH>`).join('');
     const trs = rows.trim().split('\n').map(row => {
-      const tds = row.replace(/^\||\|$/g, '').split('|').map(c => `<td>${c.trim()}</td>`).join('');
-      return `<tr>${tds}</tr>`;
+      const tds = row.replace(/^\||\|$/g, '').split('|').map(c => `<TD>${c.trim()}</TD>`).join('');
+      return `<TR>${tds}</TR>`;
     }).join('');
-    return `<table><thead><tr>${th}</tr></thead><tbody>${trs}</tbody></table>`;
+    return `<TABLE><thead><TR>${th}</TR></thead><tbody>${trs}</tbody></TABLE>\n`;
   });
 
+  // Blockquotes (sammendragsboks) → behold rå HTML
+  t = t.replace(/^> (.+)$/gm, '<BQ>$1</BQ>');
+
   let h = escHtml(t);
-  // Gjenopprett HTML fra tabeller (escHtml ødelagte dem)
-  h = h.replace(/&lt;(\/?(table|thead|tbody|tr|th|td)[^&]*)&gt;/g, '<$1>');
+
+  // Gjenopprett HTML-tagger som ble escaped
+  h = h.replace(/&lt;TABLE&gt;/g, '<table>').replace(/&lt;\/TABLE&gt;/g, '</table>');
+  h = h.replace(/&lt;thead&gt;/g, '<thead>').replace(/&lt;\/thead&gt;/g, '</thead>');
+  h = h.replace(/&lt;tbody&gt;/g, '<tbody>').replace(/&lt;\/tbody&gt;/g, '</tbody>');
+  h = h.replace(/&lt;TR&gt;/g, '<tr>').replace(/&lt;\/TR&gt;/g, '</tr>');
+  h = h.replace(/&lt;TH&gt;/g, '<th>').replace(/&lt;\/TH&gt;/g, '</th>');
+  h = h.replace(/&lt;TD&gt;/g, '<td>').replace(/&lt;\/TD&gt;/g, '</td>');
+  h = h.replace(/&lt;BQ&gt;/g, '<blockquote><p>').replace(/&lt;\/BQ&gt;/g, '</p></blockquote>');
 
   h = h.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
   h = h.replace(/\*(.*?)\*/g, '<em>$1</em>');
@@ -303,7 +315,7 @@ function renderMarkdown(tekst) {
   h = h.replace(/(<li>.*?<\/li>(\s*<li>.*?<\/li>)*)/gs, '<ul>$1</ul>');
   h = h.replace(/<\/ul>\s*<ul>/g, '');
   h = h.replace(/\n\n+/g, '</p><p>');
-  h = h.replace(/\n/g, '<br>');
+  h = h.replace(/\n(?!<)/g, '<br>');
   if (!h.startsWith('<')) h = '<p>' + h + '</p>';
   return h;
 }
@@ -324,32 +336,32 @@ async function kjørAutoAnalyse(harMandat, erSamlet) {
     sporsmal = `Les mandatet nøye og svar direkte og nummert på hvert enkelt spørsmål som stilles i mandatet. Bruk pasientjournal, NAV-mappe og legeerklæringer som kildemateriale. Strukturer svaret slik at hvert spørsmål fra mandatet besvares separat med overskrift.`;
   } else {
     if (tittelEl) tittelEl.textContent = 'Analyserer…';
-    sporsmal = `Gjennomfør en fullstendig standardanalyse og svar strukturert på disse nøkkelspørsmålene:
+    sporsmal = `Gjennomfør en fullstendig medisinsk vurdering av saksdokumentene. Start med sammendragsboks, deretter disse fem punktene:
 
-**1. Første symptomer**
-Når oppstod de første symptomene? Finn tidligste dokumenterte konsultasjon, symptomdebut og eventuelt skadedato.
+## 1. Første symptomer
+Når oppstod første dokumenterte symptomer? Angi dato, hvilken lege som dokumenterte det, og hva som ble beskrevet.
 
-**2. Varig medisinsk invaliditet (VMI)**
-Vurder VMI etter alle relevante tabeller:
-- Invaliditetstabellen 1997: hvilken diagnose, hvilken post i tabellen, estimert prosentsats og begrunnelse
-- Barnetabell: er pasienten under 16 år på skadetidspunktet? I så fall: juster sats
-- NPE Pasientskade-tabellen: er skaden en pasientskade (feilbehandling, komplikasjon)?
-Oppgi tydelig: Diagnose → Tabell → Prosentsats → Begrunnelse. Si hva som mangler for endelig fastsettelse.
+## 2. Varig medisinsk invaliditet (VMI)
+Vurder VMI etter relevante tabeller. For hvert aktuelt skadetilfelle:
+- Diagnose og diagnose-kode
+- Hvilken tabell som er aktuell (1997-tabellen / Barnetabell / NPE)
+- Estimert prosentsats med begrunnelse
+- Hva som eventuelt mangler for endelig fastsettelse
 
-**3. Grad av uførhet og arbeidsuførhet**
-- Hva dokumenterer journalen om arbeidsuførhet (sykmeldingsgrad, periode)?
-- Hva indikerer dokumentasjonen om varig uføregrad etter NAV-regelverket?
-- Skille mellom midlertidig og varig uførhet.
+## 3. Arbeidsuførhet
+- Sykmeldingsperiode og grad dokumentert i journal
+- Midlertidig vs. varig uførhet
+- Uføregrad i eget yrke vs. ethvert yrke
 
-**4. Årsakssammenheng**
-- Er det dokumentert årsakssammenheng mellom hendelsen/skaden og de rapporterte plagene?
-- Er det pre-eksisterende tilstander som kan ha bidratt?
-- Vurder bevisverdien av dokumentasjonen for årsakssammenheng.
+## 4. Årsakssammenheng
+- Er skaden/hendelsen årsak til plagene? Hva støtter dette?
+- Finnes pre-eksisterende tilstander som kan ha bidratt?
+- Bevisverdien av dokumentasjonen
 
-**5. Arbeidsskade**
-- Er det grunnlag for å vurdere dette som en arbeidsskade (yrkesskadeforsikringsloven, NAV-regelverket)?
-- Er skadehendelsen dokumentert i arbeidstiden, på arbeidsstedet eller under arbeid?
-- Er det registrert arbeidsulykke eller yrkessykdom i dokumentasjonen?`;
+## 5. Arbeidsskade
+- Skjedde hendelsen i arbeidstid/på arbeidsplass?
+- Er arbeidsulykke meldt til NAV eller arbeidsgiver?
+- Grunnlag for yrkesskadekrav?`;
   }
 
   await kjørAnalyseTilDokument(sporsmal);
