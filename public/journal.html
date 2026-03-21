@@ -162,7 +162,7 @@
       margin: 0 auto;
       display: grid;
       grid-template-columns: 1fr 340px;
-      grid-template-rows: auto 1fr auto auto;
+      grid-template-rows: auto auto 1fr auto;
       gap: 20px;
     }
 
@@ -242,6 +242,7 @@
     .upload-section {
       grid-column: 1;
       grid-row: 2;
+      align-self: start;
     }
 
     .file-grid {
@@ -338,14 +339,14 @@
 
     /* ── CHAT SECTION ── */
     .chat-section {
-      grid-column: 1;
-      grid-row: 3;
+      grid-column: 1 / -1;
+      grid-row: 4;
       display: flex;
       flex-direction: column;
     }
 
     .conversation-history {
-      height: 320px;
+      height: 220px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
@@ -430,6 +431,7 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
+      align-self: start;
     }
 
     /* ── SCORES PANEL ── */
@@ -544,8 +546,8 @@
 
     /* ── RAPPORT SECTION ── */
     .rapport-section {
-      grid-column: 1 / -1;
-      grid-row: 4;
+      grid-column: 1;
+      grid-row: 3;
     }
 
     .rapport-header {
@@ -606,6 +608,12 @@
     #rapport-dokument li { margin-bottom: 0.3em; }
     #rapport-dokument strong { font-weight: 700; color: var(--ink); }
     #rapport-dokument em { font-style: italic; }
+    #rapport-dokument hr { border: none; border-top: 1px solid var(--border); margin: 1.2em 0; }
+    #rapport-dokument table { width: 100%; border-collapse: collapse; margin-bottom: 1em; font-size: 13px; }
+    #rapport-dokument th { background: var(--fjord); color: white; padding: 7px 12px; text-align: left; font-weight: 600; }
+    #rapport-dokument td { padding: 6px 12px; border-bottom: 1px solid var(--border); }
+    #rapport-dokument tr:last-child td { border-bottom: none; }
+    #rapport-dokument tr:nth-child(even) td { background: var(--cream); }
 
     .rapport-empty {
       display: flex;
