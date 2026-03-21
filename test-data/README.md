@@ -1,65 +1,96 @@
 # Testcaser – Journalanalyse
 
-Disse filene er syntetiske, anonymiserte testcaser for manuell testing av Sana AI journalanalyse.
+Syntetiske, anonymiserte testcaser for manuell testing av Sana AI journalanalyse.
 **Alle data er fiktive. Ingen ekte pasientdata.**
 
 ## Innlogging (testbruker)
-- URL: http://sana-ai.eu-north-1.elasticbeanstalk.com/journal.html
-- E-post: demo@sana-ai.no
-- Passord: demo1234
+- **URL:** http://sana-ai.eu-north-1.elasticbeanstalk.com/journal.html
+- **E-post:** demo@sana-ai.no
+- **Passord:** demo1234
 
 ---
 
-## Case 1 – Enkel WAD-sak (nakkeslengskade)
-**Fil:** `case-enkel-WAD.txt`
-**Last opp som:** Pasientjournal
+## Krav til dokumenter i en komplett test
 
-Kort og klar sak. Rask å teste. Forventet output:
-- VMI 5–10% (WAD II uten nevrologiske utfall)
-- Årsakssammenheng klar
-- Tilbake i arbeid → varig men begrenset uførhet
+En reell sak skal alltid inneholde disse fire dokumenttypene:
 
----
+| Dokument | Beskrivelse | Last opp som |
+|----------|-------------|--------------|
+| **Pasientjournal** | Konsultasjonsnotater, diagnoser, sykemeldinger fra fastlege og spesialister | Pasientjournal |
+| **NAV-mappe** | Ytelseshistorikk, sykepengegrunnlag, AAP-vedtak, arbeidsevnevurdering | NAV-mappe |
+| **Mandat** | Oppdragsbrev fra forsikringsselskapet med konkrete spørsmål til rådgivende lege | Mandat |
+| **Legeerklæring** | Spesialistuttalelse, epikrise eller erklæring til forsikring/NAV | Legeerklæring |
 
-## Case 2 – Kneskade med arbeidsskadekrav
-**Fil:** `case-02-kneskade-arbeidsskade.txt`
-**Last opp som:** Pasientjournal
-
-Kompleks arbeidsskadecase med ACL-ruptur, pre-eksisterende meniskforandringer og spørsmål om yrkesrettet attføring. Forventet output:
-- VMI 10–15% (ACL-rekonstruksjon)
-- Arbeidsskade: Ja (NAV har godkjent)
-- Uføregrad: Trolig 50–100% i eget yrke
+Dersom alle dokumenter er samlet i én PDF, bruk feltet **Samlet PDF** istedenfor.
 
 ---
 
-## Case 3 – PTSD + rygg + mulig pasientskade (med mandat)
-**Fil:** `case-03-ptsd-komplex-med-mandat.txt`
-**Last opp som:** Samlet PDF (inneholder mandat øverst)
+## Case 1 – WAD-sak med fullt dokumentsett (enkel)
+**Filer (last opp hver for seg):**
+- `case-01-journal.txt` → Pasientjournal
+- `case-01-nav.txt` → NAV-mappe
+- `case-01-mandat.txt` → Mandat
+- `case-01-legeerklaring.txt` → Legeerklæring
 
-Filen inneholder både mandattekst og journal. Systemet skal:
-1. Oppdage mandatet
-2. Svare direkte på de 5 spørsmålene
-3. Bruke barnetabell der relevant
+**Klinisk scenario:**
+38 år gammel kontorarbeider. Nakkeslengskade (WAD II) etter trafikkulykke april 2022.
+Nevrologisk utredet – ingen nevrologiske utfall. 6 måneder sykemelding, tilbake i full jobb.
+If Skadeforsikring ber om VMI-vurdering, årsakssammenheng og arbeidsuførhetsgrad.
 
-Forventet output:
-- VMI PTSD: 20–25%
-- VMI rygg + komplikasjoner: 15–25%
-- Samlet VMI: 30–45%
-- Pasientskade: Mulig (NPE-sak under behandling)
+**Forventet output fra systemet:**
+- VMI: 7–10% (WAD II, 1997-tabellen)
+- Årsakssammenheng: Sannsynliggjort
+- Arbeidsuførhet: Midlertidig 6 mnd, ingen varig
+- Arbeidsskade: Nei
+
+> Klar PDF-versjon: `test-enkel.pdf` (kun journal, for rask test av grensesnittet)
 
 ---
 
-## Case 4 – Barnesak, hodeskade ved fødsel, NPE-krav
-**Fil:** `case-04-barn-hodeskade-npe.txt`
-**Last opp som:** Pasientjournal
+## Case 2 – Kneskade med arbeidsskadekrav (middels)
+**Fil:** `case-02-kneskade-arbeidsskade.txt` → Samlet PDF
+*(Inneholder journal, NAV-mappe og legeerklæring i én fil)*
 
-Meget kompleks sak med cerebral parese etter fødselsskade, barnetabell, NPE-vedtak og stor erstatningssak. Forventet output:
+**Klinisk scenario:**
+44 år gammel rørlegger. Komplett ACL-ruptur etter fall fra stige på jobb.
+Operert, rehabilitert, kan ikke returnere til rørleggeryrket. Yrkesskade godkjent av NAV.
+
+**Forventet output:**
+- VMI: 10–15% (ACL-rekonstruksjon)
+- Arbeidsskade: Ja (dokumentert)
+- Uføregrad i eget yrke: Høy
+
+---
+
+## Case 3 – PTSD + rygg + pasientskade med mandat (tung)
+**Fil:** `case-03-ptsd-komplex-med-mandat.txt` → Samlet PDF
+*(Inneholder mandat øverst + journal + NAV + legeerklæring)*
+
+**Klinisk scenario:**
+52 år gammel intensivsykepleier. Tre overlappende hendelser: voldsepisode på jobb (PTSD),
+arbeidsulykke (ryggprolaps), og komplikasjon etter ryggoperasjon (mulig pasientskade/NPE).
+If Skadeforsikring stiller 5 konkrete spørsmål i mandatet.
+
+**Forventet output:**
+- Systemet oppdager mandat og svarer direkte og nummert på spørsmålene
+- VMI samlet: 30–45%
+- NPE-grunnlag: Mulig
+
+---
+
+## Case 4 – Barnesak, fødselsskade, NPE (svært tung)
+**Fil:** `case-04-barn-hodeskade-npe.txt` → Samlet PDF
+
+**Klinisk scenario:**
+Gutt 8 år. Cerebral parese etter asfyksi under fødsel (forsinkelse i intervensjon).
+NPE-sak anerkjent. Erstatningskrav ca. 44 millioner kr. Barnetabell gjelder.
+
+**Forventet output:**
 - Barnetabell: VMI 80–95%
-- NPE-grunnlag: Ja (anerkjent)
-- Livslang omsorgsbehov
-- Erstatningssum svært høy (forventningsavklaring)
+- NPE-grunnlag: Anerkjent
+- Erstatningssum: Svært høy
 
 ---
 
 ## Filformat
-Filene er `.txt`-format. Sana AI støtter PDF, Word (.docx) og tekstfiler (.txt).
+Sana AI støtter **.pdf**, **.docx** og **.txt** (etter siste oppdatering).

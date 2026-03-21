@@ -1,0 +1,33 @@
+NAV-MAPPE – ANONYMISERT
+Pasient-ID: TEST-001
+NAV-kontor: NAV Bærum
+Saksbehandler: NAV
+
+=== YTELSESHISTORIKK ===
+
+Sykepenger:
+09.04.2022 – 08.10.2022: Sykepenger 100% (2 uker), deretter 50%
+Sykepengegrunnlag: 512.000 kr/år (saksbehandlerstilling, Oslo Kommune)
+Utbetalt sykepenger totalt: ca. 106.000 kr
+
+=== SYKMELDINGER REGISTRERT ===
+09.04.2022: 100%, diagnose S13.4 (WAD II), Dr. Kari Olsen
+25.04.2022: 50%, forlengelse, Dr. Kari Olsen
+23.05.2022: 50%, forlengelse, Dr. Kari Olsen
+20.06.2022: 50%, forlengelse etter spesialistvurdering
+15.08.2022: 50% → 100% retur gradvis, Dr. Kari Olsen
+06.10.2022: Friskmelding
+
+=== ARBEIDSEVNEVURDERING ===
+Ikke igangsatt. Pasienten kom tilbake i fullt arbeid innen 52-uker.
+Ingen AAP-sak opprettet.
+
+=== ANNEN TRYGDEHISTORIKK ===
+Ingen tidligere sykefravær siste 3 år registrert.
+Ingen uføresøknad.
+Ingen yrkesskademeldinger registrert hos NAV.
+
+=== INNTEKTSOPPLYSNINGER ===
+Pensjonsgivende inntekt 2021: 508.000 kr
+Pensjonsgivende inntekt 2022: 496.000 kr (redusert pga. sykefravær)
+Arbeidsgiver: Oslo Kommune, org.nr. 958935420
