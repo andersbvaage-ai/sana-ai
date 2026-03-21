@@ -14,16 +14,10 @@ phases:
       - echo Pushing image to ECR...
       - docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
       - echo Deploying to Elastic Beanstalk...
-      - VERSION="deploy-$(date +%Y%m%d-%H%M%S)-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:7}"
+      - export SHORT_SHA=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-7)
+      - export VERSION="deploy-$(date +%Y%m%d-%H%M%S)-$SHORT_SHA"
+      - echo "Version $VERSION"
       - aws s3 cp Dockerrun.aws.json s3://$EB_BUCKET/$VERSION/Dockerrun.aws.json
-      - |
-        aws elasticbeanstalk create-application-version \
-          --application-name $EB_APP \
-          --version-label $VERSION \
-          --source-bundle S3Bucket=$EB_BUCKET,S3Key=$VERSION/Dockerrun.aws.json
-      - |
-        aws elasticbeanstalk update-environment \
-          --application-name $EB_APP \
-          --environment-name $EB_ENV \
-          --version-label $VERSION
-      - echo "Deployment triggered:" $VERSION
+      - aws elasticbeanstalk create-application-version --application-name $EB_APP --version-label $VERSION --source-bundle S3Bucket=$EB_BUCKET,S3Key=$VERSION/Dockerrun.aws.json
+      - aws elasticbeanstalk update-environment --application-name $EB_APP --environment-name $EB_ENV --version-label $VERSION
+      - echo "Deployment triggered" $VERSION
