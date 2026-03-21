@@ -1,0 +1,106 @@
+===== SAK 2: KNESKADE MED ARBEIDSSKADEKRAV =====
+Pasient-ID: TEST-002
+Kjønn: Mann, 44 år
+Yrke: Rørlegger / VVS-montør
+Arbeidsgiver: Norsk VVS AS, Drammen
+Fastlege: Dr. Per Andersen, Drammen Legesenter
+Forsikringsselskap: Gjensidige Forsikring
+Saksnummer: GJF-2023-448821
+
+=== SKADEHENDELSE ===
+Dato: 14.03.2023
+Sted: Arbeidsplass, leilighetsbygg Konnerud, Drammen
+Beskrivelse: Pasienten falt ned fra stige (ca. 1,2 m høyde) mens han monterte rør i baderomsvegg. Landet på høyre kne. Hørte et smell. Umiddelbar hevelse og smerte.
+Registrert arbeidsulykke: JA – skjema meldt til NAV og arbeidsgiver samme dag (14.03.2023).
+Vitner: Lærling Bjørn Haugen (22), tilstede ved ulykken.
+
+=== LEGEJOURNALER ===
+
+14.03.2023 – Legevakten Drammen
+Pasienten kom inn med høyrekneskade etter arbeidsulykke. Betydelig hevelse, hemartrose.
+Røntgen: ingen synlig fraktur. Klinisk undersøkelse: positiv Lachman-test, positiv pivot-shift.
+Mistenker fremre korsbåndskade. Henvisninger sendt til MRI og ortoped.
+Midlertidig sykemelding 100%, 2 uker.
+
+21.03.2023 – MRI høyre kne, Drammen Sykehus
+Konklusjon: Komplett ruptur av ligamentum cruciatum anterius (LCA/ACL).
+Bakre korsbånd (LCP) intact. Medial menisk: grad 2-3 degenerativ forandring.
+Ingen fraktur. Lateral menisk: normal.
+
+28.03.2023 – Ortopedisk poliklinikk, Vestre Viken HF
+Lege: Overlege Marte Knutsen, ortoped.
+MRI gjennomgått. Bekrefter komplett ACL-ruptur. Degenerativ meniskforandring var trolig pre-eksisterende.
+Anbefaling: ACL-rekonstruksjon med hamstringsgraft. Pasienten samtykker.
+Venteliste: 8-12 uker.
+
+15.06.2023 – ACL-rekonstruksjon, Vestre Viken HF
+Operatør: Overlege M. Knutsen.
+Prosedyre: Artroskopisk ACL-rekonstruksjon med semitendinosus graft.
+Peroperativt funn: Komplett ACL-ruptur bekreftet. Medial menisk: lettere degenerativ, ingen ruptur, etterlatt.
+Operasjonen forløp uten komplikasjoner.
+Postoperativt: Krykker 6 uker, full vektbæring tillatt med smertestyring.
+
+22.06.2023 – 10.11.2023 – Rehabilitering, Drammen Fysioterapi
+Totalt 34 behandlinger. Gradvis progrediering av øvelser.
+Uke 1-6: Hevelseskontroll, ROM-øvelser, kvadriceps-aktivering.
+Uke 7-12: Propriosepsjon, styrke, balanse.
+Uke 13-24: Idrettsspesifikk rehabilitering, arbeidsrettet trening.
+Sluttrapport (10.11.2023): God muskelstyrke retur (~85% vs. venstre side). Noe restsmerte ved knefleksjon > 120 grader. Anbefaler arbeidsrettet rehabilitering (ARA).
+
+15.11.2023 – Kontroll ortopedisk pol., overlege Knutsen
+Funksjonell test: KT-1000 laksitetstest viser 2 mm sideforkjell (akseptabel). KOOS-skår: 68/100.
+Pasienten rapporterer vedvarende smerter ved knebelastning, trapp og krabbestilling (nødvendig i rørleggeryrket).
+Konklusjon: Anatomisk vellykket ACL-rekonstruksjon. Funksjonsnedsettelse vedvarer.
+Vurdering av arbeidsdyktighet: Pasienten KAN IKKE returnere til rørleggeryrket uten modifikasjoner.
+Anbefaler vurdering av yrkesrettet attføring.
+
+=== NAV-DOKUMENTER ===
+
+14.03.2023: Arbeidsulykke meldt til NAV (skjema NAV 13-07.05).
+14.03.2023 – 14.06.2023: Sykepenger 100% (tre måneder).
+14.06.2023 – 14.03.2024: Arbeidsavklaringspenger (AAP), 66% av inntektsgrunnlag.
+Inntektsgrunnlag for sykepenger: 612.000 kr/år (rørlegger med fagbrev + tillegg).
+
+NAV-vedtak 20.01.2024: AAP videreføres. Arbeidsevnevurdering igangsatt.
+NAV-vedtak 15.03.2024: Uføresøknad mottatt. Sak under behandling.
+
+=== LEGEERKLÆRING TIL FORSIKRING (Gjensidige) ===
+Dato: 20.01.2024
+Utstedt av: Overlege M. Knutsen, ortoped, Vestre Viken HF
+
+Pasient X (44 år, mann) gjennomgikk ACL-rekonstruksjon etter arbeidsulykke 14.03.2023.
+Anatomisk resultat er godt, men funksjonell kapasitet er ikke tilstrekkelig for pasientens yrke som rørlegger.
+
+Yrket krever:
+- Krabbestilling og kneling over lengre perioder
+- Løft inntil 40 kg
+- Arbeid på stige og i kummer
+- Ujevnt underlag
+
+Pasienten klarer p.t. ikke å utføre disse arbeidsoppgavene uten betydelige smerter.
+Pre-eksisterende degenerativ meniskforandring anses IKKE som årsak til ACL-rupturen.
+Ulykken er entydig årsak til ACL-rupturen.
+
+VMI-vurdering (Invaliditetstabellen 1997):
+Diagnose: Tilstand etter ACL-rekonstruksjon høyre kne med vedvarende funksjonsnedsettelse.
+Tabell: Invaliditetstabellen 1997, punkt 4.1.2 (Kneledd)
+Estimert VMI: 10–15 %, avhengig av endelig funksjonsevne ved 24-månederskontroll.
+Begrunnet ut fra KOOS 68/100, restlaksitet 2mm, smertepåvirket funksjon.
+
+=== ARBEIDSHISTORIKK OG ØKONOMI ===
+Rørlegger med fagbrev siden 2003. 20 år i yrket.
+Lønn 2022: 612.000 kr (grunnlønn + overtid + skift).
+Har ikke relevant omskolering. Ikke høyere utdanning.
+Eier av liten hytte (finansiert med lån). To barn (12 og 15 år).
+
+=== ANNEN RELEVANT INFO ===
+Pasienten røyker ikke, alkohol moderat (under 14 enheter per uke).
+Ingen psykiatrisk historikk.
+Ingen tidligere større skader eller operasjoner.
+BMI 27 (lett overvekt, ikke klinisk relevant for skaden).
+
+=== FORSIKRINGSOPPLYSNINGER ===
+Yrkesskadeforsikring gjennom Gjensidige, aktiv på skadetidspunktet.
+Yrkesskade anerkjent av NAV: Under behandling.
+Forsikringssum: Opp til 30G ved full invaliditet.
+G-verdi 2023: 118.620 kr → 30G = 3.558.600 kr.
