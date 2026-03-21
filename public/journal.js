@@ -2,6 +2,7 @@
 
 // ── State ────────────────────────────────────────────────────────────────────
 let isSending = false;
+let isAnalysing = false;
 
 function authHeaders() {
   const token = localStorage.getItem('sana_token');
@@ -79,9 +80,11 @@ async function uploadDocuments() {
       throw new Error(err.error || `HTTP ${res.status}`);
     }
 
+    const data = await res.json().catch(() => ({}));
     showUploadStatus('Dokumenter lastet opp.', 'success');
     setDocsLoaded(true);
     enableChat();
+    kjørAutoAnalyse(data.harMandat, data.erSamlet);
   } catch (err) {
     showUploadStatus(`Feil: ${err.message}`, 'error');
   } finally {
@@ -269,6 +272,140 @@ function setFact(id, value) {
   }
 }
 
+// ── Markdown renderer ─────────────────────────────────────────────────────────
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function renderMarkdown(tekst) {
+  let h = escHtml(tekst);
+  h = h.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  h = h.replace(/\*(.*?)\*/g, '<em>$1</em>');
+  h = h.replace(/^#### (.+)$/gm, '<h4>$1</h4>');
+  h = h.replace(/^### (.+)$/gm,  '<h4>$1</h4>');
+  h = h.replace(/^## (.+)$/gm,   '<h4>$1</h4>');
+  h = h.replace(/^[•\-\*] (.+)$/gm, '<li>$1</li>');
+  h = h.replace(/(<li>[\s\S]*?<\/li>)/g, '<ul>$1</ul>');
+  h = h.replace(/<\/ul>\s*<ul>/g, '');
+  h = h.replace(/\n\n+/g, '</p><p>');
+  h = h.replace(/\n/g, '<br>');
+  if (!h.startsWith('<')) h = '<p>' + h + '</p>';
+  return h;
+}
+
+// ── Auto-analyse ──────────────────────────────────────────────────────────────
+async function kjørAutoAnalyse(harMandat, erSamlet) {
+  const tittelEl = document.getElementById('rapport-tittel');
+  let sporsmal;
+
+  if (erSamlet) {
+    if (tittelEl) tittelEl.textContent = 'Identifiserer dokumenter…';
+    sporsmal = `Dette er en samlet fil med flere dokumenttyper. Gjør følgende:
+1. Identifiser hvilke seksjoner som finnes (pasientjournal, NAV-dokumenter, legeerklæringer, mandat/oppdragsbrev). Oppgi omtrentlig sideplassering eller kjennetegn for hver seksjon.
+2. Hvis det finnes et mandat — svar direkte på spørsmålene der.
+3. Kjør deretter fullstendig standardanalyse: første symptomer, VMI, grad av uførhet, årsakssammenheng og vurdering av arbeidsskade.`;
+  } else if (harMandat) {
+    if (tittelEl) tittelEl.textContent = 'Svarer på mandat…';
+    sporsmal = `Les mandatet nøye og svar direkte og nummert på hvert enkelt spørsmål som stilles i mandatet. Bruk pasientjournal, NAV-mappe og legeerklæringer som kildemateriale. Strukturer svaret slik at hvert spørsmål fra mandatet besvares separat med overskrift.`;
+  } else {
+    if (tittelEl) tittelEl.textContent = 'Analyserer…';
+    sporsmal = `Gjennomfør en fullstendig standardanalyse og svar strukturert på disse nøkkelspørsmålene:
+
+**1. Første symptomer**
+Når oppstod de første symptomene? Finn tidligste dokumenterte konsultasjon, symptomdebut og eventuelt skadedato.
+
+**2. Varig medisinsk invaliditet (VMI)**
+Vurder VMI etter alle relevante tabeller:
+- Invaliditetstabellen 1997: hvilken diagnose, hvilken post i tabellen, estimert prosentsats og begrunnelse
+- Barnetabell: er pasienten under 16 år på skadetidspunktet? I så fall: juster sats
+- NPE Pasientskade-tabellen: er skaden en pasientskade (feilbehandling, komplikasjon)?
+Oppgi tydelig: Diagnose → Tabell → Prosentsats → Begrunnelse. Si hva som mangler for endelig fastsettelse.
+
+**3. Grad av uførhet og arbeidsuførhet**
+- Hva dokumenterer journalen om arbeidsuførhet (sykmeldingsgrad, periode)?
+- Hva indikerer dokumentasjonen om varig uføregrad etter NAV-regelverket?
+- Skille mellom midlertidig og varig uførhet.
+
+**4. Årsakssammenheng**
+- Er det dokumentert årsakssammenheng mellom hendelsen/skaden og de rapporterte plagene?
+- Er det pre-eksisterende tilstander som kan ha bidratt?
+- Vurder bevisverdien av dokumentasjonen for årsakssammenheng.
+
+**5. Arbeidsskade**
+- Er det grunnlag for å vurdere dette som en arbeidsskade (yrkesskadeforsikringsloven, NAV-regelverket)?
+- Er skadehendelsen dokumentert i arbeidstiden, på arbeidsstedet eller under arbeid?
+- Er det registrert arbeidsulykke eller yrkessykdom i dokumentasjonen?`;
+  }
+
+  await kjørAnalyseTilDokument(sporsmal);
+}
+
+async function kjørAnalyseTilDokument(tekst) {
+  if (isAnalysing) return;
+  isAnalysing = true;
+
+  const rapportEl = document.getElementById('rapport-dokument');
+  const tittelEl  = document.getElementById('rapport-tittel');
+  rapportEl.innerHTML = '<div class="laster-dokument"><div class="laster-ikon">\u23F3</div><div>Analyserer\u2026</div></div>';
+
+  try {
+    const res = await fetch('/api/journal/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...authHeaders() },
+      body: JSON.stringify({ melding: tekst }),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '', currentEvent = '', akkumulert = '', contentEl = null;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const linjer = buffer.split('\n');
+      buffer = linjer.pop();
+
+      for (const linje of linjer) {
+        if (linje.startsWith('event:')) {
+          currentEvent = linje.slice(6).trim();
+        } else if (linje.startsWith('data:')) {
+          let data;
+          try { data = JSON.parse(linje.slice(5).trim()); } catch { continue; }
+          if (currentEvent === 'token') {
+            akkumulert += data.text;
+            if (!contentEl) {
+              rapportEl.innerHTML = '';
+              contentEl = document.createElement('div');
+              rapportEl.appendChild(contentEl);
+            }
+            contentEl.innerHTML = renderMarkdown(akkumulert.replace(/^SCORES:\{[^}]+\}\s*\n?/, ''));
+          } else if (currentEvent === 'scores') {
+            updateScores(data);
+          } else if (currentEvent === 'done') {
+            const renTekst = akkumulert
+              .replace(/^SCORES:\{[^}]+\}\s*\n?/, '')
+              .replace(/\nSCORES:\{[^}]+\}\s*$/, '').trim();
+            rapportEl.innerHTML = '';
+            const finalEl = document.createElement('div');
+            finalEl.innerHTML = renderMarkdown(renTekst);
+            rapportEl.appendChild(finalEl);
+            if (tittelEl) tittelEl.textContent = 'Ferdig';
+            loadFacts();
+          } else if (currentEvent === 'error') {
+            rapportEl.innerHTML = `<p style="color:#991B1B">\u274C ${escHtml(data.message || 'Ukjent feil')}</p>`;
+          }
+        }
+      }
+    }
+  } catch (err) {
+    rapportEl.innerHTML = `<p style="color:#991B1B">\u274C ${escHtml(err.message)}</p>`;
+  } finally {
+    isAnalysing = false;
+  }
+}
+
 // ── Reset session ─────────────────────────────────────────────────────────────
 async function resetSession() {
   try {
@@ -306,6 +443,12 @@ async function resetSession() {
     wrapper.classList.remove('has-file');
     label.textContent = 'Velg fil\u2026';
   });
+
+  // Reset rapport
+  const rapportEl = document.getElementById('rapport-dokument');
+  const tittelEl  = document.getElementById('rapport-tittel');
+  if (rapportEl) rapportEl.innerHTML = '<div class="rapport-empty"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>Analyserapporten vises her etter at dokumenter er lastet opp.</span></div>';
+  if (tittelEl) tittelEl.textContent = '';
 
   showUploadStatus('', '');
 }
