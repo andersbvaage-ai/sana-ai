@@ -1,7 +1,7 @@
-// Redirect til cases hvis allerede innlogget
+// Redirect til journal hvis allerede innlogget
 (function () {
   if (localStorage.getItem('sana_token')) {
-    window.location.replace('/cases.html');
+    window.location.replace('/journal.html');
   }
 })();
 
@@ -40,7 +40,7 @@ form.addEventListener('submit', async () => {
 
     localStorage.setItem('sana_token', data.token);
     localStorage.setItem('sana_user', JSON.stringify({ name: data.name, role: data.role }));
-    window.location.replace('/cases.html');
+    window.location.replace('/journal.html');
   } catch {
     showError('Kunne ikke nå serveren. Sjekk internettforbindelsen.');
   } finally {
