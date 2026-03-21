@@ -278,14 +278,29 @@ function escHtml(s) {
 }
 
 function renderMarkdown(tekst) {
-  let h = escHtml(tekst);
+  // Fjern dokumentidentifikasjon-tabell (unødvendig støy i rapporten)
+  let t = tekst.replace(/^.*?DOKUMENTIDENTIFIKASJON[\s\S]*?\n\n/m, '');
+
+  // Render markdown-tabeller
+  t = t.replace(/^\|(.+)\|\s*\n\|[-| :]+\|\s*\n((?:\|.+\|\s*\n?)*)/gm, (_, header, rows) => {
+    const th = header.split('|').map(c => `<th>${c.trim()}</th>`).join('');
+    const trs = rows.trim().split('\n').map(row => {
+      const tds = row.replace(/^\||\|$/g, '').split('|').map(c => `<td>${c.trim()}</td>`).join('');
+      return `<tr>${tds}</tr>`;
+    }).join('');
+    return `<table><thead><tr>${th}</tr></thead><tbody>${trs}</tbody></table>`;
+  });
+
+  let h = escHtml(t);
+  // Gjenopprett HTML fra tabeller (escHtml ødelagte dem)
+  h = h.replace(/&lt;(\/?(table|thead|tbody|tr|th|td)[^&]*)&gt;/g, '<$1>');
+
   h = h.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
   h = h.replace(/\*(.*?)\*/g, '<em>$1</em>');
-  h = h.replace(/^#### (.+)$/gm, '<h4>$1</h4>');
-  h = h.replace(/^### (.+)$/gm,  '<h4>$1</h4>');
-  h = h.replace(/^## (.+)$/gm,   '<h4>$1</h4>');
-  h = h.replace(/^[•\-\*] (.+)$/gm, '<li>$1</li>');
-  h = h.replace(/(<li>[\s\S]*?<\/li>)/g, '<ul>$1</ul>');
+  h = h.replace(/^#{1,4} (.+)$/gm, '<h4>$1</h4>');
+  h = h.replace(/^---+$/gm, '<hr>');
+  h = h.replace(/^[•\-] (.+)$/gm, '<li>$1</li>');
+  h = h.replace(/(<li>.*?<\/li>(\s*<li>.*?<\/li>)*)/gs, '<ul>$1</ul>');
   h = h.replace(/<\/ul>\s*<ul>/g, '');
   h = h.replace(/\n\n+/g, '</p><p>');
   h = h.replace(/\n/g, '<br>');
