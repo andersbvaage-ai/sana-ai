@@ -10,7 +10,7 @@ export interface ParsedDocument {
   filename: string;
 }
 
-const SUPPORTED_EXTENSIONS = ['.pdf', '.docx', '.doc'];
+const SUPPORTED_EXTENSIONS = ['.pdf', '.docx', '.doc', '.txt'];
 
 export function isMandateFilename(filename: string): boolean {
   const lower = filename.toLowerCase();
@@ -33,9 +33,20 @@ export async function parseBuffer(buffer: Buffer, filename: string): Promise<Par
     };
   }
 
+  // .txt
+  if (ext === '.txt') {
+    const text = buffer.toString('utf-8');
+    const lines = text.split('\n').filter((l: string) => l.trim()).length;
+    return {
+      text: scrubNorwegianPII(text),
+      pages: Math.max(1, Math.round(lines / 40)),
+      filename,
+    };
+  }
+
   // .docx / .doc
   const result = await mammoth.extractRawText({ buffer });
-  const lines = result.value.split('\n').filter(l => l.trim()).length;
+  const lines = result.value.split('\n').filter((l: string) => l.trim()).length;
   return {
     text: scrubNorwegianPII(result.value),
     pages: Math.max(1, Math.round(lines / 40)),

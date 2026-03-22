@@ -1,0 +1,55 @@
+PASIENTJOURNAL – ANONYMISERT TESTPASIENT
+
+Pasient-ID: TEST-001
+Kjønn: Kvinne
+Alder: 38 år
+Fastlege: Dr. Kari Olsen, Sandvika Legekontor
+
+=== KONSULTASJONER ===
+
+12.04.2022 – Første konsultasjon etter trafikkulykke
+Pasienten kom til konsultasjon 3 dager etter trafikkulykke 09.04.2022.
+Var fører av bil som ble påkjørt bakfra i kø ved Lysaker. Lav fart (~20 km/t).
+Klager på nakkesmerter, hodepine og svimmelhet som startet samme dag som ulykken.
+Ingen bevissthetstap. Røntgen nakke: ingen fraktur.
+Diagnose: S13.4 – Forstuing av nakkeledd (WAD II)
+Behandling: Smertestillende (paracetamol), bevegelse anbefalt. Sykmeldt 2 uker.
+
+28.04.2022 – Kontrollkonsultasjon
+Smerter bedret noe, men fortsatt daglige nakkesmerter ved belastning.
+Hodepine 3-4 ganger per uke. Konsentrasjonsvansker rapportert.
+Videre sykmelding 4 uker, 50%.
+
+15.06.2022 – Spesialistvurdering, nevrolog
+Henvist til nevrolog grunnet vedvarende plager.
+Nevrologisk undersøkelse: normale reflekser, ingen nevrologiske utfall.
+MRI nakke: minimale degenerative forandringer, ingen prolaps.
+Vurdering: WAD II, ingen tegn til WAD III. Anbefaler fysioterapi.
+
+10.08.2022 – Fysioterapijournal
+Pasient har hatt 12 behandlinger siden juni. Noe bedring i bevegelsesutslag.
+Fortsatt smertepåvirket ved langvarig sittestilling og bilkjøring.
+Anbefaler hjemmeøvelser og gradvis tilbakevending til arbeid.
+
+05.01.2023 – Halvårsoppfølging
+Pasienten har vært i full jobb siden oktober 2022, men rapporterer:
+- Daglige nakkesmerter, VAS 3-4/10
+- Søvnforstyrrelser relatert til smerter
+- Unngår bilkjøring på motorvei (angst)
+Vurderes nå som varige plager. Total sykmeldingsperiode: 6 måneder.
+
+=== DIAGNOSEHISTORIKK ===
+S13.4 – Cervical forstuing (WAD II), traumatisk, 09.04.2022
+F41.1 – Generalisert angstlidelse (lettere), sekundær
+
+=== ARBEIDSSTATUS ===
+Yrke: Kontorarbeider / saksbehandler
+Arbeidsgiver: Oslo Kommune
+Sykmeldingsperiode: 09.04.2022 – 05.10.2022 (6 måneder, delvis 50% fra mai)
+Tilbake i full stilling: 06.10.2022
+
+=== SAMMENDRAG ===
+Pasient med vedvarende plager etter nakkeslengskade ved trafikkulykke april 2022.
+Diagnose WAD II bekreftet av spesialist. Ingen nevrologiske utfall.
+Varige smerter og redusert funksjon, men tilbake i arbeid.
+Forsikringssak under behandling.

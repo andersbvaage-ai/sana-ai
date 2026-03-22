@@ -1,0 +1,174 @@
+===== SAK 3: KOMPLEKS SAK – PTSD, RYGGSKADE OG PASIENTSKADE (MED MANDAT) =====
+Pasient-ID: TEST-003
+Kjønn: Kvinne, 52 år
+Yrke: Sykepleier
+Arbeidsgiver: Oslo Universitetssykehus HF (OUS)
+Fastlege: Dr. Amina Hassan, Grünerløkka Legesenter
+Forsikringsselskap: If Skadeforsikring / NAV
+
+===========================================================================
+MANDAT – OPPDRAGSBREV FRA IF SKADEFORSIKRING
+Saksnummer: IF-2024-PTSD-00912
+Til: Sakkyndig rådgiver / AI-analysetjeneste
+Fra: If Skadeforsikring, Skadeavdeling Personskade
+Dato: 15.01.2024
+
+Vi ber om vurdering av vedlagte saksdokumenter for forsikringstaker X (52 år, sykepleier).
+
+SPØRSMÅL TIL SAKKYNDIG:
+
+1. Hva er sannsynlig varig medisinsk invaliditet (VMI) for henholdsvis:
+   a) PTSD-diagnosen
+   b) Lumbalt skiveprolaps / ryggplager
+   c) Samlet VMI
+
+2. Er det årsakssammenheng mellom de dokumenterte hendelsene og de rapporterte plagene?
+   Vurder spesielt om det er relevant pre-eksisterende sykdom som kan ha bidratt.
+
+3. Er ryggoperasjonen å anse som en pasientskade (NPE-grunnlag)?
+   Begrunnes ut fra det medisinske forløpet.
+
+4. Hva er pasientens grad av arbeidsuførhet – midlertidig og varig – i eget yrke og i ethvert yrke?
+
+5. Er det grunnlag for arbeidsskadekrav, og i så fall for hvilken diagnose?
+
+If Skadeforsikring
+===========================================================================
+
+=== BAKGRUNN ===
+
+Pasienten er 52 år og har arbeidet som intensivsykepleier ved OUS siden 1997.
+Saken gjelder tre overlappende hendelser:
+
+A) VOLDSHENDELSE PÅ JOBB (2019)
+B) ARBEIDSRELATERT RYGGSKADE (2020)
+C) KOMPLIKASJON ETTER RYGGOPERASJON – MULIG PASIENTSKADE (2021)
+
+=== DEL A: PTSD – VOLDSHENDELSE PÅ JOBB ===
+
+12.09.2019: Pasienten ble angrepet av en psykotisk pasient på intensivavdelingen.
+Pasient X (mannlig, 85 kg) grep tak i hals og dyttet henne inn i vegg.
+Pasienten fikk brudd på 4. ribbein (høyre side) og kontusjon skulder.
+Hendelsen er dokumentert i OUS-avviksystem, ref. AVV-2019-4421.
+
+Psykiatrisk forløp:
+Oktober 2019: Henvist til DPS Grünerløkka grunnet søvnforstyrrelser, gjenopplevelsesepisoder og vegring mot å gå tilbake til jobb.
+Januar 2020: PTSD-diagnose stilt av psykiater Tor Berggren, DPS Grünerløkka. ICD-10: F43.1
+Kriterier oppfylt: Re-experiencing (flashbacks, mareritten), unngåelsesatferd, hypervigilans, søvnforstyrrelser.
+
+Behandling:
+- EMDR-terapi, 24 sesjoner (2020–2021)
+- SSRI: Sertralin 100 mg daglig (igangsatt februar 2020)
+- Gruppebehandling for traumatiserte helsearbeidere (OUS-tilbud, 2020)
+
+Status januar 2024:
+Psykiater Berggren: Vesentlig bedring i akutte PTSD-symptomer. Residualtilstand med:
+- Selektiv unngåelse (kan ikke jobbe med mannlige psykotiske pasienter)
+- Periodiske søvnforstyrrelser ved stressede perioder
+- Noe redusert konsentrasjonsevne
+Diagnose: F43.1 PTSD, kronisk fase, delvis remittert.
+
+VMI psykiater Berggren (januar 2024):
+Invaliditetstabellen 1997, psykiatrisk tabell: Kronisk PTSD med residualsymptomer.
+Estimert VMI: 20–25 %.
+
+=== DEL B: RYGGSKADE – ARBEIDSULYKKE ===
+
+08.03.2020: Pasienten løftet en overvektig pasient (120 kg) uten tilstrekkelig hjelpemidler.
+Hørte et smell i ryggen. Umiddelbar smerte nedre del av ryggen med utstråling til venstre bein.
+Meldt som arbeidsulykke: NAV-skjema innlevert 10.03.2020. Godkjent som yrkesskade av NAV 15.07.2020.
+
+MRI lumbalcolumna (15.03.2020):
+L4-L5: Stort disc-prolaps med rotaffeksjon venstre L5-rot.
+L5-S1: Moderat degenerativ diskopati (pre-eksisterende).
+
+Nevrologiske funn: Positiv Lasègue venstre (30 grader). Nedsatt kraft dorsifleksjon venstre fot (4/5).
+Behandling: Fysioterapi, NSAID, epidural steroidinjeksjon uten effekt.
+Smerter vedvarte, funksjonsnedsettelse betydelig.
+
+=== DEL C: RYGGOPERASJON OG KOMPLIKASJON – MULIG PASIENTSKADE ===
+
+10.09.2020: Diskektomi L4-L5, Rikshospitalet Oslo.
+Operatør: Nevrokirurg overlege Gunnar Foss.
+Perioperativt: Uventet blødning intraoperativt. Dura-rifting oppstod.
+Reoperert akutt – duraplastikk utført.
+Pasienten er ikke informert om dura-riftingen preoperativt (risikoinformasjon: standard komplikasjoner nevnt, ikke spesifikt dura-rifting).
+
+Postoperative komplikasjoner (2020–2021):
+- Kronisk hodepine (lavtrykksmigraine sekundær til dura-rifting) – 9 måneder
+- Postoperative smerter verre enn preoperativt i 4 måneder
+- Epidural fibrose bekreftet ved MRI mars 2021
+- Cauda equina-symptomer (vannlatingsbesvær) 6 uker postoperativt, spontant bedret
+
+Ny MRI (mars 2021): Epidural fibrose L4-L5. Residuell nerverotaffeksjon venstre L5.
+Ny vurdering nevrokirurg (april 2021): Reopperasjon frarådes pga. fibrose.
+Konklusjon: Pasient har ikke oppnådd forventet bedring etter operasjon.
+
+NPE-klage innlevert: 20.08.2021. Saksnummer NPE-2021-44812.
+NPE-vurdering (foreløpig, mars 2023): Dura-rifting er en kjent komplikasjon og ikke i seg selv grunnlag for pasientskade.
+Spørsmål om manglende informasjon vurderes fortsatt.
+Endelig NPE-vedtak ikke foreligger per 15.01.2024.
+
+=== LEGEJOURNAL – OPPDATERT STATUS ===
+
+Fastlege Dr. Hassan, notat 10.01.2024:
+Pasienten er i dag 52 år og har sammensatte plager:
+1. PTSD residualsymptomer (kronisk, delvis remittert)
+2. Kroniske ryggsmerter L4-L5, VAS 5-6/10 daglig
+3. Nevrogene smerter venstre bein ved gange >500m
+4. Periodiske hodepinesymptomer (lavere frekvens nå – ca. 2x/mnd)
+5. Søvnforstyrrelser (kombinert PTSD og smerterelatert)
+
+Medikamentliste:
+- Sertralin 100 mg daglig (psykiatri)
+- Pregabalin 150 mg x2 (nevropati)
+- Paracetamol 1g x4 ved behov
+- Zolpidem 5mg ved behov (søvn)
+
+Sykmeldingshistorikk:
+Sep. 2019 – Jan. 2020: 100% (PTSD akuttfase)
+Jan. 2020 – Aug. 2020: 50% gradert (tilbake i jobb delvis, annen avdeling)
+Mars 2020 – Sep. 2020: Ny 100% sykemelding (ryggskade overlapper)
+Sep. 2020 – Sep. 2021: 100% (postoperativt forløp)
+Sep. 2021 – Dato: AAP 100%
+
+Total sammenhengende sykmelding/AAP: September 2019 – januar 2024 (4 år 4 måneder).
+
+=== NAV-MAPPE ===
+
+Ytelser:
+2019-2020: Sykepenger, 100% (6G-tak: grunnlag 680.000 kr/år)
+2020-2021: Sykepenger videreført etter ny diagnose
+2021–2024: Arbeidsavklaringspenger (AAP) 66% av 6G = 467.654 kr/år
+
+Arbeidsevnevurdering (NAV, november 2023):
+Konklusjon: Pasienten kan ikke returnere til intensivsykepleie.
+Kan muligens utføre lettere helsearbeid (kontoroppgaver, rådgivning) 50–60%.
+Anbefaler uføretrygd, søknadsprosess igangsatt.
+
+Uføresøknad innlevert: 15.11.2023. Under behandling.
+
+=== ARBEIDSGIVER – OUS ===
+OUS bekrefter arbeidsforhold fra 1997.
+Voldshendelse 2019 bekreftet i avvikssystem.
+Arbeidsulykke 2020 bekreftet i HMS-system.
+Pasienten har ikke hatt arbeidsforhold siden september 2020.
+Avtalt sluttdato: 01.02.2025 (med sluttpakke).
+
+=== FORSIKRINGSOPPLYSNINGER ===
+Yrkesskadeforsikring: If Skadeforsikring, polise YSF-2018-334521
+Gjelder begge arbeidsulykker (2019 og 2020).
+Kritisk sykdomsforsikring: Nei.
+Uføreforsikring privat: Storebrand, 200.000 kr (20% uføregrad terskel).
+
+=== PRE-EKSISTERENDE TILSTANDER ===
+2015: Episodisk migrene (ikke medisinert).
+2017: Hofteartrose venstre (mild, ikke operert). Røntgen OUS 2017.
+Ingen psykiatrisk historikk før 2019.
+Ingen ryggplager dokumentert i journal før 2020.
+L5-S1 degenerativ diskopati på MRI 2020: forenlig med aldersrelatert, ingen symptomer dokumentert.
+
+=== KOMMENTARER FRA ADVOKAT (Elden Advokatfirma) ===
+Pasientens advokat, Ingrid Solberg, har innlevert klage til If Skadeforsikring datert 10.01.2024.
+Påstand: Full yrkesskadeerstatning for begge ulykker, samt krav om uførekapital.
+NPE-klagen forventes å styrke den samlede VMI-vurderingen ved pasientskadeerstatning.
