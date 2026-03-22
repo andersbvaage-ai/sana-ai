@@ -17,7 +17,8 @@ function hideError() {
   document.getElementById('error-msg').classList.remove('visible');
 }
 
-form.addEventListener('submit', async () => {
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
   hideError();
   const email    = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value;
