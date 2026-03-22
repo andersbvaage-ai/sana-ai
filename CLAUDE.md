@@ -27,6 +27,7 @@ src/
     pdf/                        — parsePdf.mjs
 public/
   index.html                    — landingsside
+  hero-demo.js                  — animert 3-fase demo loop i hero (upload → analyzing → results)
   login.html / login.js         — innlogging
   cases.html / cases.js         — klagesak-verktøyet
   stats.html / stats.js         — statistikkpanel
@@ -133,15 +134,14 @@ Valgt retning: **Eleos/lys** — implementert i `index.html`.
 ## Gjenstående oppgaver
 
 - [ ] **Roter AWS-nøkler** i IAM (nøkler lå i .env på Dropbox)
-- [ ] **Journal AI-integrasjon** — branch `feature/journal-ai-integration` (worktree `.worktrees/journal-ai`). Task 1+2 done, Task 3–10 gjenstår. Plan: `docs/superpowers/plans/2026-03-19-journal-ai-integration.md`
+- [x] **Journal AI-integrasjon** — ferdig og merget til master via PR #1
 - [x] Inviter Morten til GitHub-repo (gjort)
 - [x] Bestem landingsside-retning — valgt Eleos/lys
 - [x] Mobiltest av landingsside — mobilnav implementert
+- [x] Landingsside hero-redesign — Eleos-stil, animert demo, metrics-strip, pill-badges (v28b)
 - [ ] E-post ved ny kontakthenvendelse (AWS SES)
-- [ ] Refresh-knapp på stats.html — dukker opp feil sted (ved siden av logoen i headeren), må debugges
 - [ ] AWS Secrets Manager for miljøvariabler (lav prioritet)
 - [ ] `/csp-audit` på alle nye HTML-filer før deploy
-- [ ] Landingsside — neste iterasjon (se under)
 
 **Juridisk (blokkerer reell bruk):**
 - [ ] DPA med AWS

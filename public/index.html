@@ -7,43 +7,77 @@
   <link rel="stylesheet" href="/site.css" />
   <style>
     /* ── HERO ── */
+    .hero-outer { background: var(--bg); }
     .hero {
-      background: var(--bg);
-      padding: 72px 48px 0;
-      display: flex; align-items: flex-end;
-      gap: 48px;
+      padding: 80px 48px 72px;
+      display: flex; align-items: center;
+      gap: 64px;
       max-width: 1200px; margin: 0 auto;
-      min-height: 560px;
+      min-height: 580px;
     }
     .hero-content {
-      flex: 0 0 50%;
-      padding-bottom: 72px;
-      display: flex; flex-direction: column; gap: 22px;
+      flex: 0 0 44%;
+      display: flex; flex-direction: column; gap: 20px;
     }
-    .hero-headline { font-size: 46px; font-weight: 700; line-height: 1.1; color: var(--primary); letter-spacing: -1.5px; }
-    .hero-sub { font-size: 20px; font-weight: 400; color: var(--teal); letter-spacing: -0.3px; }
-    .hero-body { font-size: 16px; color: var(--body); max-width: 440px; line-height: 1.75; }
-    .hero-actions { display: flex; gap: 12px; align-items: center; padding-top: 4px; }
-    .hero-visual { flex: 1; display: flex; align-items: flex-end; justify-content: flex-end; }
-
-    /* ── UI WINDOW ── */
-    .ui-window {
-      width: 100%; max-width: 460px;
-      background: #fff;
-      border: 1px solid rgba(27,58,75,0.12);
-      border-bottom: none;
-      border-radius: 14px 14px 0 0;
-      box-shadow: 0 -12px 48px rgba(27,58,75,0.12), 0 -2px 8px rgba(27,58,75,0.06);
+    .hero-headline { font-size: 80px; font-weight: 700; line-height: 1.1; color: var(--primary); letter-spacing: -3px; }
+    .hero-headline em { font-style: normal; color: var(--teal); }
+    .hero-sub { font-size: 19px; font-weight: 400; color: var(--teal); letter-spacing: -0.2px; line-height: 1.5; }
+    .hero-body { font-size: 16px; color: var(--body); max-width: 400px; line-height: 1.85; }
+    .hero-actions { display: flex; gap: 12px; align-items: center; padding-top: 8px; }
+    .hero-metrics { display: flex; align-items: center; padding-top: 8px; }
+    .hmet { display: flex; flex-direction: column; gap: 2px; }
+    .hmet-num { font-size: 21px; font-weight: 700; color: var(--primary); letter-spacing: -0.5px; line-height: 1; }
+    .hmet-lbl { font-size: 12px; color: var(--muted); line-height: 1.4; }
+    .hmet-div { width: 1px; height: 34px; background: var(--border); margin: 0 20px; flex-shrink: 0; }
+    .hero-visual {
+      flex: 1;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg-teal);
+      border-radius: 24px;
+      padding: 36px 28px 0;
+      align-self: stretch;
       overflow: hidden;
+    }
+
+    /* ── DEMO WINDOW ── */
+    .demo-win {
+      width: 100%; max-width: 480px;
+      background: #fff;
+      border: 1px solid rgba(27,58,75,0.10);
+      border-radius: 14px 14px 0 0;
+      border-bottom: none;
+      box-shadow: 0 -4px 32px rgba(27,58,75,0.10), 0 8px 24px rgba(27,58,75,0.08);
+      overflow: hidden;
+      user-select: none;
     }
     .ui-bar { background: var(--bg-warm); border-bottom: 1px solid var(--border); padding: 10px 16px; display: flex; align-items: center; gap: 7px; }
     .dot { width: 9px; height: 9px; border-radius: 50%; }
     .dot-r { background: #FF5F56; } .dot-y { background: #FFBD2E; } .dot-g { background: #27C93F; }
     .ui-bar-url { flex: 1; text-align: center; font-size: 11px; color: var(--muted); }
-    .ui-content { padding: 22px; display: flex; flex-direction: column; gap: 14px; }
+    .demo-scene { display: none; padding: 20px 22px; min-height: 258px; flex-direction: column; gap: 10px; animation: sceneFadeIn 0.35s ease; }
+    .demo-scene.active { display: flex; }
+    @keyframes sceneFadeIn { from { opacity: 0; } to { opacity: 1; } }
+    /* upload */
+    .demo-section-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+    .demo-file { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; transition: opacity 0.35s ease, transform 0.35s ease; }
+    .demo-file-icon { width: 26px; height: 26px; border-radius: 6px; background: var(--bg-teal); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .demo-file-icon svg { width: 13px; height: 13px; stroke: var(--primary); stroke-width: 2; fill: none; }
+    .demo-file-name { font-size: 12px; font-weight: 500; color: var(--ink); }
+    .demo-file-size { font-size: 11px; color: var(--muted); margin-left: auto; }
+    .demo-btn { margin-top: auto; padding: 10px; border-radius: 8px; background: var(--primary); color: #fff; font-size: 13px; font-weight: 600; text-align: center; transition: transform 0.15s, opacity 0.15s; }
+    .demo-btn.pulse { transform: scale(0.97); opacity: 0.85; }
+    /* analyzing */
+    .demo-analyzing-hd { font-size: 14px; font-weight: 600; color: var(--ink); display: flex; align-items: center; gap: 8px; }
+    .demo-spin { width: 15px; height: 15px; border: 2px solid var(--border); border-top-color: var(--teal); border-radius: 50%; animation: spin 0.75s linear infinite; flex-shrink: 0; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .demo-prog-track { height: 5px; background: var(--bg-teal); border-radius: 3px; overflow: hidden; }
+    .demo-prog-fill { height: 100%; width: 0%; background: var(--secondary); border-radius: 3px; transition: width 1.8s cubic-bezier(0.4,0,0.2,1); }
+    .demo-step { font-size: 12px; color: var(--muted); padding: 5px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 6px; transition: opacity 0.35s ease; }
+    .demo-step:last-child { border-bottom: none; }
+    .demo-step-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--teal); flex-shrink: 0; }
+    /* results */
     .ui-row { display: flex; align-items: flex-start; gap: 12px; }
     .ui-key { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); min-width: 80px; padding-top: 1px; }
-    .ui-val { font-size: 13px; font-weight: 500; color: var(--ink); }
     .ui-val-small { font-size: 12px; color: var(--body); line-height: 1.5; }
     .ui-sep { height: 1px; background: var(--border); }
     .chip { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 9999px; }
@@ -55,20 +89,20 @@
     .ui-bar-lbl { font-size: 11px; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; }
     .ui-bar-pct { font-size: 11px; font-weight: 700; color: var(--ink); }
     .ui-track { height: 4px; background: var(--bg-teal); border-radius: 2px; overflow: hidden; }
-    .ui-fill { height: 100%; width: 97%; background: var(--secondary); border-radius: 2px; }
-    .ui-status { padding: 12px 22px; border-top: 1px solid var(--border); background: var(--bg-warm); display: flex; align-items: center; gap: 8px; }
+    .ui-fill-anim { height: 100%; width: 0%; background: var(--secondary); border-radius: 2px; transition: width 1s ease 0.2s; }
+    .demo-fade { transition: opacity 0.4s ease, transform 0.4s ease; }
+    .ui-status { padding: 11px 22px; border-top: 1px solid var(--border); background: var(--bg-warm); display: flex; align-items: center; gap: 8px; }
     .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; animation: blink 2s infinite; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
     .status-txt { font-size: 11px; color: var(--muted); }
     .status-model { margin-left: auto; font-size: 10px; color: #c0cdd4; font-family: monospace; }
 
     /* ── CUSTOMERS ── */
-    .customers { background: var(--bg-teal); padding: 36px 0; overflow: hidden; }
-    .customers-label { text-align: center; font-size: 12px; font-weight: 600; letter-spacing: 0.10em; text-transform: uppercase; color: var(--primary-light2); margin-bottom: 20px; }
-    .ticker-wrap { overflow: hidden; mask-image: linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%); }
-    .ticker { display: flex; width: max-content; animation: scroll 28s linear infinite; }
-    @keyframes scroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-    .ticker-item { padding: 0 40px; font-size: 14px; font-weight: 600; color: var(--primary); opacity: 0.5; white-space: nowrap; border-right: 1px solid rgba(27,58,75,0.12); display: flex; align-items: center; }
+    .customers { background: var(--bg-teal); padding: 40px 48px; }
+    .customers-inner { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; align-items: center; }
+    .customers-label { font-size: 12px; font-weight: 600; letter-spacing: 0.10em; text-transform: uppercase; color: var(--primary-light2); }
+    .customers-pills { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+    .cust-pill { padding: 8px 20px; background: #fff; border: 1px solid rgba(27,58,75,0.10); border-radius: 9999px; font-size: 14px; font-weight: 500; color: var(--primary); opacity: 0.75; white-space: nowrap; }
 
     /* ── FEATURE SECTION ── */
     .feature-section { padding: 96px 48px; background: var(--bg); }
@@ -114,7 +148,9 @@
     .quote-block { display: flex; flex-direction: column; gap: 24px; }
     .quote-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); }
     .quote-text { font-size: 24px; font-weight: 400; line-height: 1.5; color: var(--ink); }
-    .quote-author { display: flex; flex-direction: column; gap: 2px; }
+    .quote-author { display: flex; align-items: center; gap: 14px; }
+    .quote-author-text { display: flex; flex-direction: column; gap: 2px; }
+    .quote-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; flex-shrink: 0; letter-spacing: 0.03em; }
     .quote-name { font-size: 14px; font-weight: 600; color: var(--ink); }
     .quote-role { font-size: 13px; color: var(--muted); }
     .quote-metrics { display: flex; flex-direction: column; gap: 24px; }
@@ -141,10 +177,10 @@
     .you-care-trust { font-size: 12px; color: rgba(255,255,255,0.25); margin-top: 8px; }
 
     @media (max-width: 900px) {
-      .hero { padding: 48px 24px 0; flex-direction: column; align-items: flex-start; min-height: auto; }
-      .hero-content { flex: none; padding-bottom: 40px; }
-      .hero-visual { width: 100%; justify-content: center; }
-      .ui-window { max-width: 100%; }
+      .hero { padding: 48px 24px 0; flex-direction: column; align-items: flex-start; min-height: auto; gap: 32px; }
+      .hero-content { flex: none; }
+      .hero-visual { width: 100%; border-radius: 16px; padding: 28px 20px 0; align-self: auto; }
+      .demo-win { max-width: 100%; }
       .feature-inner { gap: 40px; }
       .stats-inner { grid-template-columns: 1fr 1fr; gap: 0; }
       .stat { padding: 32px 24px; border-right: none; border-bottom: 1px solid var(--dark-bdr); }
@@ -160,8 +196,8 @@
       .you-care { padding: 64px 24px; }
     }
     @media (max-width: 600px) {
-      .hero { padding: 40px 16px 0; gap: 32px; }
-      .hero-headline { font-size: 32px; letter-spacing: -0.8px; }
+      .hero { padding: 40px 16px 0; gap: 24px; }
+      .hero-headline { font-size: 44px; letter-spacing: -1.5px; }
       .hero-sub { font-size: 17px; }
       .hero-actions { flex-direction: column; align-items: flex-start; }
       .section-title { font-size: 28px; }
@@ -174,63 +210,76 @@
       .you-care-headline { font-size: 28px; }
       .quote-text { font-size: 20px; }
       .qmet-num { font-size: 32px; }
-      .customers { padding: 24px 0; }
+      .customers { padding: 28px 16px; }
+      .hero-metrics { flex-wrap: wrap; gap: 12px; }
+      .hmet-div { display: none; }
     }
   </style>
 </head>
 <body>
 
+<div class="announce-bar">
+  <span>Se hvordan norske helseforsikringsselskaper halverer behandlingstiden</span>
+  <a href="/plattform.html">Les mer →</a>
+</div>
 <nav></nav>
 
 <!-- HERO -->
-<div style="background:var(--bg)">
+<div class="hero-outer">
 <div class="hero">
   <div class="hero-content">
     <span class="eyebrow">AI for helseforsikring</span>
-    <h1 class="hero-headline">AI-assistert klagesaksbehandling for norsk helseforsikring</h1>
-    <p class="hero-sub">Reduser behandlingstid med 70%+</p>
+    <h1 class="hero-headline">Reduser behandlingstid<br>med <em>70%+</em></h1>
+    <p class="hero-sub">AI-assistert klagesaksbehandling for norsk helseforsikring</p>
     <p class="hero-body">Sana AI gir leger et strukturert medisinsk standpunkt på sekunder — med full GDPR-compliance og uforanderlig revisjonslogg.</p>
     <div class="hero-actions">
       <a href="#hvordan" class="btn-pill btn-teal">Les mer</a>
       <a href="/kontakt.html" class="btn-pill btn-outline">Snakk med en ekspert</a>
     </div>
+    <div class="hero-metrics">
+      <div class="hmet"><span class="hmet-num">70%+</span><span class="hmet-lbl">kortere behandlingstid</span></div>
+      <div class="hmet-div"></div>
+      <div class="hmet"><span class="hmet-num">&lt;5s</span><span class="hmet-lbl">fra opplasting til standpunkt</span></div>
+      <div class="hmet-div"></div>
+      <div class="hmet"><span class="hmet-num">0</span><span class="hmet-lbl">pasientdata lagret eksternt</span></div>
+    </div>
   </div>
   <div class="hero-visual">
-    <div class="ui-window">
+    <div class="demo-win" id="heroDemo">
       <div class="ui-bar">
         <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
-        <span class="ui-bar-url">sana-ai.no/cases</span>
+        <span class="ui-bar-url">sana-ai.no/journal</span>
       </div>
-      <div class="ui-content">
-        <div class="ui-row">
-          <span class="ui-key">Klagesak</span>
-          <div>
-            <div class="ui-val">thorvaldsen-kne-2026.pdf</div>
-            <div class="ui-val-small">184 sider · 3 dokumenter · mottatt 14.03.2026</div>
-          </div>
-        </div>
-        <div class="ui-sep"></div>
-        <div class="ui-row">
-          <span class="ui-key">Standpunkt</span>
-          <div class="chip-row">
-            <span class="chip chip-green">✓ Støttes</span>
-            <span class="chip chip-amber">Kritisk prioritet</span>
-          </div>
-        </div>
-        <div class="ui-sep"></div>
-        <div class="ui-row">
-          <span class="ui-key">Begrunnelse</span>
-          <p class="ui-val-small">Multiple dokumenterte behandlingssvikt med kausalt sammenheng. To sakkyndige vurderer sannsynligheten som overveiende.</p>
-        </div>
-        <div class="ui-sep"></div>
-        <div class="ui-bar-wrap">
-          <div class="ui-bar-head">
-            <span class="ui-bar-lbl">Legeprioritering</span>
-            <span class="ui-bar-pct">97%</span>
-          </div>
-          <div class="ui-track"><div class="ui-fill"></div></div>
-        </div>
+
+      <!-- Scene 1: Upload -->
+      <div class="demo-scene active" id="demoUpload">
+        <div class="demo-section-label">Last opp dokumenter</div>
+        <div class="demo-file"><div class="demo-file-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><span class="demo-file-name">journal-thorvaldsen.pdf</span><span class="demo-file-size">2.1 MB</span></div>
+        <div class="demo-file"><div class="demo-file-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><span class="demo-file-name">nav-mappe-2024.pdf</span><span class="demo-file-size">4.7 MB</span></div>
+        <div class="demo-file"><div class="demo-file-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><span class="demo-file-name">legeerklaring.pdf</span><span class="demo-file-size">0.8 MB</span></div>
+        <div class="demo-file"><div class="demo-file-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><span class="demo-file-name">mandat.pdf</span><span class="demo-file-size">0.3 MB</span></div>
+        <div class="demo-btn" id="demoAnalyseBtn">Analyser dokumenter →</div>
       </div>
+
+      <!-- Scene 2: Analyzing -->
+      <div class="demo-scene" id="demoAnalyzing">
+        <div class="demo-analyzing-hd"><div class="demo-spin"></div>AI analyserer dokumenter...</div>
+        <div class="demo-prog-track"><div class="demo-prog-fill" id="demoProg"></div></div>
+        <div class="demo-step"><div class="demo-step-dot"></div>Fjerner PII fra 184 sider</div>
+        <div class="demo-step"><div class="demo-step-dot"></div>Leser journal og NAV-mappe</div>
+        <div class="demo-step"><div class="demo-step-dot"></div>Vurderer årsakssammenheng</div>
+        <div class="demo-step"><div class="demo-step-dot"></div>Beregner VMI og informasjonsgrunnlag</div>
+      </div>
+
+      <!-- Scene 3: Results -->
+      <div class="demo-scene" id="demoResult">
+        <div class="ui-row demo-fade"><span class="ui-key">Konklusjon</span><div class="chip-row"><span class="chip chip-green">✓ Årsakssammenheng</span><span class="chip chip-amber">VMI 7–10 %</span></div></div>
+        <div class="ui-sep demo-fade"></div>
+        <div class="ui-row demo-fade"><span class="ui-key">Analyse</span><p class="ui-val-small">WAD II etter trafikkulykke. Sannsynlig årsakssammenheng. Full arbeidsevne gjenvunnet. Endelig VMI-fastsettelse anbefales april 2024.</p></div>
+        <div class="ui-sep demo-fade"></div>
+        <div class="ui-bar-wrap demo-fade"><div class="ui-bar-head"><span class="ui-bar-lbl">Informasjonsgrunnlag</span><span class="ui-bar-pct">78%</span></div><div class="ui-track"><div class="ui-fill-anim" id="demoResultBar"></div></div></div>
+      </div>
+
       <div class="ui-status">
         <div class="status-dot"></div>
         <span class="status-txt">PII fjernet · Revisjonslogg oppdatert</span>
@@ -243,21 +292,15 @@
 
 <!-- CUSTOMERS -->
 <div class="customers">
-  <div class="customers-label">Brukt av Norges ledende helseforsikringsselskaper</div>
-  <div class="ticker-wrap">
-    <div class="ticker">
-      <span class="ticker-item">Storebrand Helse</span>
-      <span class="ticker-item">Gjensidige</span>
-      <span class="ticker-item">If Skadeforsikring</span>
-      <span class="ticker-item">Fremtind</span>
-      <span class="ticker-item">Tryg</span>
-      <span class="ticker-item">Codan</span>
-      <span class="ticker-item">Storebrand Helse</span>
-      <span class="ticker-item">Gjensidige</span>
-      <span class="ticker-item">If Skadeforsikring</span>
-      <span class="ticker-item">Fremtind</span>
-      <span class="ticker-item">Tryg</span>
-      <span class="ticker-item">Codan</span>
+  <div class="customers-inner">
+    <p class="customers-label">Bygget for norsk helseforsikring</p>
+    <div class="customers-pills">
+      <span class="cust-pill">Storebrand Helse</span>
+      <span class="cust-pill">Gjensidige Forsikring</span>
+      <span class="cust-pill">If Skadeforsikring</span>
+      <span class="cust-pill">Fremtind</span>
+      <span class="cust-pill">Tryg</span>
+      <span class="cust-pill">Codan</span>
     </div>
   </div>
 </div>
@@ -336,8 +379,11 @@
       <span class="quote-eyebrow">Fra en av våre leger</span>
       <p class="quote-text">"Sana AI fjerner ikke legens ansvar. Det fjerner <strong>støyen</strong> mellom dokumentene og avgjørelsen."</p>
       <div class="quote-author">
-        <span class="quote-name">Dr. K. Hansen</span>
-        <span class="quote-role">Overlege, klagesaksavdeling</span>
+        <div class="quote-avatar">KH</div>
+        <div class="quote-author-text">
+          <span class="quote-name">Dr. K. Hansen</span>
+          <span class="quote-role">Overlege, klagesaksavdeling</span>
+        </div>
       </div>
     </div>
     <div class="quote-metrics reveal reveal-delay-1">
@@ -379,5 +425,6 @@
 
 <footer></footer>
 <script src="/site.js"></script>
+<script src="/hero-demo.js"></script>
 </body>
 </html>

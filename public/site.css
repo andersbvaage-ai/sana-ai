@@ -46,15 +46,15 @@ nav {
   background: var(--bg-warm);
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center;
-  padding: 0 48px; gap: 48px;
+  padding: 0 48px;
 }
-.logo { font-size: 20px; font-weight: 700; color: var(--primary); letter-spacing: -0.4px; white-space: nowrap; }
+.logo { font-size: 22px; font-weight: 700; color: var(--primary); letter-spacing: -0.5px; white-space: nowrap; flex-shrink: 0; }
 .logo span { color: var(--secondary); }
-.nav-links { display: flex; gap: 32px; flex: 1; }
-.nav-links a { font-size: 15px; font-weight: 400; color: var(--body); transition: color 0.15s; white-space: nowrap; }
+.nav-links { position: absolute; left: 50%; transform: translateX(-50%); display: flex; gap: 36px; }
+.nav-links a { font-size: 16px; font-weight: 400; color: var(--body); transition: color 0.15s; white-space: nowrap; }
 .nav-links a:hover, .nav-links a.active { color: var(--primary); font-weight: 500; }
-.nav-right { display: flex; align-items: center; gap: 16px; margin-left: auto; }
-.nav-ghost { font-size: 15px; font-weight: 400; color: var(--body); transition: color 0.15s; }
+.nav-right { display: flex; align-items: center; gap: 16px; margin-left: auto; flex-shrink: 0; }
+.nav-ghost { font-size: 16px; font-weight: 400; color: var(--body); transition: color 0.15s; }
 .nav-ghost:hover { color: var(--primary); }
 
 /* ── BUTTONS ── */
@@ -80,6 +80,18 @@ nav {
 .text-center { text-align: center; }
 .section-header { text-align: center; display: flex; flex-direction: column; gap: 12px; align-items: center; }
 .section-header .section-body { text-align: center; }
+
+/* ── ANNOUNCE BAR ── */
+.announce-bar {
+  background: var(--primary);
+  padding: 10px 24px;
+  text-align: center;
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.announce-bar a { color: var(--teal-light); font-weight: 600; white-space: nowrap; transition: color 0.15s; }
+.announce-bar a:hover { color: #fff; }
 
 /* ── REVEAL ── */
 .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }

@@ -76,7 +76,15 @@
   const io = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: 0.1 });
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  const revealEls = document.querySelectorAll('.reveal');
+  revealEls.forEach(el => io.observe(el));
+  // Immediately reveal elements already in viewport on load
+  requestAnimationFrame(() => {
+    revealEls.forEach(el => {
+      const r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight && r.bottom >= 0) el.classList.add('in');
+    });
+  });
 
   // Smooth scroll for anchor links
   document.querySelectorAll('a[href^="#"]').forEach(a => {
