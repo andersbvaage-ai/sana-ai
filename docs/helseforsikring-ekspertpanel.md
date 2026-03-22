@@ -7,7 +7,9 @@ description: Use when analyzing what features give value to a health insurance c
 
 ## Oversikt
 
-Aktiver et tverrfaglig ekspertpanel på 8 spesialister. Analyser helseforsikriingsverdi fra alle perspektiver og syntetiser til konkrete funksjonsanbefalinger, prioriteringer og salgsargumenter.
+Aktiver et tverrfaglig ekspertpanel på 9 spesialister. Analyser helseforsikringsverdi fra alle perspektiver og syntetiser til konkrete funksjonsanbefalinger, prioriteringer og salgsargumenter.
+
+**Viktig:** Ekspertene skal ikke bare bekrefte hverandre — de skal utfordre hverandres standpunkter. Hver ekspert har et `**Men:**`-felt med én konkret innvending mot det andre eksperter anbefaler. Dette gir realistisk tverrfaglig spenning.
 
 **Kontekst:** Norske helseforsikringsselskaper (If, Storebrand, Gjensidige, Codan, Vertikal Helseassistanse) håndterer invaliditets- og ulykkesforsikringskrav der rådgivende leger må vurdere medisinske journaler og gi faglige anbefalinger om dekning. Prosessen er i dag manuell, tidkrevende og inkonsistent.
 
@@ -43,6 +45,8 @@ Aktiver et tverrfaglig ekspertpanel på 8 spesialister. Analyser helseforsikriin
 - Varsling om inkonsistens: pasienten sier én ting, journalen sier noe annet
 - Oversikt over relevante ICD-10-koder og hva de betyr for dette forsikringsvilkåret
 
+**Men:** Notatutkast bekymrer henne. Hvis AI foreslår en konklusjon, er det fare for at hun leser journalen for å bekrefte forslaget — ikke for å vurdere kritisk. Det er anchor bias, og det kan føre til at hun overser noe avgjørende. Hun vil ha AI-sammendrag uten konklusjon, ikke ferdigformulerte anbefalinger.
+
 ---
 
 ### 2. Henrik Moe — Skadebehandler (forsikringsselskap, ikke medisinsk utdannet)
@@ -60,6 +64,8 @@ Aktiver et tverrfaglig ekspertpanel på 8 spesialister. Analyser helseforsikriin
 - Standardiserte meldinger til kunde om status og mangler
 - Estimert behandlingstid basert på sakskompleksitet
 
+**Men:** Han er skeptisk til estimert behandlingstid — hvis systemet sier "2 dager" og legen bruker 5, skaper det urealistiske forventninger hos kunden og merarbeid for ham når han må forklare forsinkelsen.
+
 ---
 
 ### 3. Dr. Bjørn Strand — Medisinsk fagsjef (forsikringsselskapet)
@@ -76,6 +82,8 @@ Aktiver et tverrfaglig ekspertpanel på 8 spesialister. Analyser helseforsikriin
 - Anonymisert "liknende saker"-funksjon: "I 78% av WAD II-saker ble X besluttet"
 - Søkbar beslutningsdatabase internt
 - Opplæringsgrunnlag: nye rådgivende leger kan se hva erfarne besluttet og hvorfor
+
+**Men:** "Liknende saker"-funksjonen er et tveegget sverd. Hvis den viser at 78% besluttet X, kan det normalisere feilaktige beslutninger i stedet for å løfte kvaliteten. Han vil ikke ha en funksjon som automatiserer inkonsistens på skalanivå.
 
 ---
 
@@ -96,6 +104,8 @@ Aktiver et tverrfaglig ekspertpanel på 8 spesialister. Analyser helseforsikriin
 - Databehandleravtale-maler og DPIA-dokumentasjon ferdig utarbeidet
 - Rollebasert tilgang: skadebehandler ser ikke full journal
 
+**Men:** Automatiske notatutkast fra AI klassifiseres sannsynligvis som et høyrisiko-system under EU AI Act artikkel 6 — dette krever konformitetsvurdering, registrering i EU-database og løpende overvåking. Det er ikke en showstopper, men det er 6–12 måneder med ekstraarbeid selskapet ikke har budsjettert for.
+
 ---
 
 ### 5. Sofie Andersen — Pasient/forsikringstaker (38 år, WAD II-krav)
@@ -111,12 +121,16 @@ Aktiver et tverrfaglig ekspertpanel på 8 spesialister. Analyser helseforsikriin
 - Automatisk bekreftelse: "Vi har mottatt disse dokumentene, mangler X"
 - Statusoppdatering underveis
 - Avslagsbrev på forståelig norsk med konkret begrunnelse
-- Klageveiledn: "Hvis du er uenig, kan du..."
+- Klageveiledning: "Hvis du er uenig, kan du..."
+
+**Men:** Hun representerer kundeopplevelsen If selger videre. Raskere behandling er bra — men hvis systemet produserer mer konsistente avslag uten at begrunnelsene er mer forståelige, har hun ikke vunnet noe.
 
 ---
 
 ### 6. Tor Helgesen — Helseøkonom (konsulentselskap)
 **Perspektiv:** Kost/nytte for forsikringsselskapet.
+
+**Kalibrering:** Hvis brukeren oppgir antall krav/år og antall rådgivende leger, bruk disse tallene i alle beregninger — ikke eksempeltallene under.
 
 **Tallene som betyr noe:**
 - En rådgivende lege koster 1,5–2,2 MNOK/år inkl. sosiale kostnader
@@ -135,6 +149,8 @@ Aktiver et tverrfaglig ekspertpanel på 8 spesialister. Analyser helseforsikriin
 - Konkret pilotdesign med målbare KPIer (tid per sak, klageandel, NPS)
 - Referansekunder eller studier fra liknende markeder (UK, Sverige, Danmark)
 - Pris per sak (per-use) eller abonnement — hva er forutsigbart?
+
+**Men:** ROI-beregningen forutsetter at tidsbesparelsen faktisk realiseres som kapasitetsgevinst — ikke bare at legene bruker den frigjorte tiden på andre ting uten at saksvolum øker. Han vil ha en klar plan for hvordan gevinsten tas ut i praksis.
 
 ---
 
@@ -156,6 +172,8 @@ Aktiver et tverrfaglig ekspertpanel på 8 spesialister. Analyser helseforsikriin
 - "Mangler SSO — IT vil ikke administrere separate brukere"
 - "Ingen API = manuell kopiering = ny feilkilde"
 
+**Men:** SSO-godkjenning via IT-security review tar typisk 3–6 måneder i store forsikringsselskaper, uavhengig av hvor god løsningen er teknisk. "Lav inngangsterskel" i piloten gjelder ikke for IT — de har egne prosesser og vil ikke akseptere unntak.
+
 ---
 
 ### 8. Pål Rønning — Salg og produktsjef (helseforsikring)
@@ -175,6 +193,27 @@ Aktiver et tverrfaglig ekspertpanel på 8 spesialister. Analyser helseforsikriin
 
 **Pitch han vil ha:**
 > "Sana-AI hjelper rådgivende leger lese journaler 40% raskere, genererer strukturerte fagnotater og gir full audit trail. Piloten vår hos [selskap] reduserte behandlingstid per sak fra 75 til 43 minutter. Legen bestemmer alltid — AI forbereder."
+
+**Men:** Uten referansekunder i Norden er det vanskelig å få gjennom innkjøpsgodkjenning. If vil spørre "hvem bruker dette allerede?" — og "ingen ennå" er et reelt hinder, ikke bare et salgsutfordring.
+
+---
+
+### 9. Erik Vold — Skeptisk rådgivende lege (8 år, Storebrand)
+**Rolle:** Erfaren rådgivende lege som er åpen for verktøy som faktisk hjelper, men som har sett mange "AI-løsninger" komme og gå. Ikke fiendtlig — men krevende.
+
+**Bekymringene hans:**
+- Anchor bias: Hvis AI foreslår en konklusjon, leser han journalen for å bekrefte — ikke for å vurdere kritisk. Det er en reell faglig risiko.
+- Ansvarsplassering: Hvis AI overser en pre-eksisterende tilstand og han signerer notatet, hvem har ansvaret? Journalen hans? AI-leverandøren? Forsikringsselskapet?
+- Deskilling: Bruker han AI-sammendrag lenge nok, mister han evnen til å lese en kompleks journal fra bunnen. Det er ikke et hypotetisk problem — det skjer med radiologer som bruker CAD-verktøy.
+- Komplekse saker: For enkle WAD II-saker kan AI hjelpe. For fleresykelighetstilfeller der alt henger i hop, er han redd AI-sammendraget gir ham falsk trygghet.
+
+**Hva som ville overbevist ham:**
+- AI presenterer funn og kronologi — ikke konklusjoner. Han trekker konklusjonen selv.
+- Tydelig "usikker"-flagging: systemet sier eksplisitt når det ikke vet, i stedet for å glatte over.
+- Pilotdata som viser at feilrate ikke øker med AI-støtte (ikke bare at tid per sak reduseres).
+- Mulighet til å slå av AI-forslaget for komplekse saker.
+
+**Men:** Han innser at den manuelle prosessen heller ikke er feilfri — han overser ting selv fordi han er sliten etter sak 35 av 40. Et godt AI-verktøy som presenterer funn uten å konkludere er strengt tatt bedre enn ingen støtte.
 
 ---
 
@@ -238,8 +277,9 @@ Funksjoner som krever mer data, regulatorisk avklaring eller modenhet i markedet
 
 ## Outputformat
 
-Presenter alltid analysen slik:
-1. **Ekspertoppsummering** — ett avsnitt per ekspert med deres viktigste innsikt
+Presenter alltid analysen i denne strukturen — også når spesifikke spørsmål stilles. Svar på spørsmålene *innenfor* strukturen, ikke i stedet for den:
+
+1. **Ekspertoppsummering** — ett avsnitt per ekspert med deres viktigste innsikt og viktigste motstand (`**Men:**`)
 2. **Funksjonsmatrise** med A/B/C/D-kategorier
 3. **Topp 5 quick wins** — lav kompleksitet, høy verdi
 4. **Salgsargumenter** — 3–5 setninger forsikringsselskapet vil høre
