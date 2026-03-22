@@ -28,7 +28,7 @@ journalRouter.post(
   upload.fields([
     { name: 'journal', maxCount: 1 },
     { name: 'nav', maxCount: 1 },
-    { name: 'legeerklæring', maxCount: 1 },
+    { name: 'legeerklaring', maxCount: 1 },
     { name: 'mandat', maxCount: 1 },
     { name: 'samlet', maxCount: 1 },
     { name: 'zip', maxCount: 1 },
@@ -55,10 +55,13 @@ journalRouter.post(
       } else if (files?.samlet?.[0]) {
         session.documents.samlet = await parseBuffer(files.samlet[0].buffer, files.samlet[0].originalname);
       } else {
-        for (const field of ['journal', 'nav', 'legeerklæring', 'mandat'] as const) {
+        for (const field of ['journal', 'nav', 'mandat'] as const) {
           if (files?.[field]?.[0]) {
             session.documents[field] = await parseBuffer(files[field][0].buffer, files[field][0].originalname);
           }
+        }
+        if (files?.legeerklaring?.[0]) {
+          session.documents['legeerklæring'] = await parseBuffer(files.legeerklaring[0].buffer, files.legeerklaring[0].originalname);
         }
       }
 

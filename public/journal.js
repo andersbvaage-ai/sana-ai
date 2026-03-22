@@ -27,7 +27,7 @@ const userNameEl = document.getElementById('user-name');
 const fileInputs = {
   journal:      { input: document.getElementById('file-journal'),       wrapper: document.getElementById('wrapper-journal'),       label: document.getElementById('label-journal') },
   nav:          { input: document.getElementById('file-nav'),           wrapper: document.getElementById('wrapper-nav'),           label: document.getElementById('label-nav') },
-  'legeerklæring':{ input: document.getElementById('file-legeerklaring'), wrapper: document.getElementById('wrapper-legeerklaring'), label: document.getElementById('label-legeerklaring') },
+  legeerklaring: { input: document.getElementById('file-legeerklaring'), wrapper: document.getElementById('wrapper-legeerklaring'), label: document.getElementById('label-legeerklaring') },
   mandat:       { input: document.getElementById('file-mandat'),        wrapper: document.getElementById('wrapper-mandat'),        label: document.getElementById('label-mandat') },
   samlet:       { input: document.getElementById('file-samlet'),        wrapper: document.getElementById('wrapper-samlet'),        label: document.getElementById('label-samlet') },
   zip:          { input: document.getElementById('file-zip'),           wrapper: document.getElementById('wrapper-zip'),           label: document.getElementById('label-zip') },
