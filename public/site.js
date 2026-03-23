@@ -7,7 +7,7 @@
       <a href="/sikkerhet.html">Sikkerhet</a>
       <a href="/om-oss.html">Om oss</a>
     </div>
-    <div class="nav-right">
+    <div class="nav-right" id="navRight">
       <a href="/login.html" class="nav-ghost">Logg inn</a>
       <a href="/kontakt.html" class="btn-pill btn-teal">Be om demo</a>
     </div>
@@ -27,6 +27,17 @@
     <a href="/kontakt.html" class="btn-pill btn-teal">Be om demo</a>
   `;
   document.querySelector('nav').insertAdjacentElement('afterend', mobileMenu);
+
+  // Auth state in nav
+  const token = localStorage.getItem('sana_token');
+  const user = JSON.parse(localStorage.getItem('sana_user') || 'null');
+  if (token) {
+    const navRight = document.getElementById('navRight');
+    navRight.innerHTML = `
+      <span class="nav-user">${user?.name ?? 'Innlogget'}</span>
+      <a href="/journal.html" class="btn-pill btn-teal">Åpne verktøyet</a>
+    `;
+  }
 
   // Mark active nav links
   const path = window.location.pathname.replace(/\/$/, '') || '/index.html';
