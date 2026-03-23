@@ -59,7 +59,13 @@
   setText('[data-lc="problem.headingEm"]', c.problem?.headingEm);
   if (c.problem?.body) {
     const el = document.querySelector('[data-lc="problem.body"]');
-    if (el) el.innerHTML = c.problem.body.replace(/\n\n/g, '<br><br>');
+    if (el) {
+      el.textContent = '';
+      c.problem.body.split(/\n\n/).forEach((part, i) => {
+        if (i > 0) { el.appendChild(document.createElement('br')); el.appendChild(document.createElement('br')); }
+        el.appendChild(document.createTextNode(part));
+      });
+    }
   }
 
   // Kontakt

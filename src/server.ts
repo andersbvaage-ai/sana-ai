@@ -2,15 +2,13 @@ import { createApp } from './app';
 import { config } from './config';
 import { initCaseStore } from './services/cases/caseStore';
 
-const app = createApp();
+async function start() {
+  const app = createApp();
 
-initCaseStore().catch(err => {
-  console.error('[server] Feil ved initialisering av caseStore:', err);
-  process.exit(1);
-});
+  await initCaseStore();
 
-app.listen(config.server.port, () => {
-  console.log(`
+  const server = app.listen(config.server.port, () => {
+    console.log(`
 ╔══════════════════════════════════════════════════════════╗
 ║          Sana AI – Integrasjonsmodul                     ║
 ╠══════════════════════════════════════════════════════════╣
@@ -27,4 +25,22 @@ Endepunkter:
   GET  /api/admin/status      (krever x-admin-token)
   POST /api/admin/review-outcome
 `);
+  });
+
+  process.on('SIGTERM', () => {
+    console.log('[server] SIGTERM mottatt, avslutter gracefully...');
+    server.close(() => {
+      console.log('[server] Alle tilkoblinger lukket.');
+      process.exit(0);
+    });
+    setTimeout(() => {
+      console.error('[server] Tvungen avslutning etter 30s.');
+      process.exit(1);
+    }, 30_000);
+  });
+}
+
+start().catch(err => {
+  console.error('[server] Feil ved oppstart:', err);
+  process.exit(1);
 });

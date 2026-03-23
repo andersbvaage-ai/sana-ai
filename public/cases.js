@@ -198,10 +198,18 @@ async function openCase(id) {
   const c = await r.json();
 
   const titleEl = document.getElementById('detail-title');
-  titleEl.innerHTML = `
-    <span id="title-text">${escHtml(c.tittel ?? c.filnavn)}</span>
-    <button id="title-edit-btn" title="Rediger tittel" style="background:none;border:none;cursor:pointer;padding:0 0 0 6px;opacity:0.5;color:white;font-size:13px;line-height:1;" onclick="startTitleEdit('${c.id}', ${JSON.stringify(c.tittel ?? c.filnavn)})">✎</button>
-  `;
+  titleEl.textContent = '';
+  const titleSpan = document.createElement('span');
+  titleSpan.id = 'title-text';
+  titleSpan.textContent = c.tittel ?? c.filnavn;
+  const editBtn = document.createElement('button');
+  editBtn.id = 'title-edit-btn';
+  editBtn.title = 'Rediger tittel';
+  editBtn.style.cssText = 'background:none;border:none;cursor:pointer;padding:0 0 0 6px;opacity:0.5;color:white;font-size:13px;line-height:1;';
+  editBtn.textContent = '✎';
+  editBtn.addEventListener('click', () => startTitleEdit(c.id, c.tittel ?? c.filnavn));
+  titleEl.appendChild(titleSpan);
+  titleEl.appendChild(editBtn);
   document.getElementById('export-pdf-btn').style.display = 'block';
   document.getElementById('delete-case-btn').style.display = 'block';
   document.getElementById('detail-summary').textContent = c.analyse.sammendrag;
@@ -238,7 +246,7 @@ async function openCase(id) {
   const done = document.getElementById('assess-done');
   if (c.status === 'vurdert' && c.legeVurdering) {
     done.classList.add('visible');
-    done.innerHTML = `✓ Sist lagret ${formatTime(c.legeVurdering.vurdertTidspunkt)}`;
+    done.textContent = `✓ Sist lagret ${formatTime(c.legeVurdering.vurdertTidspunkt)}`;
   } else {
     done.classList.remove('visible');
   }
