@@ -143,9 +143,13 @@ Valgt retning: **Eleos/lys** — implementert i `index.html`.
 - [x] Bestem landingsside-retning — valgt Eleos/lys
 - [x] Mobiltest av landingsside — mobilnav implementert
 - [x] Landingsside hero-redesign — Eleos-stil, animert demo, metrics-strip, pill-badges (v28b)
+- [x] Pilot-klar for forsikringspitch — demo-modus, forsikringsseksjon, onboarding, CTA (v29b)
+- [x] Rådgivende lege-validering — feedback, PDF-eksport, redigerbar rapport, hjelpepanel (v29b)
+- [x] Nav viser innlogget tilstand — brukernavn + «Åpne verktøyet» (v30b)
+- [ ] **Rekruttere rådgivende lege** for validering av verktøyet
+- [ ] **Book forsikringsmøte** — If Forsikring er identifisert som første kandidat
 - [ ] E-post ved ny kontakthenvendelse (AWS SES)
 - [ ] AWS Secrets Manager for miljøvariabler (lav prioritet)
-- [ ] `/csp-audit` på alle nye HTML-filer før deploy
 
 **Juridisk (blokkerer reell bruk):**
 - [ ] DPA med AWS
