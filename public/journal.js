@@ -3,6 +3,7 @@
 // ── State ────────────────────────────────────────────────────────────────────
 let isSending = false;
 let isAnalysing = false;
+let selectedRating = null;
 
 function authHeaders() {
   const token = localStorage.getItem('sana_token');
@@ -12,6 +13,12 @@ function authHeaders() {
 // ── DOM refs ─────────────────────────────────────────────────────────────────
 const uploadBtn = document.getElementById('upload-btn');
 const uploadStatus = document.getElementById('upload-status');
+const demoBtn = document.getElementById('demo-btn');
+const demoBadge = document.getElementById('demo-badge');
+const onboardingToggle = document.getElementById('onboarding-toggle');
+const onboardingBody = document.getElementById('onboarding-body');
+const onboardingChevron = document.getElementById('onboarding-chevron');
+const onboardingDemoLink = document.getElementById('onboarding-demo-link');
 const chatInput = document.getElementById('chat-input');
 const sendBtn = document.getElementById('send-btn');
 const conversationHistory = document.getElementById('conversation-history');
@@ -22,6 +29,19 @@ const statusDot = document.getElementById('status-dot');
 const statusText = document.getElementById('status-text');
 const logoutBtn = document.getElementById('logout-btn');
 const userNameEl = document.getElementById('user-name');
+const feedbackPanel = document.getElementById('feedback-panel');
+const feedbackBtns = document.querySelectorAll('.feedback-btn');
+const feedbackCommentArea = document.getElementById('feedback-comment-area');
+const feedbackComment = document.getElementById('feedback-comment');
+const feedbackSend = document.getElementById('feedback-send');
+const feedbackConfirm = document.getElementById('feedback-confirm');
+const eksportBtn = document.getElementById('eksport-pdf-btn');
+const printDato = document.getElementById('print-dato');
+const printLegeNavn = document.getElementById('print-lege-navn');
+const editBadge = document.getElementById('edit-badge');
+const helpToggle = document.getElementById('help-toggle');
+const helpBody = document.getElementById('help-body');
+const helpChevron = document.getElementById('help-chevron');
 
 // File inputs and wrappers
 const fileInputs = {
@@ -95,6 +115,39 @@ async function uploadDocuments() {
 function showUploadStatus(msg, type) {
   uploadStatus.textContent = msg;
   uploadStatus.className = type ? type : '';
+}
+
+// ── Demo case ─────────────────────────────────────────────────────────────────
+async function loadDemoCase() {
+  demoBtn.disabled = true;
+  showUploadStatus('Laster demo-sak\u2026', '');
+  try {
+    const zipRes = await fetch('/demo-data/case-01.zip');
+    if (!zipRes.ok) throw new Error('Kunne ikke laste demo-fil');
+    const blob = await zipRes.blob();
+    const formData = new FormData();
+    formData.append('zip', new File([blob], 'case-01-komplett.zip', { type: 'application/zip' }));
+    const res = await fetch('/api/journal/last-opp', {
+      method: 'POST',
+      headers: authHeaders(),
+      body: formData,
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: 'Ukjent feil' }));
+      throw new Error(err.error || `HTTP ${res.status}`);
+    }
+    const data = await res.json().catch(() => ({}));
+    showUploadStatus('Demo-sak lastet.', 'success');
+    demoBadge.textContent = 'Demo: WAD-sak \u2014 Whiplash \u00B7 Syntetiske data';
+    demoBadge.classList.remove('hidden');
+    setDocsLoaded(true);
+    enableChat();
+    kjørAutoAnalyse(data.harMandat, data.erSamlet);
+  } catch (err) {
+    showUploadStatus(`Feil: ${err.message}`, 'error');
+  } finally {
+    demoBtn.disabled = false;
+  }
 }
 
 // ── Status indicator ──────────────────────────────────────────────────────────
@@ -370,6 +423,8 @@ Vurder VMI etter relevante tabeller. For hvert aktuelt skadetilfelle:
 async function kjørAnalyseTilDokument(tekst) {
   if (isAnalysing) return;
   isAnalysing = true;
+  onboardingBody.classList.add('hidden');
+  onboardingChevron.classList.add('rotated');
 
   const rapportEl = document.getElementById('rapport-dokument');
   const tittelEl  = document.getElementById('rapport-tittel');
@@ -418,8 +473,18 @@ async function kjørAnalyseTilDokument(tekst) {
             const finalEl = document.createElement('div');
             finalEl.innerHTML = renderMarkdown(renTekst);
             rapportEl.appendChild(finalEl);
+            finalEl.contentEditable = 'true';
+            finalEl.setAttribute('spellcheck', 'true');
+            finalEl.classList.add('editable-rapport');
+            editBadge.classList.remove('hidden');
             if (tittelEl) tittelEl.textContent = 'Ferdig';
             loadFacts();
+            eksportBtn.classList.remove('hidden');
+            feedbackPanel.classList.remove('hidden');
+            selectedRating = null;
+            feedbackBtns.forEach(b => b.classList.remove('selected'));
+            feedbackCommentArea.classList.add('hidden');
+            feedbackConfirm.classList.add('hidden');
           } else if (currentEvent === 'error') {
             rapportEl.innerHTML = `<p style="color:#991B1B">\u274C ${escHtml(data.message || 'Ukjent feil')}</p>`;
           }
@@ -478,6 +543,13 @@ async function resetSession() {
   if (tittelEl) tittelEl.textContent = '';
 
   showUploadStatus('', '');
+  demoBadge.classList.add('hidden');
+  demoBadge.textContent = '';
+  feedbackPanel.classList.add('hidden');
+  feedbackConfirm.classList.add('hidden');
+  selectedRating = null;
+  eksportBtn.classList.add('hidden');
+  editBadge.classList.add('hidden');
 }
 
 // ── Load session status on page load ─────────────────────────────────────────
@@ -515,6 +587,15 @@ function initAuth() {
 
 // ── Event listeners ───────────────────────────────────────────────────────────
 uploadBtn.addEventListener('click', uploadDocuments);
+demoBtn.addEventListener('click', loadDemoCase);
+
+onboardingToggle.addEventListener('click', () => {
+  const isOpen = !onboardingBody.classList.contains('hidden');
+  onboardingBody.classList.toggle('hidden', isOpen);
+  onboardingChevron.classList.toggle('rotated', isOpen);
+});
+
+onboardingDemoLink.addEventListener('click', loadDemoCase);
 
 sendBtn.addEventListener('click', () => {
   sendMessage(chatInput.value.trim());
@@ -534,6 +615,44 @@ logoutBtn.addEventListener('click', () => {
   localStorage.removeItem('sana_token');
   localStorage.removeItem('sana_user');
   window.location.href = '/login.html';
+});
+
+feedbackBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    selectedRating = btn.dataset.rating;
+    feedbackBtns.forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    feedbackCommentArea.classList.remove('hidden');
+  });
+});
+
+feedbackSend.addEventListener('click', async () => {
+  if (!selectedRating) return;
+  feedbackSend.disabled = true;
+  try {
+    await fetch('/api/journal/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...authHeaders() },
+      body: JSON.stringify({ rating: selectedRating, comment: feedbackComment.value }),
+    });
+  } catch { /* ignore */ }
+  feedbackCommentArea.classList.add('hidden');
+  feedbackBtns.forEach(b => b.classList.remove('selected'));
+  feedbackConfirm.classList.remove('hidden');
+  feedbackSend.disabled = false;
+});
+
+eksportBtn.addEventListener('click', () => {
+  const user = JSON.parse(localStorage.getItem('sana_user') || 'null');
+  if (printLegeNavn) printLegeNavn.textContent = user?.name ?? '';
+  if (printDato) printDato.textContent = new Date().toLocaleDateString('nb-NO', { year:'numeric', month:'long', day:'numeric' });
+  window.print();
+});
+
+helpToggle.addEventListener('click', () => {
+  const isOpen = !helpBody.classList.contains('hidden');
+  helpBody.classList.toggle('hidden', isOpen);
+  helpChevron.classList.toggle('rotated', !isOpen);
 });
 
 // ── Init ──────────────────────────────────────────────────────────────────────

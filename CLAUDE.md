@@ -63,6 +63,11 @@ public/
 
 ## Deploy-prosess (produksjon)
 
+Deploy kjøres automatisk via **AWS CodeBuild** (`buildspec.yml` i roten). CodeBuild bygger Docker-image, pusher til ECR og deployer til Elastic Beanstalk med versjonslabel basert på timestamp + commit SHA.
+
+Trigger CodeBuild manuelt ved behov via AWS Console eller webhook.
+
+**Manuell deploy (fallback):**
 ```bash
 # 1. Build og push Docker-image
 docker build --no-cache -t sana-ai .
@@ -94,15 +99,14 @@ Før deploy — gå gjennom denne listen:
 
 - [ ] `tsc --noEmit` passerer
 - [ ] `/csp-audit` kjørt på alle endrede HTML-filer
-- [ ] `docker build` lokalt uten feil
-- [ ] Deploy-sekvens fra deploy-prosess-seksjonen over kjørt
+- [ ] `docker build` lokalt uten feil (eller trigger CodeBuild)
 
 ---
 
 ## GitHub
 
 Repo: https://github.com/andersbvaage-ai/sana-ai (privat)
-Inviter Morten som collaborator når GitHub-brukernavn er kjent.
+Morten Dobloug er collaborator (`morten@inca.no`).
 
 **OBS:** AWS-nøkler i `.env` bør roteres — filen har ligget på Dropbox.
 

@@ -24,6 +24,9 @@ cases.json
 # Playwright
 .playwright-mcp/
 
+# Design references and screenshots
+design-refs/
+
 # OS
 .DS_Store
 Thumbs.db
@@ -39,3 +42,7 @@ Thumbs.db
 
 # Git worktrees
 .worktrees/
+
+# Allow demo data
+!public/demo-data/
+!public/demo-data/*

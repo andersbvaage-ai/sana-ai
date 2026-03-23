@@ -1,3 +1,13 @@
+const params = new URLSearchParams(window.location.search);
+if (params.get('emne') === 'pilot') {
+  const meldingEl = document.getElementById('melding');
+  if (meldingEl && !meldingEl.value) {
+    meldingEl.value = 'Vi er interessert i å starte en pilot av Sana AI. Kan dere ta kontakt for å avtale en gjennomgang?';
+  }
+  const titelEl = document.querySelector('.form-card-title');
+  if (titelEl) titelEl.textContent = 'Start pilot';
+}
+
 const submitBtn = document.getElementById('submitBtn');
 const formError = document.getElementById('formError');
 const formContent = document.getElementById('formContent');

@@ -337,10 +337,29 @@
     .upload-btn:hover { background: var(--fjord-2); }
     .upload-btn:disabled { background: var(--muted); cursor: not-allowed; }
 
+    /* ── DEMO MODE ── */
+    .demo-divider { display:flex; align-items:center; gap:10px; margin:12px 0 10px; }
+    .demo-divider::before,.demo-divider::after { content:''; flex:1; height:1px; background:var(--border); }
+    .demo-divider span { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.8px; color:var(--muted); }
+    .demo-btn { background:transparent; color:var(--fjord); border:1.5px solid var(--fjord); }
+    .demo-btn:hover { background:var(--gold-lt); border-color:var(--gold); color:var(--fjord); }
+    .demo-badge { font-size:11px; background:var(--gold-lt); border:1px solid var(--gold); border-radius:var(--radius-sm); padding:5px 10px; color:var(--fjord); margin-top:8px; }
+    .hidden { display:none !important; }
+
+    /* ── ONBOARDING PANEL ── */
+    .onboarding-panel { grid-column: 1; grid-row: 3; }
+    .onboarding-header { cursor: pointer; }
+    .onboarding-chevron { margin-left: auto; transition: transform 0.2s; }
+    .onboarding-chevron.rotated { transform: rotate(-180deg); }
+    .onboarding-steps { padding-left: 20px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: var(--ink-2); line-height: 1.6; }
+    .onboarding-steps li { margin-bottom: 0; }
+    .onboarding-tip { font-size: 12px; color: var(--muted); margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+    .onboarding-demo-link { background: none; border: none; color: var(--fjord); font-weight: 600; font-size: 12px; cursor: pointer; text-decoration: underline; padding: 0; font-family: inherit; }
+
     /* ── CHAT SECTION ── */
     .chat-section {
       grid-column: 1 / -1;
-      grid-row: 4;
+      grid-row: 5;
       display: flex;
       flex-direction: column;
     }
@@ -427,7 +446,7 @@
     /* ── SIDE PANEL ── */
     .side-panel {
       grid-column: 2;
-      grid-row: 2 / 4;
+      grid-row: 2 / 5;
       display: flex;
       flex-direction: column;
       gap: 16px;
@@ -547,7 +566,7 @@
     /* ── RAPPORT SECTION ── */
     .rapport-section {
       grid-column: 1;
-      grid-row: 3;
+      grid-row: 4;
     }
 
     .rapport-header {
@@ -648,6 +667,55 @@
     }
 
     .rapport-empty svg { opacity: 0.3; }
+
+    /* ── FEEDBACK PANEL ── */
+    .feedback-panel { padding: 16px 36px 24px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; }
+    .feedback-label { font-size: 13px; font-weight: 600; color: var(--ink-2); }
+    .feedback-buttons { display: flex; gap: 8px; }
+    .feedback-btn { padding: 7px 16px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: inherit; cursor: pointer; background: white; color: var(--ink-2); transition: all 0.15s; font-weight: 500; }
+    .feedback-btn:hover { border-color: var(--fjord); color: var(--fjord); }
+    .feedback-btn.selected { background: var(--gold-lt); border-color: var(--gold); color: var(--fjord); font-weight: 600; }
+    .feedback-textarea { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: inherit; resize: vertical; min-height: 72px; color: var(--ink); }
+    .feedback-textarea:focus { outline: none; border-color: var(--fjord); }
+    .feedback-send-btn { padding: 8px 18px; background: var(--fjord); color: white; border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; align-self: flex-start; }
+    .feedback-send-btn:hover { background: var(--fjord-2); }
+    .feedback-confirm { font-size: 13px; color: var(--green); font-weight: 500; }
+
+    /* ── EKSPORT / PRINT ── */
+    .eksport-btn { padding: 6px 14px; background: var(--cream); border: 1.5px solid var(--border); color: var(--fjord); font-size: 12px; font-weight: 600; font-family: inherit; border-radius: var(--radius-sm); cursor: pointer; transition: all 0.15s; }
+    .eksport-btn:hover { border-color: var(--fjord); background: var(--gold-lt); }
+    .print-header { display: none; }
+    @media print {
+      header, .upload-section, .onboarding-panel, .side-panel, .chat-section, #feedback-panel { display: none !important; }
+      main { display: block !important; padding: 0 !important; max-width: 100% !important; }
+      .rapport-section { grid-column: 1 !important; box-shadow: none !important; border: none !important; }
+      #rapport-dokument { font-size: 12pt !important; padding: 0 !important; }
+      .print-header { display: block !important; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid #1B3A4B; }
+      .print-header-title { font-family: Georgia, serif; font-size: 18pt; font-weight: 700; color: #1B3A4B; }
+      .print-header-meta { font-size: 10pt; color: #6B7280; margin-top: 4px; }
+    }
+
+    /* ── EDIT BADGE ── */
+    #edit-badge { font-size: 11px; font-weight: 600; color: var(--gold); background: var(--gold-lt); border: 1px solid var(--gold); border-radius: var(--radius-sm); padding: 3px 8px; letter-spacing: 0.3px; }
+    .editable-rapport:focus { outline: 2px solid var(--gold); border-radius: 4px; }
+    .editable-rapport { min-height: 100px; }
+
+    /* ── HELP PANEL ── */
+    .help-header { cursor: pointer; }
+    .help-chevron { margin-left: auto; transition: transform 0.2s; }
+    .help-chevron.rotated { transform: rotate(-180deg); }
+    .help-body { display: flex; flex-direction: column; gap: 12px; }
+    .help-body.hidden { display: none !important; }
+    .help-item { display: flex; gap: 10px; align-items: flex-start; }
+    .help-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+    .help-dot.risk { background: #DC2626; }
+    .help-dot.complexity { background: #CA8A04; }
+    .help-dot.info { background: #16A34A; }
+    .help-name { font-size: 12px; font-weight: 600; color: var(--ink-2); }
+    .help-desc { font-size: 12px; color: var(--muted); line-height: 1.5; margin-top: 2px; }
+    .help-docs { border-top: 1px solid var(--border); padding-top: 12px; }
+    .help-docs-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-bottom: 6px; }
+    .help-docs-list { padding-left: 18px; font-size: 12px; color: var(--ink-2); line-height: 1.7; }
   </style>
 </head>
 <body>
@@ -745,12 +813,64 @@
       </div>
 
       <button class="upload-btn" id="upload-btn">Last opp dokumenter</button>
+      <div class="demo-divider"><span>eller</span></div>
+      <button class="upload-btn demo-btn" id="demo-btn">Last inn demo-sak</button>
+      <div id="demo-badge" class="demo-badge hidden"></div>
       <div id="upload-status"></div>
+    </div>
+  </section>
+
+  <!-- Onboarding panel -->
+  <section class="card onboarding-panel" id="onboarding-panel">
+    <div class="card-header onboarding-header" id="onboarding-toggle">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--fjord)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span class="card-title">Kom i gang</span>
+      <svg class="onboarding-chevron" id="onboarding-chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="card-body" id="onboarding-body">
+      <ol class="onboarding-steps">
+        <li><strong>Last opp dokumenter</strong> — pasientjournal, NAV-mappe, legeerklæring og/eller mandat (PDF, DOCX, TXT). Eller bruk ZIP-arkiv med alle filene samlet.</li>
+        <li><strong>Analysen starter automatisk</strong> — AI gjennomgår dokumentene og gir medisinsk standpunkt, VMI-vurdering og årsakssammenheng.</li>
+        <li><strong>Still oppfølgingsspørsmål</strong> — chat-funksjonen lar deg spørre om spesifikke deler av saken.</li>
+      </ol>
+      <p class="onboarding-tip">Ingen dokumenter tilgjengelig? <button class="onboarding-demo-link" id="onboarding-demo-link">Prøv demo-saken</button></p>
     </div>
   </section>
 
   <!-- Side panel -->
   <aside class="side-panel">
+    <!-- Help panel -->
+    <section class="card" id="help-panel">
+      <div class="card-header help-header" id="help-toggle">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--fjord)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span class="card-title">Hva betyr skårene?</span>
+        <svg class="help-chevron" id="help-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="card-body help-body hidden" id="help-body">
+        <div class="help-item">
+          <span class="help-dot risk"></span>
+          <div><span class="help-name">Svindelrisiko</span><p class="help-desc">Høy verdi indikerer motstridende opplysninger eller uvanlig saksforløp. 0 = ingen indikasjon.</p></div>
+        </div>
+        <div class="help-item">
+          <span class="help-dot complexity"></span>
+          <div><span class="help-name">Kompleksitet</span><p class="help-desc">Høy verdi betyr mange diagnoser, lange forløp eller uklare årsakssammenhenger. 0 = enkel sak.</p></div>
+        </div>
+        <div class="help-item">
+          <span class="help-dot info"></span>
+          <div><span class="help-name">Informasjonsgrunnlag</span><p class="help-desc">Høy verdi betyr godt dokumentasjonsgrunnlag. Lav verdi = AI mangler tilstrekkelig info for sikker konklusjon.</p></div>
+        </div>
+        <div class="help-docs">
+          <p class="help-docs-title">Dokumentrekkefølge</p>
+          <ol class="help-docs-list">
+            <li>Pasientjournal — viktigst</li>
+            <li>NAV-mappe — trygdehistorikk</li>
+            <li>Legeerklæring — styrker VMI</li>
+            <li>Mandat — AI svarer direkte på spørsmålene</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
     <!-- Scores -->
     <section class="card">
       <div class="card-header">
@@ -847,13 +967,33 @@
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--fjord)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
         <span class="card-title">Analyseresultat</span>
       </div>
-      <span id="rapport-tittel"></span>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button id="eksport-pdf-btn" class="eksport-btn hidden">Eksporter PDF</button>
+        <span id="edit-badge" class="hidden">&#9998; Redigerbar</span>
+        <span id="rapport-tittel"></span>
+      </div>
+    </div>
+    <div class="print-header">
+      <div class="print-header-title">Sana<em>AI</em> — Journalanalyse</div>
+      <div class="print-header-meta"><span id="print-dato"></span> &middot; <span id="print-lege-navn"></span></div>
     </div>
     <div id="rapport-dokument">
       <div class="rapport-empty">
         <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         <span>Analyserapporten vises her etter at dokumenter er lastet opp.</span>
       </div>
+    </div>
+    <div id="feedback-panel" class="feedback-panel hidden">
+      <span class="feedback-label">Var analysen nyttig?</span>
+      <div class="feedback-buttons" id="feedback-buttons">
+        <button class="feedback-btn" id="feedback-pos" data-rating="pos">&#128077; Ja</button>
+        <button class="feedback-btn" id="feedback-neg" data-rating="neg">&#128078; Nei / mangler noe</button>
+      </div>
+      <div id="feedback-comment-area" class="hidden">
+        <textarea id="feedback-comment" class="feedback-textarea" placeholder="Hva manglet eller var feil? (valgfritt)"></textarea>
+        <button class="feedback-send-btn" id="feedback-send">Send tilbakemelding</button>
+      </div>
+      <span id="feedback-confirm" class="feedback-confirm hidden">Takk for tilbakemeldingen.</span>
     </div>
   </section>
 </main>

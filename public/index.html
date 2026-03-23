@@ -159,6 +159,18 @@
     .qmet-num em { font-style: normal; color: var(--teal); }
     .qmet-desc { font-size: 14px; color: var(--body); line-height: 1.5; }
 
+    /* ── INSURANCE VALUE PROP ── */
+    .insurance-value { padding: 96px 48px; background: var(--bg-warm); border-top: 1px solid var(--border); }
+    .insurance-inner { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 48px; align-items: center; }
+    .ins-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; width: 100%; }
+    .ins-card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 32px 28px; display: flex; flex-direction: column; gap: 8px; transition: box-shadow 0.2s, transform 0.2s; }
+    .ins-card:hover { box-shadow: 0 6px 24px rgba(27,58,75,0.09); transform: translateY(-2px); }
+    .ins-num { font-size: 56px; font-weight: 700; color: var(--primary); letter-spacing: -2px; line-height: 1; }
+    .ins-label { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.3; }
+    .ins-desc { font-size: 14px; color: var(--body); line-height: 1.65; margin-top: 4px; }
+    .ins-cta { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .ins-cta-note { font-size: 13px; color: var(--muted); }
+
     /* ── COMPLIANCE ── */
     .compliance { background: var(--bg-teal); padding: 64px 48px; border-top: 1px solid rgba(27,58,75,0.07); }
     .compliance-inner { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px; align-items: center; }
@@ -192,6 +204,8 @@
       .how { padding: 64px 24px; }
       .stats { padding: 48px 24px; }
       .testimonial { padding: 64px 24px; }
+      .insurance-value { padding: 64px 24px; }
+      .ins-grid { grid-template-columns: 1fr; }
       .compliance { padding: 48px 24px; }
       .you-care { padding: 64px 24px; }
     }
@@ -394,6 +408,38 @@
   </div>
 </section>
 
+<!-- INSURANCE VALUE PROP -->
+<section id="forsikring" class="insurance-value">
+  <div class="insurance-inner">
+    <div class="section-header reveal">
+      <p class="eyebrow">For forsikringsselskaper</p>
+      <h2 class="section-title">Fra timer til sekunder per sak</h2>
+      <p class="section-body">Rådgivende leger behandler 40–80 klagesaker i måneden. Sana AI halverer ikke bare behandlingstiden — det standardiserer kvaliteten.</p>
+    </div>
+    <div class="ins-grid">
+      <div class="ins-card reveal">
+        <div class="ins-num">70%+</div>
+        <div class="ins-label">kortere behandlingstid per sak</div>
+        <p class="ins-desc">Legen bruker 10 minutter i stedet for 2 timer. Dokumentgjennomgang skalerer ikke — AI gjør det.</p>
+      </div>
+      <div class="ins-card reveal">
+        <div class="ins-num">80%</div>
+        <div class="ins-label">av AI-forslag akseptert uten endring</div>
+        <p class="ins-desc">Strukturert output gjør det enklere å si ja enn å skrive fra bunnen.</p>
+      </div>
+      <div class="ins-card reveal">
+        <div class="ins-num">0</div>
+        <div class="ins-label">pasientdata forlater Norge</div>
+        <p class="ins-desc">AWS eu-north-1. PII strippes lokalt. GDPR Art. 9-arkitektur.</p>
+      </div>
+    </div>
+    <div class="ins-cta reveal">
+      <a href="/kontakt.html?emne=pilot" class="btn-pill btn-navy">Start pilot &#8594;</a>
+      <p class="ins-cta-note">Typisk pilotperiode: 4–6 uker · Vi setter opp og trener systemet</p>
+    </div>
+  </div>
+</section>
+
 <!-- COMPLIANCE -->
 <section class="compliance">
   <div class="compliance-inner">
@@ -418,7 +464,7 @@
     <span class="eyebrow eyebrow-on-dark">Legen bryr seg. Vi bryr oss.</span>
     <h2 class="you-care-headline">Fornøyde leger.<br><em>Fornøyde pasienter.</em><br>Fornøyde ledere.</h2>
     <p class="you-care-sub">Helseforsikringslegene bruker for mye tid på administrasjon — i stedet for medisinsk vurdering. Sana AI fjerner støyen.</p>
-    <a href="/kontakt.html" class="btn-pill btn-teal btn-pill-lg">Be om demo</a>
+    <a href="/kontakt.html?emne=pilot" class="btn-pill btn-teal btn-pill-lg">Start pilot</a>
     <p class="you-care-trust">AWS eu-north-1 · GDPR Art. 9 · PII fjernes automatisk · Legen godkjenner alltid</p>
   </div>
 </section>

@@ -146,6 +146,26 @@ journalRouter.post('/fakta', async (req: Request, res: Response): Promise<void> 
   res.json(facts);
 });
 
+// ── Feedback ─────────────────────────────────────────────────────────────────
+journalRouter.post('/feedback', (req: Request, res: Response) => {
+  const userId = getUserId(req);
+  const { rating, comment } = req.body as { rating?: string; comment?: string };
+  if (rating !== 'pos' && rating !== 'neg') {
+    res.status(400).json({ error: 'Ugyldig rating', code: 'INVALID_INPUT' });
+    return;
+  }
+  const session = getSession(userId);
+  console.log(JSON.stringify({
+    event: 'JOURNAL_FEEDBACK',
+    userId,
+    rating,
+    comment: comment?.slice(0, 500) ?? '',
+    scores: session?.scores ?? null,
+    timestamp: new Date().toISOString(),
+  }));
+  res.json({ ok: true });
+});
+
 // ── Reset session ───────────────────────────────────────────────────────────
 journalRouter.post('/reset', (req: Request, res: Response) => {
   resetSession(getUserId(req));
