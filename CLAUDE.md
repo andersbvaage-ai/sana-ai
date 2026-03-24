@@ -13,26 +13,24 @@ AI-drevet klagesak-analyseverktøy for helsesektoren. Lege laster opp dokumenter
 
 ```
 src/
-  app.ts                        — Express-app, middleware-oppsett
-  server.ts                     — inngangspunkt
-  config/                       — env-vars og typer
-  middleware/                   — authenticate, requireAuth, rateLimit, killSwitch
-  routes/                       — admin, auth, cases, contact, content, export, stats, summarize
+  app.ts / server.ts
+  config/
+  middleware/             — authenticate, requireAuth, rateLimit, killSwitch
+  routes/                — admin, auth, cases, contact, content, export, stats, summarize
   services/
-    ai/                         — bedrockClient.ts (AWS Bedrock, Claude Sonnet, eu-north-1)
-    auth/                       — userStore, tokenValidator, behandlerVerifier
-    cases/                      — caseStore (S3), caseAnalyzer, extractText
-    content/                    — contentStore (S3-backed, in-memory cache)
-    scrubbing/                  — inputScrubber (PII-fjerning før AI)
-    pdf/                        — parsePdf.mjs
+    ai/                  — bedrockClient.ts (AWS Bedrock, Claude Sonnet, eu-north-1)
+    auth/                — userStore, tokenValidator, behandlerVerifier
+    cases/               — caseStore (S3), caseAnalyzer, extractText
+    content/             — contentStore (S3-backed, in-memory cache)
+    scrubbing/           — inputScrubber (PII-fjerning før AI)
+    pdf/                 — parsePdf.mjs
 public/
-  index.html                    — landingsside
-  hero-demo.js                  — animert 3-fase demo loop i hero (upload → analyzing → results)
-  login.html / login.js         — innlogging
-  cases.html / cases.js         — klagesak-verktøyet
-  stats.html / stats.js         — statistikkpanel
-  content-admin.html            — CMS-admin
-  landing-content.js            — henter og appliserer CMS-innhold via data-lc-attributter
+  index.html / hero-demo.js   — landingsside + animert demo-loop
+  login.html / login.js
+  cases.html / cases.js       — klagesak-verktøyet
+  stats.html / stats.js
+  content-admin.html
+  landing-content.js          — henter CMS-innhold via data-lc-attributter
 ```
 
 **Stack:** Node.js + TypeScript, Express, Helmet (CSP), AWS Bedrock, S3, Elastic Beanstalk, ECR, Docker
@@ -61,27 +59,21 @@ public/
 
 ---
 
-## Deploy-prosess (produksjon)
+## Landingsside — infrastruktur
 
-Deploy kjøres automatisk via **AWS CodeBuild** (`buildspec.yml` i roten). CodeBuild bygger Docker-image, pusher til ECR og deployer til Elastic Beanstalk med versjonslabel basert på timestamp + commit SHA.
+- `public/site.css` — delte stiler (nav, footer, knapper, tokens, reveal-animasjoner)
+- `public/site.js` — rendrer nav + footer dynamisk, hamburger-meny, IntersectionObserver
+- Alle nye HTML-sider linker til disse: `<link rel="stylesheet" href="/site.css">` og `<script src="/site.js"></script>`
 
-Trigger CodeBuild manuelt ved behov via AWS Console eller webhook.
+**Sider:** `index.html` · `plattform.html` · `sikkerhet.html` · `om-oss.html` · `kontakt.html`
 
-**Manuell deploy (fallback):**
-```bash
-# 1. Build og push Docker-image
-docker build --no-cache -t sana-ai .
-docker tag sana-ai 480437358794.dkr.ecr.eu-north-1.amazonaws.com/sana-ai:latest
-docker push 480437358794.dkr.ecr.eu-north-1.amazonaws.com/sana-ai:latest
+---
 
-# 2. Pakk og last opp til S3
-powershell Compress-Archive -Path Dockerrun.aws.json -DestinationPath deploy.zip -Force
-aws s3 cp deploy.zip s3://sana-ai-eb-deployments-480437358794/deploy-vXX.zip
+## Deploy
 
-# 3. Deploy til Elastic Beanstalk
-aws elasticbeanstalk create-application-version --application-name sana-ai --version-label vXX --source-bundle S3Bucket=sana-ai-eb-deployments-480437358794,S3Key=deploy-vXX.zip
-aws elasticbeanstalk update-environment --environment-name sana-ai-prod --version-label vXX
-```
+Deploy kjøres automatisk via **AWS CodeBuild** (`buildspec.yml`). Trigger via AWS Console eller webhook.
+
+**Manuell fallback:** Se `/deploy`-skill.
 
 **AWS-ressurser (eu-north-1):**
 - EB environment: `sana-ai-prod`
@@ -95,57 +87,15 @@ aws elasticbeanstalk update-environment --environment-name sana-ai-prod --versio
 
 ## Klar for produksjon
 
-Før deploy — gå gjennom denne listen:
-
 - [ ] `tsc --noEmit` passerer
 - [ ] `/csp-audit` kjørt på alle endrede HTML-filer
 - [ ] `docker build` lokalt uten feil (eller trigger CodeBuild)
 
 ---
 
-## GitHub
-
-Repo: https://github.com/andersbvaage-ai/sana-ai (privat)
-Morten Dobloug er collaborator (`morten@inca.no`).
-
-**OBS:** AWS-nøkler i `.env` bør roteres — filen har ligget på Dropbox.
-
----
-
-## Landingsside — designretning
-
-Valgt retning: **Eleos/lys** — implementert i `index.html`.
-- System font stack (ikke Google Fonts)
-- Lys hero (hvit bakgrunn, mørk tekst)
-- Teal pill-knapper (`#93C7C7`)
-- Pastell feature-cards
-- Nav: kremfarget (`#f7f5e7`)
-
-**Felles infrastruktur:**
-- `public/site.css` — delte stiler (nav, footer, knapper, tokens, reveal-animasjoner)
-- `public/site.js` — rendrer nav + footer dynamisk, hamburger-meny, IntersectionObserver
-- Alle nye HTML-sider linker til disse — legg til `<link rel="stylesheet" href="/site.css">` og `<script src="/site.js"></script>` på nye sider.
-
-**Sidestruktur:**
-- `index.html` — forside
-- `plattform.html` — produktside
-- `sikkerhet.html` — compliance
-- `om-oss.html` — team og visjon
-- `kontakt.html` — kontaktskjema (erstatter modal, bruker `/api/contact`)
-
----
-
 ## Gjenstående oppgaver
 
 - [ ] **Roter AWS-nøkler** i IAM (nøkler lå i .env på Dropbox)
-- [x] **Journal AI-integrasjon** — ferdig og merget til master via PR #1
-- [x] Inviter Morten til GitHub-repo (gjort)
-- [x] Bestem landingsside-retning — valgt Eleos/lys
-- [x] Mobiltest av landingsside — mobilnav implementert
-- [x] Landingsside hero-redesign — Eleos-stil, animert demo, metrics-strip, pill-badges (v28b)
-- [x] Pilot-klar for forsikringspitch — demo-modus, forsikringsseksjon, onboarding, CTA (v29b)
-- [x] Rådgivende lege-validering — feedback, PDF-eksport, redigerbar rapport, hjelpepanel (v29b)
-- [x] Nav viser innlogget tilstand — brukernavn + «Åpne verktøyet» (v30b)
 - [ ] **Rekruttere rådgivende lege** for validering av verktøyet
 - [ ] **Book forsikringsmøte** — If Forsikring er identifisert som første kandidat
 - [ ] E-post ved ny kontakthenvendelse (AWS SES)

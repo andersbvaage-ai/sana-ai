@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Internt — Sana AI</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1B3A4B;
+      --gold: #B8935A;
+      --teal: #4a8a8a;
+      --bg: #FAF8F4;
+      --white: #fff;
+      --ink: #1B3A4B;
+      --body: #4A5C6A;
+      --muted: #7A8D99;
+      --border: rgba(27,58,75,0.10);
+      --red: #c0392b;
+      --red-bg: #FFF0ED;
+      --gold-bg: #FFF4DC;
+      --teal-bg: #E2F0F0;
+      --green: #2e7d52;
+      --green-bg: #e8f5ee;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--ink); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    /* ── HEADER ── */
+    .header { background: var(--navy); padding: 20px 40px; display: flex; align-items: center; justify-content: space-between; }
+    .header-logo { font-size: 18px; font-weight: 700; color: #fff; }
+    .header-logo span { color: var(--gold); }
+    .header-badge { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); padding: 5px 12px; border-radius: 9999px; border: 1px solid rgba(255,255,255,0.15); }
+
+    /* ── LAYOUT ── */
+    .container { max-width: 1000px; margin: 0 auto; padding: 40px; display: flex; flex-direction: column; gap: 32px; }
+
+    /* ── CARD ── */
+    .card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .card-head { padding: 18px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+    .card-title { font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+    .card-body { padding: 8px 0; }
+
+    /* ── TODO LIST ── */
+    .todo-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 24px; border-bottom: 1px solid var(--border); }
+    .todo-item:last-child { border-bottom: none; }
+    .todo-check { width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--border); flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; }
+    .todo-check.done { background: var(--teal); border-color: var(--teal); }
+    .todo-check.done svg { display: block; }
+    .todo-check svg { display: none; width: 10px; height: 10px; stroke: #fff; stroke-width: 2.5; fill: none; }
+    .todo-text { flex: 1; }
+    .todo-label { font-size: 14px; font-weight: 500; color: var(--ink); }
+    .todo-label.done { text-decoration: line-through; color: var(--muted); font-weight: 400; }
+    .todo-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .tag { display: inline-flex; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; white-space: nowrap; margin-left: 8px; }
+        .tag-red { background: var(--red-bg); color: var(--red); }
+    .tag-gold { background: var(--gold-bg); color: #8a6020; }
+    .tag-teal { background: var(--teal-bg); color: var(--teal); }
+    .tag-green { background: var(--green-bg); color: var(--green); }
+
+    /* ── SPØRSMÅL ── */
+    .qa-item { padding: 16px 24px; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .qa-item:last-child { border-bottom: none; }
+    .qa-q { font-size: 14px; font-weight: 500; color: var(--ink); }
+    .qa-a { font-size: 13px; color: var(--body); line-height: 1.6; }
+    .qa-phase { padding: 10px 24px; background: var(--bg); border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); }
+
+    /* ── GAPS ── */
+    .gap-item { padding: 13px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 12px; }
+    .gap-item:last-child { border-bottom: none; }
+    .gap-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+    .gap-dot.red { background: var(--red); }
+    .gap-dot.gold { background: var(--gold); }
+    .gap-text { font-size: 14px; color: var(--body); }
+    .gap-text strong { color: var(--ink); font-weight: 600; }
+
+    /* ── NEXT STEPS ── */
+    .next-item { padding: 13px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 14px; }
+    .next-item:last-child { border-bottom: none; }
+    .next-num { width: 24px; height: 24px; border-radius: 50%; background: var(--navy); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .next-text { font-size: 14px; color: var(--body); }
+    .next-text strong { color: var(--ink); }
+
+    @media (max-width: 700px) {
+      .container { padding: 20px; }
+      .qa-item { grid-template-columns: 1fr; gap: 6px; }
+      .header { padding: 16px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">Sana <span>AI</span></div>
+  <span class="header-badge">Internt — ikke del</span>
+</div>
+
+<div class="container">
+
+  <!-- TODO -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title">Todo</div>
+    </div>
+    <div class="card-body">
+      <div class="todo-item">
+        <div class="todo-check"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7.5 8,3"/></svg></div>
+        <div class="todo-text">
+          <div class="todo-label">Roter AWS-nøkler i IAM<span class="tag tag-red">Kritisk</span></div>
+          <div class="todo-sub">Nøkler lå i .env på Dropbox — bør gjøres umiddelbart</div>
+        </div>
+      </div>
+      <div class="todo-item">
+        <div class="todo-check"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7.5 8,3"/></svg></div>
+        <div class="todo-text">
+          <div class="todo-label">Send systemdokumentasjon til advokat<span class="tag tag-red">Kritisk</span></div>
+          <div class="todo-sub">docs/personvern-systemdokumentasjon.docx er klar for ekstern juridisk vurdering</div>
+        </div>
+      </div>
+      <div class="todo-item">
+        <div class="todo-check"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7.5 8,3"/></svg></div>
+        <div class="todo-text">
+          <div class="todo-label">Signer DPA med AWS<span class="tag tag-red">Kritisk</span></div>
+          <div class="todo-sub">Via AWS Console → AWS GDPR Data Processing Addendum. Kreves før reelle pasientdata</div>
+        </div>
+      </div>
+      <div class="todo-item">
+        <div class="todo-check"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7.5 8,3"/></svg></div>
+        <div class="todo-text">
+          <div class="todo-label">Gjennomfør DPIA<span class="tag tag-red">Kritisk</span></div>
+          <div class="todo-sub">GDPR Art. 35 — med juridisk bistand etter advokatgjennomgang</div>
+        </div>
+      </div>
+      <div class="todo-item">
+        <div class="todo-check"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7.5 8,3"/></svg></div>
+        <div class="todo-text">
+          <div class="todo-label">Rekruttere rådgivende lege for validering<span class="tag tag-gold">Høy</span></div>
+          <div class="todo-sub">Faglig validering av verktøyet — kontakt identifisert, ikke fulgt opp</div>
+        </div>
+      </div>
+      <div class="todo-item">
+        <div class="todo-check"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7.5 8,3"/></svg></div>
+        <div class="todo-text">
+          <div class="todo-label">Book møte med If Forsikring<span class="tag tag-gold">Høy</span></div>
+          <div class="todo-sub">Første kandidat for forsikringspitch — cold outreach</div>
+        </div>
+      </div>
+      <div class="todo-item">
+        <div class="todo-check"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7.5 8,3"/></svg></div>
+        <div class="todo-text">
+          <div class="todo-label">E-postvarsling ved ny kontakthenvendelse<span class="tag tag-teal">Normal</span></div>
+          <div class="todo-sub">AWS SES — henvendelser fra kontakt.html sendes ikke på e-post i dag</div>
+        </div>
+      </div>
+      <div class="todo-item">
+        <div class="todo-check"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7.5 8,3"/></svg></div>
+        <div class="todo-text">
+          <div class="todo-label">Fjern __DEV__ passord-bypass i userStore.ts<span class="tag tag-red">Kritisk</span></div>
+          <div class="todo-sub">Plaintext dev-bypass kan brukes i produksjon</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IF FORSIKRING — MØTEFORBEREDELSE -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title">If Forsikring — Møteforberedelse (Cold/Demo)</div>
+    </div>
+    <div class="card-body">
+      <div class="qa-phase">Tidlig i møtet — de avklarer premissene</div>
+      <div class="qa-item">
+        <div class="qa-q">«Hvem bruker dette allerede?»</div>
+        <div class="qa-a">«Vi er i pilotfase. Vil du snakke direkte med legen som har testet det?» — ikke si "dere kan bli first mover".</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q">«Hva gjør systemet — og hva gjør det ikke?»</div>
+        <div class="qa-a">Vær presis: genererer sammendrag og notat-utkast. Sier aldri avslå/innvilg. Legen konkluderer alltid.</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q">«Legen bestemmer fortsatt — ikke sant?»</div>
+        <div class="qa-a">Ubetinget ja. AI presenterer funn, legen signerer. Ingen unntak.</div>
+      </div>
+
+      <div class="qa-phase">Midtveis — de evaluerer risiko</div>
+      <div class="qa-item">
+        <div class="qa-q">«Hva skjer med dataene? Hvor lagres de?»</div>
+        <div class="qa-a">AWS eu-north-1 (Stockholm). PII scrubbes lokalt før AI-sending. Zero retention i Bedrock. Send dem til /personvern.html.</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q">«Hva med GDPR og EU AI Act?»</div>
+        <div class="qa-a">Vær ærlig om DPA/DPIA-status. Pek til sana-ai.no/personvern.html og /apenhet.html. Ikke bagatelliser.</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q">«Hva om AI-en tar feil — hvem har ansvaret?»</div>
+        <div class="qa-a">Legen signerer og har faglig ansvar. AI er et forberedelsesverktøy, ikke et beslutningssystem.</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q">«Trenes AI-modellen på dataene våre?»</div>
+        <div class="qa-a">Nei. Bedrock har zero data retention. Ingen fine-tuning på kundedata.</div>
+      </div>
+
+      <div class="qa-phase">Sent — de tenker implementering</div>
+      <div class="qa-item">
+        <div class="qa-q">«Integrerer dette med systemene vi har?»</div>
+        <div class="qa-a">Ikke i fase 1. Pilot kjøres standalone — ingen EPJ-kobling nødvendig.</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q">«Hva koster det?»</div>
+        <div class="qa-a">Styr mot scope-avklaring: «La oss definere pilot-scope, så setter vi pris på det.»</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q">«Hva er neste steg?»</div>
+        <div class="qa-a">Ha svaret klart: legemøte for faglig validering, deretter scope-dokument. Be om dette konkret i møtet.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÅPNE COMPLIANCE-GAPS -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title">Åpne compliance-gaps</div>
+    </div>
+    <div class="card-body">
+      <div class="gap-item">
+        <div class="gap-dot red"></div>
+        <div class="gap-text"><strong>DPA med AWS</strong> — ikke signert. Blokkerer reell bruk med pasientdata.</div>
+      </div>
+      <div class="gap-item">
+        <div class="gap-dot red"></div>
+        <div class="gap-text"><strong>DPIA</strong> — ikke gjennomført. GDPR Art. 35 krever dette ved ny teknologi + helseopplysninger.</div>
+      </div>
+      <div class="gap-item">
+        <div class="gap-dot red"></div>
+        <div class="gap-text"><strong>Rettslig grunnlag Art. 9</strong> — uavklart. Hvilket Art. 9(2)-grunnlag gjelder for AI-analysen?</div>
+      </div>
+      <div class="gap-item">
+        <div class="gap-dot red"></div>
+        <div class="gap-text"><strong>Advokatgjennomgang</strong> — ikke gjort. Systemdokumentasjon er klar, men ikke sendt.</div>
+      </div>
+      <div class="gap-item">
+        <div class="gap-dot red"></div>
+        <div class="gap-text"><strong>Informasjonsplikt til klagere</strong> — ikke implementert. GDPR Art. 13/14 + EU AI Act Art. 50.</div>
+      </div>
+      <div class="gap-item">
+        <div class="gap-dot gold"></div>
+        <div class="gap-text"><strong>EU AI Act klassifisering</strong> — sannsynligvis høyrisiko (Annex III pkt. 5b). Ikke formelt vurdert.</div>
+      </div>
+      <div class="gap-item">
+        <div class="gap-dot gold"></div>
+        <div class="gap-text"><strong>CORS ikke eksplisitt begrenset</strong> — alle origins tillatt som standard.</div>
+      </div>
+      <div class="gap-item">
+        <div class="gap-dot gold"></div>
+        <div class="gap-text"><strong>cases.json i klartekst</strong> — sensitiv data ikke kryptert på disk.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NESTE STEG -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title">Neste steg — prioritert</div>
+    </div>
+    <div class="card-body">
+      <div class="next-item">
+        <div class="next-num">1</div>
+        <div class="next-text"><strong>Roter AWS-nøkler</strong> — gjøres i AWS IAM Console. 15 min arbeid.</div>
+      </div>
+      <div class="next-item">
+        <div class="next-num">2</div>
+        <div class="next-text"><strong>Send systemdokumentasjon til advokat</strong> — docs/personvern-systemdokumentasjon.docx er klar.</div>
+      </div>
+      <div class="next-item">
+        <div class="next-num">3</div>
+        <div class="next-text"><strong>Signer DPA med AWS</strong> — via AWS Console. Tar 10 minutter.</div>
+      </div>
+      <div class="next-item">
+        <div class="next-num">4</div>
+        <div class="next-text"><strong>Book møte med If Forsikring</strong> — cold outreach. Bruk /sana-pitch for å forberede.</div>
+      </div>
+      <div class="next-item">
+        <div class="next-num">5</div>
+        <div class="next-text"><strong>Rekruttere rådgivende lege</strong> — faglig validering før forsikringspitch styrker troverdigheten betydelig.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

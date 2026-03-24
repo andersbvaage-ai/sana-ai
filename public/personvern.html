@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personvern & GDPR – Sana AI</title>
+  <link rel="stylesheet" href="/site.css" />
+  <style>
+    /* ── PAGE HERO ── */
+    .page-hero { background: var(--primary); padding: 80px 48px 72px; }
+    .page-hero-inner { max-width: 720px; display: flex; flex-direction: column; gap: 20px; }
+    .page-hero h1 { font-size: 48px; font-weight: 700; line-height: 1.1; letter-spacing: -1.5px; color: #fff; }
+    .page-hero-body { font-size: 18px; color: var(--dark-txt); line-height: 1.7; }
+    .badges-hero { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+    .badge-hero { display: flex; align-items: center; gap: 8px; padding: 8px 16px; background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.15); border-radius: 9999px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.85); }
+    .badge-chk { width: 17px; height: 17px; border-radius: 50%; background: var(--teal-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .badge-chk svg { width: 9px; height: 9px; stroke: var(--primary); stroke-width: 2.5; fill: none; }
+
+    /* ── DATA TABLE SECTION ── */
+    .data-section { padding: 96px 48px; background: var(--bg); }
+    .data-inner { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 48px; }
+    .data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .data-table th { text-align: left; padding: 12px 16px; font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border); }
+    .data-table td { padding: 16px 16px; vertical-align: top; border-bottom: 1px solid var(--border); color: var(--body); line-height: 1.6; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table td:first-child { font-weight: 500; color: var(--ink); }
+    .tag { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; white-space: nowrap; }
+    .tag-red { background: #FFF0ED; color: #c0392b; }
+    .tag-teal { background: var(--bg-teal); color: var(--teal); }
+    .tag-blue { background: var(--bg-blue); color: #2a6fa8; }
+
+    /* ── COMPLIANCE GRID ── */
+    .compliance-section { padding: 96px 48px; background: var(--bg-warm); border-top: 1px solid var(--border); }
+    .compliance-inner { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 56px; }
+    .compliance-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .comp-card { border: 1px solid var(--border); border-radius: 16px; padding: 32px; display: flex; flex-direction: column; gap: 16px; background: #fff; transition: box-shadow 0.2s; }
+    .comp-card:hover { box-shadow: 0 4px 20px rgba(27,58,75,0.08); }
+    .comp-card-head { display: flex; align-items: flex-start; gap: 16px; }
+    .comp-icon { width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .comp-icon svg { width: 20px; height: 20px; stroke: var(--primary); stroke-width: 1.7; fill: none; }
+    .comp-icon.teal { background: var(--bg-teal); } .comp-icon.gold { background: var(--bg-gold); }
+    .comp-icon.blue { background: var(--bg-blue); } .comp-icon.pink { background: var(--bg-pink); }
+    .comp-card-title { font-size: 18px; font-weight: 600; color: var(--ink); line-height: 1.3; }
+    .comp-card-sub { font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--teal); margin-top: 2px; }
+    .comp-card-body { font-size: 14px; color: var(--body); line-height: 1.75; }
+    .comp-card-detail { background: var(--bg-warm); border-radius: 8px; padding: 14px 16px; font-size: 13px; color: var(--body); line-height: 1.65; }
+    .comp-card-detail strong { color: var(--ink); font-weight: 600; }
+
+    /* ── CTA ── */
+    .cta-section { background: var(--primary); padding: 80px 48px; text-align: center; }
+    .cta-inner { max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; align-items: center; }
+    .cta-headline { font-size: 36px; font-weight: 700; color: #fff; letter-spacing: -1px; line-height: 1.15; }
+    .cta-sub { font-size: 16px; color: var(--dark-txt); line-height: 1.7; }
+
+    @media (max-width: 900px) {
+      .page-hero { padding: 56px 24px; }
+      .page-hero h1 { font-size: 36px; }
+      .data-section { padding: 64px 24px; }
+      .compliance-section { padding: 64px 24px; }
+      .compliance-grid { grid-template-columns: 1fr; }
+      .cta-section { padding: 64px 24px; }
+      .data-table th, .data-table td { padding: 12px 10px; }
+    }
+    @media (max-width: 600px) {
+      .page-hero h1 { font-size: 28px; }
+      .cta-headline { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav></nav>
+
+<div class="page-hero">
+  <div class="page-hero-inner reveal">
+    <span class="eyebrow eyebrow-on-dark">Personvern & GDPR</span>
+    <h1>Helseopplysninger behandlet etter strengeste krav</h1>
+    <p class="page-hero-body">Klagedokumenter inneholder særlige kategorier personopplysninger etter GDPR Art. 9. Her forklarer vi hvilke data vi behandler, hvilke rammeverk vi er underlagt, og hva det betyr i praksis.</p>
+    <div class="badges-hero">
+      <div class="badge-hero"><div class="badge-chk"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7.5 8,3"/></svg></div>GDPR Art. 9</div>
+      <div class="badge-hero"><div class="badge-chk"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7.5 8,3"/></svg></div>EU AI Act</div>
+      <div class="badge-hero"><div class="badge-chk"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7.5 8,3"/></svg></div>Normen</div>
+      <div class="badge-hero"><div class="badge-chk"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7.5 8,3"/></svg></div>Data forblir i EØS</div>
+    </div>
+  </div>
+</div>
+
+<section class="data-section">
+  <div class="data-inner">
+    <div class="section-header reveal">
+      <span class="eyebrow">Databehandling</span>
+      <h2 class="section-title text-center">Hvilke data behandler vi</h2>
+      <p class="section-body text-center">Oversikt over alle datakategorier i systemet, hva de klassifiseres som under GDPR, og hvilke tiltak som gjelder.</p>
+    </div>
+    <table class="data-table reveal">
+      <thead>
+        <tr>
+          <th>Datakategori</th>
+          <th>GDPR-kategori</th>
+          <th>Sendes til AI</th>
+          <th>Tiltak</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Klagetekst — diagnoser, behandlinger, legeattester</td>
+          <td><span class="tag tag-red">Art. 9 — helseopplysninger</span></td>
+          <td>Ja — etter scrubbing</td>
+          <td>PII fjernes lokalt. Medisinsk innhold sendes som anonymisert fritekst.</td>
+        </tr>
+        <tr>
+          <td>Navn, adresse, kontaktinfo</td>
+          <td><span class="tag tag-blue">Art. 6 — personopplysninger</span></td>
+          <td>Nei</td>
+          <td>Scrubbes alltid før AI-sending. Lagres ikke i analysen.</td>
+        </tr>
+        <tr>
+          <td>Fødselsnummer (11 siffer)</td>
+          <td><span class="tag tag-red">Art. 9 — særlig sensitiv</span></td>
+          <td>Nei</td>
+          <td>Fjernes ved regex-matching. Sendes aldri ut av norsk server.</td>
+        </tr>
+        <tr>
+          <td>AI-generert analyse</td>
+          <td><span class="tag tag-red">Art. 9 — avledet helseopplysning</span></td>
+          <td>—</td>
+          <td>Lagres internt i S3 (kryptert). Brukes kun av autentisert lege.</td>
+        </tr>
+        <tr>
+          <td>Legens vurdering og fagnotat</td>
+          <td><span class="tag tag-red">Art. 9 — helseopplysninger</span></td>
+          <td>—</td>
+          <td>Lagres internt. Inngår i revisjonslogg med bruker-ID og tidsstempel.</td>
+        </tr>
+        <tr>
+          <td>Revisjonslogg (hvem, når, hva)</td>
+          <td><span class="tag tag-teal">Art. 6(1)(c) — rettslig forpliktelse</span></td>
+          <td>—</td>
+          <td>Ingen personsensitivt innhold. Loggføres til CloudWatch — ikke mulig å slette via app.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="compliance-section">
+  <div class="compliance-inner">
+    <div class="section-header reveal">
+      <span class="eyebrow">Rammeverk</span>
+      <h2 class="section-title text-center">Regelverk vi er underlagt</h2>
+      <p class="section-body text-center">Sana AI er underlagt fire overlappende rammeverk for personvern og AI i helsesektoren.</p>
+    </div>
+    <div class="compliance-grid">
+      <div class="comp-card reveal">
+        <div class="comp-card-head">
+          <div class="comp-icon teal"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div><div class="comp-card-title">GDPR — personvernforordningen</div><div class="comp-card-sub">EU / EØS</div></div>
+        </div>
+        <div class="comp-card-body">Helseopplysninger er særlige kategorier (Art. 9) og krever eksplisitt rettslig grunnlag. All behandling er underlagt GDPR, og data forlater aldri EØS-området.</div>
+        <div class="comp-card-detail"><strong>Relevante artikler:</strong> Art. 9 (særkategori), Art. 28 (databehandleravtale med AWS), Art. 35 (DPIA), Art. 13/14 (informasjonsplikt til klagere).</div>
+      </div>
+      <div class="comp-card reveal reveal-delay-1">
+        <div class="comp-card-head">
+          <div class="comp-icon gold"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+          <div><div class="comp-card-title">EU AI Act</div><div class="comp-card-sub">Gjelder i Norge via EØS-avtalen</div></div>
+        </div>
+        <div class="comp-card-body">AI-systemer brukt i forsikring som påvirker tilgang til tjenester klassifiseres sannsynligvis som høyrisiko (Annex III, pkt. 5b). Dette stiller krav til teknisk dokumentasjon, risikovurdering og menneskelig tilsyn.</div>
+        <div class="comp-card-detail"><strong>Tiltak:</strong> Menneskelig godkjenning av alle AI-standpunkter er obligatorisk — legen kan ikke eksportere uten å ha gjennomgått og godkjent analysen. Formell høyrisiko-klassifisering avklares med juridisk rådgiver.</div>
+      </div>
+      <div class="comp-card reveal">
+        <div class="comp-card-head">
+          <div class="comp-icon blue"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+          <div><div class="comp-card-title">Normen</div><div class="comp-card-sub">Norm for informasjonssikkerhet i helse- og omsorgssektoren</div></div>
+        </div>
+        <div class="comp-card-body">Normen er den norske bransjestandarden som konkretiserer GDPR for helsesektoren. Den stiller spesifikke krav til tilgangsstyring, logging og hendelseshåndtering.</div>
+        <div class="comp-card-detail"><strong>Implementert:</strong> Rollebasert tilgangskontroll, JWT-sesjon med 8t utløp, fullstendig logging av alle tilgangsoperasjoner, kill-switch for øyeblikkelig nedstengning av AI.</div>
+      </div>
+      <div class="comp-card reveal reveal-delay-1">
+        <div class="comp-card-head">
+          <div class="comp-icon pink"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <div><div class="comp-card-title">Pasientjournalloven</div><div class="comp-card-sub">Lov om behandling av helseopplysninger</div></div>
+        </div>
+        <div class="comp-card-body">Pasientjournalloven regulerer behandling av helseopplysninger i journaler — herunder krav til integritet, sporbarhet og tilgangsbegrensning.</div>
+        <div class="comp-card-detail"><strong>Implementert:</strong> Uforanderlig revisjonslogg for alle operasjoner. Kun autentiserte brukere med riktig rolle kan lese eller oppdatere en sak. Originaldokument lagres separat og er ikke tilgjengelig via UI etter prosessering.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-inner reveal">
+    <span class="eyebrow eyebrow-on-dark">Dokumentasjon</span>
+    <h2 class="cta-headline">Spørsmål om personvern?</h2>
+    <p class="cta-sub">Vi stiller med systemdokumentasjon, DPA-utkast og juridisk vurdering for innkjøpsprosessen.</p>
+    <a href="/kontakt.html" class="btn-pill btn-teal btn-pill-lg">Ta kontakt</a>
+  </div>
+</section>
+
+<footer></footer>
+<script src="/site.js"></script>
+</body>
+</html>

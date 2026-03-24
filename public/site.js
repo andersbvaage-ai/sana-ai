@@ -4,7 +4,14 @@
     <a href="/" class="logo">Sana <span>AI</span></a>
     <div class="nav-links">
       <a href="/plattform.html">Plattform</a>
-      <a href="/sikkerhet.html">Sikkerhet</a>
+      <div class="nav-dropdown">
+        <a href="/sikkerhet.html">Sikkerhet <svg class="nav-dropdown-arrow" viewBox="0 0 10 6"><polyline points="1,1 5,5 9,1"/></svg></a>
+        <div class="nav-dropdown-menu">
+          <a href="/sikkerhet.html">Teknisk sikkerhet<span>Arkitektur, PII-scrubbing, dataflyt</span></a>
+          <a href="/personvern.html">Personvern &amp; GDPR<span>Art. 9, Normen, EU AI Act</span></a>
+          <a href="/apenhet.html">Dette jobber vi med<span>DPA, DPIA, juridisk status</span></a>
+        </div>
+      </div>
       <a href="/om-oss.html">Om oss</a>
     </div>
     <div class="nav-right" id="navRight">
@@ -22,7 +29,9 @@
   mobileMenu.id = 'navMobile';
   mobileMenu.innerHTML = `
     <a href="/plattform.html">Plattform</a>
-    <a href="/sikkerhet.html">Sikkerhet</a>
+    <a href="/sikkerhet.html">Teknisk sikkerhet</a>
+    <a href="/personvern.html">Personvern &amp; GDPR</a>
+    <a href="/apenhet.html">Dette jobber vi med</a>
     <a href="/om-oss.html">Om oss</a>
     <a href="/kontakt.html" class="btn-pill btn-teal">Be om demo</a>
   `;
@@ -76,7 +85,9 @@
     <a href="/" class="footer-logo">Sana <span>AI</span></a>
     <div class="footer-links">
       <a href="/plattform.html">Plattform</a>
-      <a href="/sikkerhet.html">Sikkerhet</a>
+      <a href="/sikkerhet.html">Teknisk sikkerhet</a>
+      <a href="/personvern.html">Personvern &amp; GDPR</a>
+      <a href="/apenhet.html">Dette jobber vi med</a>
       <a href="/om-oss.html">Om oss</a>
       <a href="/kontakt.html">Kontakt</a>
     </div>

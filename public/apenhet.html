@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dette jobber vi med – Sana AI</title>
+  <link rel="stylesheet" href="/site.css" />
+  <style>
+    /* ── PAGE HERO ── */
+    .page-hero { background: var(--primary); padding: 80px 48px 72px; }
+    .page-hero-inner { max-width: 720px; display: flex; flex-direction: column; gap: 20px; }
+    .page-hero h1 { font-size: 48px; font-weight: 700; line-height: 1.1; letter-spacing: -1.5px; color: #fff; }
+    .page-hero-body { font-size: 18px; color: var(--dark-txt); line-height: 1.7; }
+
+    /* ── INTRO ── */
+    .intro-section { padding: 80px 48px; background: var(--bg); }
+    .intro-inner { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+    .intro-text { font-size: 17px; color: var(--body); line-height: 1.8; }
+    .intro-text strong { color: var(--ink); }
+
+    /* ── TIMELINE ── */
+    .timeline-section { padding: 0 48px 96px; background: var(--bg); }
+    .timeline-inner { max-width: 800px; margin: 0 auto; }
+    .timeline { display: flex; flex-direction: column; }
+    .timeline-item { display: grid; grid-template-columns: 32px 1fr; gap: 0 24px; position: relative; }
+    .timeline-item:not(:last-child)::before { content: ''; position: absolute; left: 15px; top: 18px; bottom: 0; width: 2px; background: var(--border); z-index: 0; }
+    .timeline-dot-wrap { display: flex; flex-direction: column; align-items: center; padding-top: 4px; }
+    .timeline-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; z-index: 1; position: relative; }
+    .timeline-dot.doing { background: var(--teal); box-shadow: 0 0 0 4px var(--bg-teal); }
+    .timeline-dot.planned { background: var(--secondary); box-shadow: 0 0 0 4px var(--bg-gold); }
+    .timeline-dot.longterm { background: var(--primary-light2); box-shadow: 0 0 0 4px #e8edf0; }
+    .timeline-card { padding: 0 0 40px 0; }
+    .timeline-status { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+    .timeline-status.doing { color: var(--teal); }
+    .timeline-status.planned { color: var(--secondary); }
+    .timeline-status.longterm { color: var(--muted); }
+    .timeline-title { font-size: 20px; font-weight: 600; color: var(--ink); line-height: 1.3; margin-bottom: 10px; }
+    .timeline-body { font-size: 15px; color: var(--body); line-height: 1.75; }
+    .timeline-detail { margin-top: 14px; background: var(--bg-warm); border-radius: 10px; padding: 14px 18px; font-size: 13px; color: var(--body); line-height: 1.65; border: 1px solid var(--border); }
+    .timeline-detail strong { color: var(--ink); }
+
+    /* ── DIVIDER ── */
+    .section-divider { max-width: 800px; margin: 0 auto 48px; padding: 0 0 0 56px; }
+    .section-divider-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+    /* ── CTA ── */
+    .cta-section { background: var(--primary); padding: 80px 48px; text-align: center; }
+    .cta-inner { max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; align-items: center; }
+    .cta-headline { font-size: 36px; font-weight: 700; color: #fff; letter-spacing: -1px; line-height: 1.15; }
+    .cta-sub { font-size: 16px; color: var(--dark-txt); line-height: 1.7; }
+
+    @media (max-width: 900px) {
+      .page-hero { padding: 56px 24px; }
+      .page-hero h1 { font-size: 36px; }
+      .intro-section { padding: 56px 24px; }
+      .timeline-section { padding: 0 24px 72px; }
+      .section-divider { padding-left: 56px; }
+      .cta-section { padding: 64px 24px; }
+    }
+    @media (max-width: 600px) {
+      .page-hero h1 { font-size: 28px; }
+      .cta-headline { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav></nav>
+
+<div class="page-hero">
+  <div class="page-hero-inner reveal">
+    <span class="eyebrow eyebrow-on-dark">Åpenhet</span>
+    <h1>Dette jobber vi med</h1>
+    <p class="page-hero-body">Den tekniske arkitekturen er på plass. Det som gjenstår er den juridiske formaliseringen som kreves før systemet kan håndtere reelle pasientdata i produksjon.</p>
+  </div>
+</div>
+
+<section class="intro-section">
+  <div class="intro-inner reveal">
+    <p class="intro-text">Vi mener at <strong>ærlighet om status er et tegn på modenhet</strong>, ikke svakhet. Mange AI-selskaper påstår full compliance uten å spesifisere hva det innebærer. Vi velger å vise nøyaktig hvor vi er i prosessen — hva som er gjort, hva som pågår, og hva som er planlagt.</p>
+    <p class="intro-text">Nedenfor finner du en komplett oversikt over pågående og planlagte tiltak, sortert etter prioritet.</p>
+  </div>
+</section>
+
+<section class="timeline-section">
+  <div class="timeline-inner">
+
+    <div class="section-divider reveal">
+      <span class="section-divider-label">Pågår nå</span>
+    </div>
+
+    <div class="timeline reveal">
+      <div class="timeline-item">
+<div class="timeline-dot-wrap"><div class="timeline-dot doing"></div></div>
+        <div class="timeline-card">
+          <div class="timeline-status doing">Pågår</div>
+          <div class="timeline-title">Databehandleravtale (DPA) med AWS</div>
+          <div class="timeline-body">AWS behandler helseopplysninger på vegne av forsikringsselskapet når klagedokumenter sendes til Bedrock. GDPR Art. 28 krever en skriftlig databehandleravtale før dette kan skje med reelle pasientdata.</div>
+          <div class="timeline-detail"><strong>Status:</strong> AWS tilbyr standard GDPR DPA via AWS Console (AWS GDPR Data Processing Addendum). AWS er sertifisert ISO 27001, ISO 27017, ISO 27018 og SOC 1/2/3. Formell inngåelse og arkivering pågår.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+<div class="timeline-dot-wrap"><div class="timeline-dot doing"></div></div>
+        <div class="timeline-card">
+          <div class="timeline-status doing">Pågår</div>
+          <div class="timeline-title">Advokatgjennomgang av systemdokumentasjon</div>
+          <div class="timeline-body">Teknisk systemdokumentasjon og personverngrunnlag er utarbeidet internt og er klart for ekstern juridisk vurdering. Dokumentet dekker dataflyt, behandlingsgrunnlag, risikovurdering og dataminimering.</div>
+          <div class="timeline-detail"><strong>Status:</strong> Utkast ferdig (v0.1, 2026-03-13). Sendes til juridisk rådgiver for gjennomgang av særlig Art. 9(2)-grunnlag og EU AI Act-klassifisering.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider reveal">
+      <span class="section-divider-label">Planlagt</span>
+    </div>
+
+    <div class="timeline reveal">
+      <div class="timeline-item">
+<div class="timeline-dot-wrap"><div class="timeline-dot planned"></div></div>
+        <div class="timeline-card">
+          <div class="timeline-status planned">Planlagt</div>
+          <div class="timeline-title">DPIA — vurdering av personvernkonsekvenser</div>
+          <div class="timeline-body">GDPR Art. 35 krever en Data Protection Impact Assessment (DPIA) når ny teknologi brukes til å behandle særlige kategorier personopplysninger i stor skala. Sana AI faller inn under dette kravet.</div>
+          <div class="timeline-detail"><strong>Hjemmel:</strong> GDPR art. 35 og Datatilsynets DPIA-veileder. Gjennomføres med juridisk bistand etter advokatgjennomgang av systemdokumentasjon.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+<div class="timeline-dot-wrap"><div class="timeline-dot planned"></div></div>
+        <div class="timeline-card">
+          <div class="timeline-status planned">Planlagt</div>
+          <div class="timeline-title">EU AI Act — formell klassifisering og konformitet</div>
+          <div class="timeline-body">AI-systemer brukt i forsikring som påvirker tilgang til tjenester klassifiseres sannsynligvis som høyrisiko under EU AI Act Annex III. Høyrisiko-klassifisering krever teknisk dokumentasjon, samsvarsvurdering og registrering i EU AI Act-database.</div>
+          <div class="timeline-detail"><strong>Status:</strong> Menneskelig tilsyn er allerede innført (obligatorisk legesgodkjenning). Formell klassifisering og konformitetsvurdering gjennomføres som del av advokatprosessen.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot-wrap"><div class="timeline-dot planned"></div></div>
+        <div class="timeline-card">
+          <div class="timeline-status planned">Planlagt</div>
+          <div class="timeline-title">Informasjonsplikt til klagere om AI-assistanse</div>
+          <div class="timeline-body">GDPR Art. 13/14 og EU AI Act Art. 50 krever at klagere informeres om at klagen kan bli behandlet med AI-assistanse. Denne informasjonen skal gis i klagebekreftelsen.</div>
+          <div class="timeline-detail"><strong>Foreslått tekst:</strong> «Klagen din kan bli analysert med AI-assistert verktøy som støtte for legens vurdering. AI-analysen er ikke bindende og godkjennes alltid av en lege.»</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider reveal">
+      <span class="section-divider-label">Langsiktig</span>
+    </div>
+
+    <div class="timeline reveal">
+      <div class="timeline-item">
+<div class="timeline-dot-wrap"><div class="timeline-dot longterm"></div></div>
+        <div class="timeline-card">
+          <div class="timeline-status longterm">Langsiktig</div>
+          <div class="timeline-title">ISO 27001 / ISO 27799 — informasjonssikkerhet</div>
+          <div class="timeline-body">ISO 27001 er den internasjonale standarden for informasjonssikkerhetsstyring. ISO 27799 er den helsespesifikke varianten. Vi følger prinsippene i arkitekturen og planlegger formell sertifisering når organisasjonen vokser.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot-wrap"><div class="timeline-dot longterm"></div></div>
+        <div class="timeline-card">
+          <div class="timeline-status longterm">Langsiktig</div>
+          <div class="timeline-title">Uavhengig OWASP-revisjon</div>
+          <div class="timeline-body">Ekstern tredjepartsrevisjon mot OWASP Top 10 — de ti vanligste sårbarhetene i webapplikasjoner. Gjennomføres av uavhengig sikkerhetsfirma, planlagt i takt med vekst.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-inner reveal">
+    <span class="eyebrow eyebrow-on-dark">Kontakt</span>
+    <h2 class="cta-headline">Spørsmål om compliance-status?</h2>
+    <p class="cta-sub">Ta kontakt for en teknisk gjennomgang, systemdokumentasjon eller DPA-utkast tilpasset innkjøpsprosessen.</p>
+    <a href="/kontakt.html" class="btn-pill btn-teal btn-pill-lg">Ta kontakt</a>
+  </div>
+</section>
+
+<footer></footer>
+<script src="/site.js"></script>
+</body>
+</html>
